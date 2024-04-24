@@ -101,7 +101,7 @@ export const Canvas = () => {
         return () => {
             renderer.dispose();
         };
-    }, []);
+    }, [pallete]);
 
     return (
         <canvas
