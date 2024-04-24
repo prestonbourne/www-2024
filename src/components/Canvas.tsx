@@ -26,7 +26,7 @@ const visibleHeightAtZDepth = ( depth: number, camera: THREE.PerspectiveCamera )
 export const Canvas = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     
-    const rawPallete = ["#a8e1f7","#f7cef4","#ffe8f8","#e0105c","#cb73ab"]
+    const rawPallete = ["#e8f8ff","#edeafa","#edf6ff","#e0fcf3","#ffdce1"]
     const pallete = rawPallete.map(color => new THREE.Color(color));
 
     useEffect(() => {

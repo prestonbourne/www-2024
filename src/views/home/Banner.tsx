@@ -7,13 +7,14 @@ import srcImg from "../../../public/headshot_bw.png"
 
 const Photo: React.FC = () => {
     return (
-        <div className="w-28 h-28 rounded-md bg-gray-200 absolute top-56 border-solid border-4 border-slate-50 overflow-clip">
+        <div className="bg-gray-200 relative -top-28">
             <Image
                 placeholder="blur"
                 src={srcImg}
-                alt="Get Out"
-                className="w-full h-full object-cover"
-                fill
+                alt="Headshot of Preston Bourne"
+                className="object-cover absolute top-0 left-0 rounded-md w-28 h-28"
+                width={112}
+                height={112}
             />
         </div>
     );

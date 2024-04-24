@@ -7,40 +7,36 @@ export const Home = () => {
         <>
             <Banner />
             <Header>
-                <h1 className="text-4xl font-bold">
+                <h1 className="text-4xl font-bold pb-2">
                     Preston Bourne
                     <span className="text-xl text-slate-500">
                         &nbsp;/ engineering + design
                     </span>
                 </h1>
+                <p className="text-2xl font-bold text-slate-700">
+                    Crafting beautiful & performant software
+                </p>
             </Header>
             <Main>
-                <p className="text-2xl mb-4 font-bold text-slate-700">
-                    Chasing performant & beautiful software
-                </p>
                 <Body>
                     I earned my Bachlor&rsquo;s degree in Design & Technology
                     from Parsons in New York. In my penultimate year, I was
-                    accepted as an exchange student at Cornell University.
-                    During this time, I was advised by a Ph.d Researcher at
-                    Microsoft where we focused on making Large Language Models
-                    safe enough for production in environments.
+                    accepted as an exchange student at Cornell University where I worked with graduate students and was advised by a Ph.d at Microsoft Azure
+                    on building solutions to ensure LLMs were safe enough for highly regulated production environments like Finance and Healthcare.
                 </Body>
                 <Body>
-                    Subsequently, after graduation, I joined Hashicorp as an
-                    Engineer where I do a mixture of Frontend, Server side and
-                    DevOps work.
+                    I interned at @Hashicorp and received an offer to join fulltime as an
+                    Engineer on the Web Infrastucture and Platforms team.
                 </Body>
                 <Body>
-                    In tandem with current my professional life, I&apos;m
+                    In tandem with my professional life, I&apos;m
                     pursuing a Master&apos;s in Computer Science @ NYU Tandon.
-                    My studies encompass Physics, Computer Graphics and Applied
-                    Machine Learning with a focus on Vision and Rendering.
+                    My studies focus on Computer rendering, perception and vision.
                 </Body>
                 <Body>
-                    I welcome you to explore some of my written work, technical
-                    projects and social media profiles. If you have a question
-                    about how I built something or advice on how to improve
+                    You&apos;re invited to explore my written work, technical
+                    projects and social media profiles. If you have questions
+                    about how I built or advice on how to improve
                     something. Don&apos;t hesitate to reach out.
                 </Body>
             </Main>
@@ -52,7 +48,7 @@ interface BodyProps extends React.HTMLAttributes<HTMLParagraphElement> {}
 
 const Body: React.FC<BodyProps> = ({ className, children, ...props }) => {
     return (
-        <p className={`text-base my-4 font-[450] ${className}`} {...props}>
+        <p className={`text-base leading-relaxed my-2 font-[450] ${className}`} {...props}>
             {children}
         </p>
     );
