@@ -2,18 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
-
 /*
   1. Use a more-intuitive box-sizing model.
 */
-*, *::before, *::after {
-  box-sizing: border-box;
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
 /*
   2. Remove default margin
 */
 * {
-  margin: 0;
+    margin: 0;
 }
 /*
   Typographic tweaks!
@@ -21,49 +22,61 @@
   4. Improve text rendering
 */
 body {
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
 }
 /*
   5. Improve media defaults
 */
-img, picture, video, canvas, svg {
-  display: block;
-  max-width: 100%;
+img,
+picture,
+video,
+canvas,
+svg {
+    display: block;
+    max-width: 100%;
 }
 /*
   6. Remove built-in form typography styles
 */
-input, button, textarea, select {
-  font: inherit;
+input,
+button,
+textarea,
+select {
+    font: inherit;
 }
 /*
   7. Avoid text overflows
 */
-p, h1, h2, h3, h4, h5, h6 {
-  overflow-wrap: break-word;
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    overflow-wrap: break-word;
 }
 /*
   8. Create a root stacking context
 */
-#root, #__next {
-  isolation: isolate;
+#root,
+#__next {
+    isolation: isolate;
 }
 
-
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+    --foreground-rgb: 0, 0, 0;
+    --background-start-rgb: 214, 219, 220;
+    --background-end-rgb: 255, 255, 255;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+    :root {
+        --foreground-rgb: 255, 255, 255;
+        --background-start-rgb: 0, 0, 0;
+        --background-end-rgb: 0, 0, 0;
+    }
 }
 
 /* body {
@@ -77,7 +90,45 @@ p, h1, h2, h3, h4, h5, h6 {
 } */
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+    .text-balance {
+        text-wrap: balance;
+    }
+}
+
+@layer components {
+  .link-animation {
+    --underline-width: 2px;
+    padding-bottom: 1px;
+
+    text-decoration: none;
+    background-image: linear-gradient(
+        to right,
+        theme("colors.green.300"),
+        theme("colors.blue.300")
+      ),
+      linear-gradient(
+        to right,
+        theme("colors.purple.200"),
+        theme("colors.blue.500")
+      );
+
+    background-size: 100% var(--underline-width),
+      100% var(--underline-width);
+    background-position: 100% 100%, 0 100%;
+    background-repeat: no-repeat, no-repeat;
+
   }
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  @layer components {
+
+    .link-animation {
+      transition: background-size 220ms cubic-bezier(0.075, 0.82, 0.165, 1);
+    }
+
+    .link-animation:hover {
+      background-size: 0 var(--underline-width), 100% var(--underline-width);
+    }
+}
 }
