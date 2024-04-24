@@ -23,7 +23,7 @@ export const Home = () => {
                     I earned my Bachelor&rsquo;s degree in Design & Technology
                     from <Link href="https://www.newschool.edu/parsons/bfa-design-technology/" target={'_blank'} >Parsons in New York </Link> . During my
                     penultimate year, I had the privilege of studying as an
-                    exchange student at Cornell University, collaborating with
+                    exchange student at <Link href={"https://tech.cornell.edu/"} target="_blank" >Cornell University</Link>, collaborating with
                     graduate students under the mentorship of a Ph.D. at
                     Microsoft Azure on solutions to safeguard LLMs in regulated
                     sectors such as Finance and Healthcare.
