@@ -1,32 +1,38 @@
 "use client";
 import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import vertexShader from "@/shaders/vert.glsl";
 import fragmentShader from "@/shaders/frag.glsl";
+import { OrbitControls } from "three/examples/jsm/Addons.js";
 
-const visibleHeightAtZDepth = ( depth: number, camera: THREE.PerspectiveCamera ) => {
+const visibleHeightAtZDepth = (
+    depth: number,
+    camera: THREE.PerspectiveCamera
+) => {
     // compensate for cameras not positioned at z=0
     const cameraOffset = camera.position.z;
-    if ( depth < cameraOffset ) depth -= cameraOffset;
+    if (depth < cameraOffset) depth -= cameraOffset;
     else depth += cameraOffset;
-  
-    // vertical fov in radians
-    const vFOV = camera.fov * Math.PI / 180; 
-  
-    // Math.abs to ensure the result is always positive
-    return 2 * Math.tan( vFOV / 2 ) * Math.abs( depth );
-  };
 
-  const visibleWidthAtZDepth = ( depth: number, camera: THREE.PerspectiveCamera ) => {
-    const height = visibleHeightAtZDepth( depth, camera );
+    // vertical fov in radians
+    const vFOV = (camera.fov * Math.PI) / 180;
+
+    // Math.abs to ensure the result is always positive
+    return 2 * Math.tan(vFOV / 2) * Math.abs(depth);
+};
+
+const visibleWidthAtZDepth = (
+    depth: number,
+    camera: THREE.PerspectiveCamera
+) => {
+    const height = visibleHeightAtZDepth(depth, camera);
     return height * camera.aspect;
-  };
+};
 
 export const Canvas = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    
-    const rawPallete = ["#e8f8ff","#edeafa","#edf6ff","#e0fcf3","#ffdce1"]
+
+    const rawPallete = ["#e8f8ff", "#edeafa", "#edf6ff", "#e0fcf3", "#ffdce1"];
     const pallete = rawPallete.map(color => new THREE.Color(color));
 
     useEffect(() => {
@@ -53,16 +59,23 @@ export const Canvas = () => {
         renderer.setClearColor(0xffffff);
         renderer.setSize(width, height);
         // Initialize OrbitControls
-        const controls = new OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true; // optional, but this gives a smoother camera movement
-        controls.dampingFactor = 0.1;
+        const devMode = process.env.NODE_ENV === "development";
+        if (devMode) {
+            const controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.25;
+        }
 
+        const planeScalar = 1.8
+        const planeWidth = visibleWidthAtZDepth(0.0, camera) * planeScalar;
+        
 
-        const planeWidth = visibleWidthAtZDepth(0.0, camera) * 1.8;
-      
-
-
-        const geometry = new THREE.PlaneGeometry(planeWidth, planeWidth, 600, 600);
+        const geometry = new THREE.PlaneGeometry(
+            planeWidth,
+            planeWidth,
+            400,
+            400
+        );
         const material = new THREE.ShaderMaterial({
             vertexShader,
             fragmentShader,
@@ -74,12 +87,19 @@ export const Canvas = () => {
         });
         const plane = new THREE.Mesh(geometry, material);
 
-
         scene.add(plane);
 
         const handleResize = () => {
+            if (!canvas || !canvas.parentElement) return;
+
             const width = canvas.parentElement!.clientWidth;
             const height = canvas.parentElement!.clientHeight;
+
+            const planeWidth = visibleWidthAtZDepth(0.0, camera)
+            const planeHeight = visibleHeightAtZDepth(0.0, camera) * planeScalar;
+
+
+            plane.scale.set(planeWidth, planeHeight, plane.scale.z);
 
             camera.aspect = width / height;
             camera.updateProjectionMatrix();
@@ -98,9 +118,7 @@ export const Canvas = () => {
 
         animate();
 
-        return () => {
-            renderer.dispose();
-        };
+        return () => renderer.dispose();
     }, [pallete]);
 
     return (
