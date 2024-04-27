@@ -39,12 +39,9 @@ export const Canvas = () => {
         const canvas = canvasRef.current;
         if (!canvas) return;
 
-        const scene = new THREE.Scene();
-        const width = canvas.parentElement!.clientWidth;
-        const height = canvas.parentElement!.clientHeight;
-
+        const width = canvas.clientWidth;
+        const height =  canvas.clientHeight;
         const FOV = 50;
-
         const camera = new THREE.PerspectiveCamera(
             FOV,
             width / height,
@@ -69,7 +66,6 @@ export const Canvas = () => {
         const planeScalar = 1.8
         const planeWidth = visibleWidthAtZDepth(0.0, camera) * planeScalar;
         
-
         const geometry = new THREE.PlaneGeometry(
             planeWidth,
             planeWidth,
@@ -87,19 +83,15 @@ export const Canvas = () => {
         });
         const plane = new THREE.Mesh(geometry, material);
 
+        const scene = new THREE.Scene();
         scene.add(plane);
+        camera.lookAt(plane.position);
 
         const handleResize = () => {
             if (!canvas || !canvas.parentElement) return;
 
-            const width = canvas.parentElement!.clientWidth;
-            const height = canvas.parentElement!.clientHeight;
-
-            const planeWidth = visibleWidthAtZDepth(0.0, camera)
-            const planeHeight = visibleHeightAtZDepth(0.0, camera) * planeScalar;
-
-
-            plane.scale.set(planeWidth, planeHeight, plane.scale.z);
+            const width = window.innerWidth;
+            const height = window.innerHeight;
 
             camera.aspect = width / height;
             camera.updateProjectionMatrix();

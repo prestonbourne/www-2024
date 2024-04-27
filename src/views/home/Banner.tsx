@@ -21,7 +21,7 @@ const Photo: React.FC = () => {
 export const Banner: React.FC = () => {
     return (
         <>
-            <div className="max-h-32">
+            <div className="max-h-32 overflow-clip">
                 <Canvas />
             </div>
             <Center>
