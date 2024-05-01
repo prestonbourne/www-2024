@@ -27,8 +27,7 @@ export const Home = () => {
                         target="_blank"
                     >
                     Parsons School of Design
-                    </Link>
-                    &nbsp;in New York. During my penultimate year, I had the privilege of
+                    </Link>. In my final year, I had the privilege of
                     studying as an exchange student at{" "}
                     <Link href={"https://tech.cornell.edu/"} target="_blank">
                         Cornell University
@@ -70,6 +69,13 @@ export const Home = () => {
                     >
                         X / Twitter
                     </Link>
+                    &nbsp;|&nbsp;
+                    <Link
+                        href="https://sketches.prestonbourne.dev"
+                        target="_blank"
+                    >
+                        Code Sketches
+                    </Link>
                 </Body>
             </Main>
         </>
@@ -81,7 +87,7 @@ interface BodyProps extends React.HTMLAttributes<HTMLParagraphElement> {}
 const Body: React.FC<BodyProps> = ({ className = '', children, ...props }) => {
     return (
         <p
-            className={`text-sm md:text-base leading-relaxed my-2 ${className}`}
+            className={`text-base leading-relaxed mb-4 ${className}`}
             {...props}
         >
             {children}
