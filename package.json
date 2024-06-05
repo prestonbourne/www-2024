@@ -9,15 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@mdx-js/loader": "^3.0.1",
-    "@mdx-js/react": "^3.0.1",
-    "@next/mdx": "^14.2.3",
     "@types/mdx": "^2.0.13",
+    "class-variance-authority": "^0.7.0",
     "framer-motion": "^11.0.20",
     "next": "14.1.4",
+    "next-mdx-remote": "^5.0.0",
     "raw-loader": "^4.0.2",
     "react": "^18",
     "react-dom": "^18",
+    "remark-gfm": "^4.0.0",
     "three": "^0.162.0"
   },
   "devDependencies": {

@@ -1,9 +1,3 @@
-import _withMDX from "@next/mdx";
-
-const withMDX = _withMDX({
-    extension: /\.mdx?$/,
-});
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     webpack: (config, options) => {
@@ -21,4 +15,4 @@ const nextConfig = {
     },
 };
 
-export default withMDX(nextConfig);
+export default nextConfig;
