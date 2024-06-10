@@ -2,6 +2,7 @@ import { Main } from "@/components/Main";
 import { Header } from "@/components/Header";
 import { Body, Divider, Heading } from "@/components/markdown";
 import type { Note } from "@/app/notes/utils";
+import { NoteHeading } from "./NoteHeading";
 import Link from "next/link";
 import { getNotes } from "@/app/notes/utils";
 
@@ -13,15 +14,13 @@ export default async function NotesHome() {
                     href={"/"}
                     className="text-slate-800 hover:text-slate-600 transition-colors"
                 >
-                    &lsaquo; Go Back
+                &lsaquo; Go Back
                 </Link>
-                <Heading level={1} className="py-3">
-                    Notes
-                </Heading>
-                <Body className="pb-1 mb-2">
-                    Documentation of my learnings, thoughts and experiments. The
-                    palest ink is more persistent than the sharpest memory.
-                </Body>
+                <NoteHeading
+                title="Notes"
+                description="Documentation of my learnings, thoughts and experiments. The
+                palest ink is more persistent than the sharpest memory."
+                />
                 <Divider />
             </Header>
             <Main>

@@ -76,3 +76,20 @@ export const getNotes = (): Note[] => {
 export const getNoteBySlug = (slug: string): Note | undefined => {
     return getNotes().find(note => note.slug === slug);
 };
+
+export const calculateReadingTime = (content: string) => { 
+    const wordsPerMinute = 220;
+    const words = content.split(/\s/g).length;
+    const minutes = words / wordsPerMinute;
+    const readTime = Math.floor(minutes);
+    return readTime;
+};
+
+export const formatISOToDate = (ISO: string) => { 
+    return new Date(ISO).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    });
+
+}
