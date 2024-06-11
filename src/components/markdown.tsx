@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import { cva } from "class-variance-authority";
 import NextLink, { LinkProps as NextLinkProps } from "next/link";
@@ -13,7 +12,8 @@ import {
 } from "react";
 import { ArrowRightIcon, InformationCircleIcon } from "./icons";
 import NextImage, { ImageProps as NextImageProps } from "next/image";
-import { CodeBlock } from "./CodeBlock";
+import { CodeBlock, extractCodeEl, extractLang } from "./markdown/CodeBlock";
+import { codeToHtml } from "shiki";
 
 const headingStyles = cva("font-bold text-slate-800", {
   variants: {
@@ -227,7 +227,22 @@ const components: MDXComponents = {
   Callout,
   Link,
   Image,
-  code: (props) => <CodeBlock {...props} />,
+
+  pre: async (props) => {
+    const isElement = React.isValidElement(props.children);
+    if (!isElement) {
+      return <pre {...props} />;
+    }
+    const codeEl = extractCodeEl(props.children as ReactElement);
+    const lang = extractLang(codeEl?.props.className as string);
+    const code = await codeToHtml(codeEl?.props.children as string, {
+      lang,
+      theme: "snazzy-light",
+    });
+    
+
+    return <CodeBlock code={code}  />;
+  },
 };
 
 export const CustomMDX: React.FC<{ source: string }> = ({ source }) => {

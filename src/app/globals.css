@@ -131,3 +131,16 @@ h6 {
     }
 }
 }
+
+/* Custom scrollbar for all WebKit browsers */
+::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+  padding: 4px;
+}
+
+
+::-webkit-scrollbar-thumb {
+  background-color: lightgrey;
+  border-radius: 4px;
+}

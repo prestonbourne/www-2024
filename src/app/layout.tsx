@@ -9,6 +9,7 @@ const firaSans = Fira_Sans({
 
 export const metadata: Metadata = {
     title: "Preston Bourne",
+    description: "Homepage of Preston Bourne, a Software Engineer and Designer.",
 };
 
 export default function RootLayout({

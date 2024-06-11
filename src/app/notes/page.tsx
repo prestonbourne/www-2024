@@ -1,6 +1,6 @@
 import { Main } from "@/components/Main";
 import { Header } from "@/components/Header";
-import { Body, Divider, Heading } from "@/components/markdown";
+import { Body, Divider } from "@/components/markdown";
 import type { Note } from "@/app/notes/utils";
 import { NoteHeading } from "./NoteHeading";
 import Link from "next/link";
