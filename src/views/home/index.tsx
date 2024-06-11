@@ -8,7 +8,7 @@ export const Home = () => {
     <>
       <Banner />
       <Header>
-        <Heading level={2} render="h1">
+        <Heading level={2} render="h1" className="pb-2">
           Preston Bourne
           <span className="text-base lg:text-lg text-slate-500">
             &nbsp;/ engineering + design
