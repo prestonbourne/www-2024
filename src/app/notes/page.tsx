@@ -37,10 +37,13 @@ function Note(note: Note) {
         <li>
             <Link
                 href={`/notes/${slug}`}
-                className="block my-1 hover:text-slate-600 transition-all"
+                className="block my-1 transition-all hover:text-slate-500 group/item"
             >
-                <Body>
-                    {title} <br /> {new Date(publishedAt).toLocaleDateString()}
+                <Body className="mb-0 text-inherit group-hover/item:underline group-hover/item:decoration-dashed group-hover/item:text-sky-500">
+                    {title}
+                </Body>
+                <Body className="text-sm no-underline hover:no-underline">
+                    {new Date(publishedAt).toLocaleDateString()}
                 </Body>
             </Link>
         </li>

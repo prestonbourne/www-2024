@@ -10,7 +10,7 @@ import {
   ReactElement,
   ComponentProps,
 } from "react";
-import { ArrowRightIcon, InformationCircleIcon } from "./icons";
+import { ArrowRightIcon, InfoCircledIcon} from "@radix-ui/react-icons";
 import NextImage, { ImageProps as NextImageProps } from "next/image";
 import { CodeBlock, extractCodeEl, extractLang } from "./markdown/CodeBlock";
 import { codeToHtml } from "shiki";
@@ -82,14 +82,14 @@ export const Link: React.FC<LinkProps> = ({ href, children, ...props }) => {
 
 const TypeToEmoji = {
   error: "🚫",
-  info: <InformationCircleIcon />,
+  info: <InfoCircledIcon />,
   warning: "⚠️",
 };
 
 type CalloutType = keyof typeof TypeToEmoji;
 
 const calloutClasses = cva(
-  "overflow-x-auto my-6 rounded-xl border py-4 px-6 contrast-more:border-current contrast-more:dark:border-current transition-all",
+  "overflow-x-auto my-6 rounded-md border py-4 px-6 contrast-more:border-current contrast-more:dark:border-current transition-all",
   {
     variants: {
       type: {

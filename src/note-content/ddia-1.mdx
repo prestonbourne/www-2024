@@ -87,11 +87,11 @@ async function fetchData() {
 
 #### Hardware Faults
 
-As an application developer, these are a bit more out of your control. Fortunately, one of the big selling points of Cloud Providers like AWS is that they ensure you don’t need to worry about these. Cloud platforms are designed to prioritize flexibility and elasticity over single machine reliability, however, this does not mean they can’t occasionally occur.
+As an application developer, these are a bit more out of your control. Fortunately, one of the big selling points of Cloud Providers like AWS is that they abstract away the hardware for your. Cloud platforms are designed to prioritize flexibility and elasticity over single machine reliability, however, this does not mean they can’t occasionally occur.
 
 Common Hardware Faults include:
 
-- **Disk Failures**: Hard disks have a mean time to failure (MTTF) of about 10 to 50 years, but in large storage clusters, you might expect one disk to fail per day.
+- **Disk Failures**: Hard disks have a mean time to failure (MTTF) of about 10 to 50 years, in large storage clusters, you might expect one disk to fail per day.
 - **Power Failures**: Power outages or fluctuations can cause system crashes and data corruption. Redundant power supplies and backup generators are common mitigations.
 - **Network Failures**: Unplugging the wrong network cable or router malfunctions can lead to network partitions, affecting the availability and consistency of distributed systems.
 
@@ -115,11 +115,15 @@ To understand and plan for scalability, we describe the current load using load 
 
 TLDR on how Twitter handles Scale
 
-It’s like a mailbox. Twitter used a technique called fan-out. The intuition behind this is that people tend to tweet far less than they just open the app. Thus, it makes sense to send tweets to each follower at the time of posting instead of to querying the entire database whenever someone opens the app,. Note that there are edge cases for celebrities with >1M followers where the logic must change since sending the tweet to so many people at once would make the experience bad for the tweeter.
+It’s like a mailbox. Twitter used a technique called fan-out. The intuition behind this is that people tend to tweet far less than they just open the app. Thus, it makes sense to send tweets to each follower at the time of posting instead of to querying the entire database whenever someone opens the app. Note that there are edge cases for celebrities with >1M followers where the logic must change since sending the tweet to so many people at once would make the experience bad for the tweeter.
 
-**Post Tweet Operation** - **Average Load**: 4.6k requests/second, peaking at 12k requests/second. - **Description**: A user posts a tweet, which needs to be delivered to all their followers.
+**Post Tweet Operation** 
+- **Average Load**: 4.6k requests/second, peaking at 12k requests/second
+- **Description**: A user posts a tweet, which needs to be delivered to all their followers
 
-**View Timeline Operation** - **Average Load**: 300k requests/second. - **Description**: Users view tweets posted by people they follow, requiring access to a personalized home timeline.
+**View Timeline Operation**
+- **Average Load**: 300k requests/second
+- **Description**: Users view tweets posted by people they follow, requiring access to a personalized home timeline
 
 _Initially_, when a user requests their home timeline, the system looks up all the people they follow, retrieves all the tweets from those users, and merges them in real-time. This method was inefficient under heavy load, as merging tweets on-the-fly required significant computational resources, causing performance issues.
 
