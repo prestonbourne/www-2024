@@ -13,8 +13,8 @@ export const NoteHeading = ({
 }) => {
   return (
     <>
-      <Heading level={1}>{title}</Heading>
-      <Body className="text-slate-700 text-sm">{description}</Body>
+      <Heading level={1} className="pb-1">{title}</Heading>
+      <Body className="text-slate-700 text-sm py-2">{description}</Body>
     </>
   );
 };

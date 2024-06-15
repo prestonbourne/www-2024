@@ -1,7 +1,12 @@
 import { Banner } from "./Banner";
 import { Main } from "@/components/Main";
 import { Header } from "@/components/Header";
-import { Heading, Body, Link } from "@/components/markdown";
+import { Heading, Body as BaseBody, Link } from "@/components/markdown";
+import { ComponentProps } from "react";
+
+const Body = ({ children }: ComponentProps<'p'>) => {
+  return <BaseBody className="py-2">{children}</BaseBody>;
+}
 
 export const Home = () => {
   return (

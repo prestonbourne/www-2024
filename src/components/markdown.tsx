@@ -10,7 +10,7 @@ import {
   ReactElement,
   ComponentProps,
 } from "react";
-import { ArrowRightIcon, InfoCircledIcon} from "@radix-ui/react-icons";
+import { ArrowRightIcon, InfoCircledIcon } from "@radix-ui/react-icons";
 import NextImage, { ImageProps as NextImageProps } from "next/image";
 import { CodeBlock, extractCodeEl, extractLang } from "./markdown/CodeBlock";
 import { codeToHtml } from "shiki";
@@ -19,8 +19,8 @@ const headingStyles = cva("font-bold text-slate-800", {
   variants: {
     level: {
       1: "text-2xl lg:text-3xl py-4",
-      2: "text-xl lg:text-2xl py-4",
-      3: "text-lg lg:text-xl py-3",
+      2: "text-xl lg:text-2xl py-3",
+      3: "text-lg lg:text-xl py-2",
       4: "text-base lg:text-lg py-2",
       5: "text-lg",
       6: "text-base",
@@ -59,7 +59,7 @@ export const Body: React.FC<React.HTMLAttributes<HTMLParagraphElement>> = ({
 }) => {
   return (
     <p
-      className={`text-base text-slate-800 leading-relaxed mb-4 ${className}`}
+      className={`text-base text-slate-800 leading-relaxed ${className}`}
       {...props}
     >
       {children}
@@ -157,7 +157,7 @@ export const ListItem: React.FC = ({
 };
 
 export const Divider = ({ className }: ComponentProps<"hr">) => {
-  return <hr className={`my-3 border-t border-slate-300 ${className}`} />;
+  return <hr className={`border-t border-slate-300 ${className}`} />;
 };
 
 type ImageProps = NextImageProps & {
@@ -205,7 +205,9 @@ const components: MDXComponents = {
 
     return <Image alt={imgName} src={src} />;
   },
-  p: (props) => <Body {...props} />,
+  p: ({ className, ...rest }) => {
+    return <Body {...rest} className={`${className} mb-4`} />;
+  },
   a: (props) => {
     const { href, children, ...rest } = props;
     if (typeof href !== "string") {
@@ -239,9 +241,8 @@ const components: MDXComponents = {
       lang,
       theme: "snazzy-light",
     });
-    
 
-    return <CodeBlock code={code}  />;
+    return <CodeBlock code={code} />;
   },
 };
 
