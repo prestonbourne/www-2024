@@ -18,15 +18,15 @@ export const Home = () => {
     <>
       <Banner />
       <Header>
-        <Heading level={2} render="h1" className="pb-2">
+        <Heading level={2} render="h1" className="pb-1">
           Preston Bourne
           <span className="text-base lg:text-lg">
             &nbsp;/ engineering + design
           </span>
         </Heading>
-        <p className="text-lg font-medium">
-          Crafting beautiful & performant software
-        </p>
+        <BaseBody className="italic" >
+          Chasing beautiful, performant software
+        </BaseBody>
       </Header>
       <Main>
         <Body>
