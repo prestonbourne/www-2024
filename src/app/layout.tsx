@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
 import { Fira_Sans } from "next/font/google";
+import Head from "next/head";
 import "./globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/react"
@@ -9,11 +9,6 @@ const firaSans = Fira_Sans({
     subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-    title: "Preston Bourne",
-    description: "Homepage of Preston Bourne, a Software Engineer and Designer.",
-};
-
 export default function RootLayout({
     children,
 }: Readonly<{
@@ -21,6 +16,14 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
+            <Head>
+                <meta charSet="utf-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <link rel="icon" href="/favicon.ico" />
+                <title>Preston Bourne | Software Engineer</title>
+                <meta name="description" content="Chasing beautiful, performant software." />
+                <meta name="og:title" content="Preston Bourne | Software Engineer" />
+            </Head>
             <body className={`${firaSans.className} bg-light dark:bg-dark text-light dark:text-dark`}>
                 {children}
                 <SpeedInsights />
