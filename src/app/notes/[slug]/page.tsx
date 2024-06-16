@@ -25,35 +25,35 @@ export default async function Page({ params }: { params: any }) {
   onlyInProduction(() => noteService.incrementViews(note.slug, cookies));
 
   return (
-    <article>
+    <>
       <BackLink link="/notes" />
-      <Heading level={1} className="pb-2">
-        {metadata.title}
-      </Heading>
-      <Body className="text-sm py-2">
-        {metadata.description}
-      </Body>
-      <div className="flex justify-between my-2 py-0 items-center">
-        <NoteStat
-          text={formatISOToDate(metadata.publishedAt)}
-          Icon={CalendarIcon}
-        />
-        <div className="flex gap-4 my-0 py-0 items-center">
+      <article>
+        <Heading level={1} className="pb-2">
+          {metadata.title}
+        </Heading>
+        <Body className="text-sm py-2">{metadata.description}</Body>
+        <div className="flex justify-between my-2 py-0 items-center">
           <NoteStat
-            text={`${calculateReadingTime(note.content)} mins`}
-            Icon={ClockIcon}
+            text={formatISOToDate(metadata.publishedAt)}
+            Icon={CalendarIcon}
           />
-          <ViewCount text={note.views} />
+          <div className="flex gap-4 my-0 py-0 items-center">
+            <NoteStat
+              text={`${calculateReadingTime(note.content)} mins`}
+              Icon={ClockIcon}
+            />
+            <ViewCount text={note.views} />
+          </div>
         </div>
-      </div>
 
-      <Divider className="my-4" />
-      <CustomMDX source={note.content} />
-      <Divider className="my-4" />
-      <div className="flex justify-end my-8">
-        {/* <LikeCount text={note.likes} /> */}
-      </div>
-    </article>
+        <Divider className="my-4" />
+        <CustomMDX source={note.content} />
+        <Divider className="my-4" />
+        <div className="flex justify-end my-8">
+          {/* <LikeCount text={note.likes} /> */}
+        </div>
+      </article>
+    </>
   );
 }
 

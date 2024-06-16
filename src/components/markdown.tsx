@@ -205,7 +205,7 @@ const components: MDXComponents = {
 
     return <Image alt={imgName} src={src} />;
   },
-  p: ({ className, ...rest }) => {
+  p: ({ className='', ...rest }) => {
     return <Body {...rest} className={`${className} mb-4`} />;
   },
   a: (props) => {

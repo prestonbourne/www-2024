@@ -19,7 +19,7 @@ export default async function NotesHome() {
 
   return (
     <>
-      <Header>
+      <Header className="py-0 px-0">
         <BackLink link="/" />
         <NoteHeading
           title="Notes"
@@ -28,9 +28,7 @@ export default async function NotesHome() {
         />
         <Divider className="mt-2 mb-4" />
       </Header>
-      <Main>
-        <NoteList notes={notes} />
-      </Main>
+      <NoteList notes={notes} />
     </>
   );
 }
