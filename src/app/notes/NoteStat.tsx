@@ -9,7 +9,7 @@ type NoteStatProps = {
 export const NoteStat = ({ text = 0, Icon }: NoteStatProps) => {
   return (
     <div
-      className={`text-slate-600 text-sm flex flex-row items-center gap-1`}
+      className={`text-sm flex flex-row items-center gap-1`}
     >
       {Icon && (
         <div className="w-4 h-4">

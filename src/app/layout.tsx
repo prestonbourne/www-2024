@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={`${firaSans.className} bg-slate-50`}>
+            <body className={`${firaSans.className} bg-light dark:bg-dark text-light dark:text-dark`}>
                 {children}
                 <SpeedInsights />
                 <Analytics />

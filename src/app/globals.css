@@ -79,6 +79,12 @@ h6 {
     }
 }
 
+@layer base {
+  :root {
+    --shadow-dense: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.04), 0 3px 6px rgba(0, 0, 0, 0.1), 0 6px 12px rgba(0, 10, 10, 0.10)
+  }
+}
+
 @layer utilities {
     .text-balance {
         text-wrap: balance;
@@ -143,4 +149,30 @@ h6 {
 ::-webkit-scrollbar-thumb {
   background-color: lightgrey;
   border-radius: 4px;
+}
+
+@media (prefers-color-scheme: dark) {
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(87,53,87,0.6);
+  }
+}
+
+ pre.shiki {
+  padding: 16px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 24px 0;
+  box-shadow: var(--shadow-dense);
+}
+
+@media (prefers-color-scheme: dark) {
+  .shiki,
+  .shiki span {
+    color: var(--shiki-dark) !important;
+    background-color: var(--shiki-dark-bg) !important;
+    /* Optional, if you also want font styles */
+    font-style: var(--shiki-dark-font-style) !important;
+    font-weight: var(--shiki-dark-font-weight) !important;
+    text-decoration: var(--shiki-dark-text-decoration) !important;
+  }
 }

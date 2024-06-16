@@ -14,7 +14,7 @@ export const NoteHeading = ({
   return (
     <>
       <Heading level={1} className="pb-1">{title}</Heading>
-      <Body className="text-slate-700 text-sm py-2">{description}</Body>
+      <Body className="text-sm py-2">{description}</Body>
     </>
   );
 };

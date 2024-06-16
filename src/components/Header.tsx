@@ -4,7 +4,7 @@ type HeaderProps = { children: React.ReactNode } & React.HTMLProps<HTMLDivElemen
 
 export const Header: React.FC<HeaderProps> = ({ children, className }) => {
     return (
-        <header className={`mx-auto max-w-2xl py-2 px-4 ${className}`}>
+        <header className={`mx-auto max-w-3xl py-2 px-4 ${className}`}>
             {children}
         </header>
     );

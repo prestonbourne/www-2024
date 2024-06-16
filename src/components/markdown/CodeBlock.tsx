@@ -8,10 +8,10 @@ export const CodeBlock = ({ code }: CodeBlockProps) => {
   return (
     <div
       dangerouslySetInnerHTML={{ __html: code }}
-      className="my-4 shadow-md p-4 border rounded-md overflow-x-auto"
     />
   );
 };
+
 
 export const extractLang = (className?: string) => {
   if (!className) return "plaintext";

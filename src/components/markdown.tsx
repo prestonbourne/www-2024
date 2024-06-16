@@ -10,12 +10,12 @@ import {
   ReactElement,
   ComponentProps,
 } from "react";
-import { ArrowRightIcon, InfoCircledIcon } from "@radix-ui/react-icons";
+import { ChevronRightIcon, InfoCircledIcon } from "@radix-ui/react-icons";
 import NextImage, { ImageProps as NextImageProps } from "next/image";
 import { CodeBlock, extractCodeEl, extractLang } from "./markdown/CodeBlock";
 import { codeToHtml } from "shiki";
 
-const headingStyles = cva("font-bold text-slate-800", {
+const headingStyles = cva("font-bold text-slate-800 dark:text-neutral-300 antialised", {
   variants: {
     level: {
       1: "text-2xl lg:text-3xl py-4",
@@ -59,7 +59,7 @@ export const Body: React.FC<React.HTMLAttributes<HTMLParagraphElement>> = ({
 }) => {
   return (
     <p
-      className={`text-base text-slate-800 leading-relaxed ${className}`}
+      className={`text-base leading-relaxed antialiased ${className}`}
       {...props}
     >
       {children}
@@ -94,7 +94,7 @@ const calloutClasses = cva(
     variants: {
       type: {
         error: "border-red-200 bg-red-500 text-red-900",
-        info: "border-blue-500 bg-blue-200 text-blue-900",
+        info: "border-blue-500 bg-blue-200 text-blue-900 dark:bg-blue-900 dark:text-blue-200",
         warning: "border-yellow-200 bg-yellow-500 text-yellow-900",
       },
     },
@@ -135,7 +135,7 @@ export function Callout({
       <summary className="flex items-center cursor-pointer">
         <div className="select-none text-xl mr-3">{emoji}</div>
         <span className="font-semibold">{title}</span>
-        <ArrowRightIcon className="ml-auto w-6 h-6 arrow-icon" />
+        <ChevronRightIcon className="ml-auto w-5 h-5 arrow-icon" />
       </summary>
       <div className="mt-4">{children}</div>
     </details>
@@ -153,11 +153,11 @@ export const UnorderedList: React.FC<UnorderedListProps> = ({ children }) => {
 export const ListItem: React.FC = ({
   children,
 }: React.HTMLAttributes<HTMLLIElement>) => {
-  return <li className="my-2 text-base text-slate-800">{children}</li>;
+  return <li className="my-2 text-base">{children}</li>;
 };
 
 export const Divider = ({ className }: ComponentProps<"hr">) => {
-  return <hr className={`border-t border-slate-300 ${className}`} />;
+  return <hr className={`border-t border-neutral-300 dark:border-neutral-600 ${className}`} />;
 };
 
 type ImageProps = NextImageProps & {
@@ -167,7 +167,7 @@ type ImageProps = NextImageProps & {
 
 const Image = ({ src, alt }: ImageProps) => {
   return (
-    <figure className="my-12 overflow-clip rounded-md shadow-xl">
+    <figure className="my-12 overflow-clip rounded-md shadow-dense">
       <figcaption className="block bg-slate-500 text-sm text-slate-100 pl-6 py-2">
         {alt}
       </figcaption>
@@ -239,7 +239,10 @@ const components: MDXComponents = {
     const lang = extractLang(codeEl?.props.className as string);
     const code = await codeToHtml(codeEl?.props.children as string, {
       lang,
-      theme: "snazzy-light",
+      themes: {
+        light: 'catppuccin-latte',
+        dark: 'dracula-soft'
+      },
     });
 
     return <CodeBlock code={code} />;

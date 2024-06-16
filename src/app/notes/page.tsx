@@ -7,25 +7,20 @@ import { NoteStat } from "./NoteStat";
 import { ArrowTopRightIcon, CalendarIcon } from "@radix-ui/react-icons";
 import { noteService } from "./note-service";
 import { cookies } from "next/headers";
+import { BackLink } from "./BackLink";
 import type { Note } from "@/types";
 
 export default async function NotesHome() {
-
   let notes: Note[] = [];
   const notesRes = await noteService.fetchNotes(cookies);
   if (!notesRes.error) {
     notes = notesRes.data;
-  };
+  }
 
   return (
     <>
       <Header>
-        <Link
-          href={"/"}
-          className="text-slate-800 hover:text-slate-600 transition-colors"
-        >
-          &lsaquo; Go Back
-        </Link>
+        <BackLink link="/" />
         <NoteHeading
           title="Notes"
           description="Documentation of my learnings, thoughts and experiments. The
@@ -47,12 +42,17 @@ function NoteItem(note: Note) {
   return (
     <li className="flex flex-row justify-between items-center group hover:cursor-pointer">
       <Link href={`/notes/${slug}`} className="block my-1 group">
-        <Body className="text-inherit group-hover:underline group-hover:decoration-dashed group-hover/:text-sky-500 pb-1 transition-colors">
+        <Body className="text-inherit pb-1 transition-colors decoration-dotted group-hover:underline">
           {title}
         </Body>
-        <NoteStat text={formattedDate} Icon={CalendarIcon} />
+        <div className="text-sm flex flex-row items-center gap-1">
+          <div className="w-4 h-4">
+            <CalendarIcon />
+          </div>
+          {formattedDate}
+        </div>
       </Link>
-      <div className="text-slate-800 group-hover:text-sky-500 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all">
+      <div className="group-hover:text-sky-500 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all">
         <ArrowTopRightIcon className="w-4 h-4" />
       </div>
     </li>
@@ -60,7 +60,6 @@ function NoteItem(note: Note) {
 }
 
 function NoteList({ notes }: { notes: Note[] }) {
-
   if (notes.length === 0) {
     return <FailedToLoadNotes />;
   }
@@ -75,11 +74,11 @@ function NoteList({ notes }: { notes: Note[] }) {
 }
 
 function FailedToLoadNotes() {
-
-
   return (
     <div className="flex flex-col items-center justify-center">
-      <Body className="text-slate-800 text-lg">Sorry about that, something went wrong when trying to fetch my notes</Body>
+      <Body className="text-slate-800 text-lg">
+        Sorry about that, something went wrong when trying to fetch my notes
+      </Body>
     </div>
   );
 }
