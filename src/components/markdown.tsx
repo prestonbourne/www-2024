@@ -105,7 +105,7 @@ export const Link: React.FC<LinkProps> = ({
     >
       {children}
       {icon && (
-        <ExternalLinkIcon className="transition-transform group-hover:translate-x-[2px] group-hover:-translate-y-[2px]" />
+        <ExternalLinkIcon className="transition-all group-hover:translate-x-[2px] group-hover:-translate-y-[2px]" />
       )}
     </NextLink>
   );
