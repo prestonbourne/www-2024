@@ -43,7 +43,7 @@ const HomeButton: React.FC = () => {
   return (
     <Link href={"/"}>
       <div className="px-3 py-1 rounded-lg sheen-ring hover:scale-110 transition-transform text-xl bg-slate-50 dark:bg-background/50 border border-solid border-slate-400 dark:border-none">
-        <p className="dark:text-light-sec text-slate-500">~</p>
+        <p className="dark:text-body text-slate-400">~</p>
       </div>
     </Link>
   );
