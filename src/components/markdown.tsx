@@ -10,26 +10,34 @@ import {
   ReactElement,
   ComponentProps,
 } from "react";
-import { ChevronRightIcon, InfoCircledIcon } from "@radix-ui/react-icons";
+import {
+  ExternalLinkIcon,
+  ChevronRightIcon,
+  InfoCircledIcon,
+} from "@radix-ui/react-icons";
 import NextImage, { ImageProps as NextImageProps } from "next/image";
 import { CodeBlock, extractCodeEl, extractLang } from "./markdown/CodeBlock";
 import { codeToHtml } from "shiki";
+import { cx } from "class-variance-authority";
 
-const headingStyles = cva("font-bold text-slate-800 dark:text-neutral-300 antialised", {
-  variants: {
-    level: {
-      1: "text-2xl lg:text-3xl py-4",
-      2: "text-xl lg:text-2xl py-3",
-      3: "text-lg lg:text-xl py-2",
-      4: "text-base lg:text-lg py-2",
-      5: "text-lg",
-      6: "text-base",
+const headingStyles = cva(
+  "font-bold text-slate-800 dark:text-white text-black antialised",
+  {
+    variants: {
+      level: {
+        1: "text-2xl lg:text-3xl py-4",
+        2: "text-xl lg:text-2xl py-3",
+        3: "text-lg lg:text-xl py-2",
+        4: "text-base lg:text-lg py-2",
+        5: "text-lg",
+        6: "text-base",
+      },
     },
-  },
-  defaultVariants: {
-    level: 1,
-  },
-});
+    defaultVariants: {
+      level: 1,
+    },
+  }
+);
 
 type HeadingProps = {
   level: 1 | 2 | 3 | 4 | 5 | 6;
@@ -59,7 +67,10 @@ export const Body: React.FC<React.HTMLAttributes<HTMLParagraphElement>> = ({
 }) => {
   return (
     <p
-      className={`text-base leading-relaxed antialiased ${className}`}
+      className={cx(
+        `text-base leading-relaxed antialiased text-body`,
+        className
+      )}
       {...props}
     >
       {children}
@@ -67,15 +78,35 @@ export const Body: React.FC<React.HTMLAttributes<HTMLParagraphElement>> = ({
   );
 };
 
-type LinkProps = NextLinkProps &
-  React.AnchorHTMLAttributes<HTMLAnchorElement> & {
+export type LinkProps = NextLinkProps &
+  ComponentProps<'a'> & {
     children: React.ReactNode;
+    icon?: true;
   };
 
-export const Link: React.FC<LinkProps> = ({ href, children, ...props }) => {
+export const Link: React.FC<LinkProps> = ({
+  href,
+  children,
+  className,
+  icon = false,
+  ...props
+}) => {
   return (
-    <NextLink href={href} className="link-animation" {...props}>
+    <NextLink
+      href={href}
+      className={cx(
+        "underline decoration-dotted inline-flex flex-row items-center gap-1",
+        "transition-all underline-offset-4",
+        "hover:text-primary hover:decoration-action",
+        icon && "group",
+        className
+      )}
+      {...props}
+    >
       {children}
+      {icon && (
+        <ExternalLinkIcon className="transition-transform group-hover:translate-x-[2px] group-hover:-translate-y-[2px]" />
+      )}
     </NextLink>
   );
 };
@@ -157,7 +188,11 @@ export const ListItem: React.FC = ({
 };
 
 export const Divider = ({ className }: ComponentProps<"hr">) => {
-  return <hr className={`border-t border-neutral-300 dark:border-neutral-600 ${className}`} />;
+  return (
+    <hr
+      className={`border-t border-neutral-300 dark:border-neutral-600 ${className}`}
+    />
+  );
 };
 
 type ImageProps = NextImageProps & {
@@ -205,7 +240,7 @@ const components: MDXComponents = {
 
     return <Image alt={imgName} src={src} />;
   },
-  p: ({ className='', ...rest }) => {
+  p: ({ className = "", ...rest }) => {
     return <Body {...rest} className={`${className} mb-4`} />;
   },
   a: (props) => {
@@ -240,8 +275,8 @@ const components: MDXComponents = {
     const code = await codeToHtml(codeEl?.props.children as string, {
       lang,
       themes: {
-        light: 'catppuccin-latte',
-        dark: 'dracula-soft'
+        light: "catppuccin-latte",
+        dark: "dracula-soft",
       },
     });
 

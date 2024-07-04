@@ -1,13 +1,9 @@
-import { Main } from "@/components/Main";
-import { Header } from "@/components/Header";
+import { Header, Main } from "@/components/common";
 import { Body, Divider } from "@/components/markdown";
-import { NoteHeading } from "./NoteHeading";
+import { NoteHeading } from "@/components/notes/NoteHeading";
 import Link from "next/link";
-import { NoteStat } from "./NoteStat";
-import { ArrowTopRightIcon, CalendarIcon } from "@radix-ui/react-icons";
-import { noteService } from "./note-service";
+import { noteService } from "@/lib/note-service";
 import { cookies } from "next/headers";
-import { BackLink } from "./BackLink";
 import type { Note } from "@/types";
 
 export default async function NotesHome() {
@@ -20,7 +16,6 @@ export default async function NotesHome() {
   return (
     <>
       <Header className="py-0 px-0">
-        <BackLink link="/" />
         <NoteHeading
           title="Notes"
           description="Documentation of my learnings, thoughts and experiments. The
@@ -34,25 +29,32 @@ export default async function NotesHome() {
 }
 
 function NoteItem(note: Note) {
-  const { metadata, slug } = note;
+  const { metadata, slug, views } = note;
   const { title, publishedAt } = metadata;
-  const formattedDate = new Date(publishedAt).toLocaleDateString();
+  const date = new Date(publishedAt);
+  const formattedDate = `${date.toLocaleString("default", {
+    month: "long",
+  })} ${date.getFullYear()}`;
+
   return (
-    <li className="flex flex-row justify-between items-center group hover:cursor-pointer">
-      <Link href={`/notes/${slug}`} className="block my-1 group">
-        <Body className="text-inherit pb-1 transition-colors decoration-dotted group-hover:underline">
+    <li>
+      <Link
+        href={`/notes/${slug}`}
+        className="flex flex-col justify-between py-2 my-2 group w-full"
+      >
+        <Body className="transition-colors group-hover:text-primary">
           {title}
         </Body>
-        <div className="text-sm flex flex-row items-center gap-1">
-          <div className="w-4 h-4">
-            <CalendarIcon />
-          </div>
-          {formattedDate}
+        <div className="flex flex-row">
+          {views ? (
+            <Body className="text-sm text-sub-text">
+              {formattedDate}&nbsp;~&nbsp;{views} views
+            </Body>
+          ) : (
+            <Body className="text-sm text-sub-text">{formattedDate}</Body>
+          )}
         </div>
       </Link>
-      <div className="group-hover:text-sky-500 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all">
-        <ArrowTopRightIcon className="w-4 h-4" />
-      </div>
     </li>
   );
 }
@@ -63,11 +65,13 @@ function NoteList({ notes }: { notes: Note[] }) {
   }
 
   return (
-    <ol>
-      {notes.map((note) => (
-        <NoteItem key={note.slug} {...note} />
-      ))}
-    </ol>
+    <Main>
+      <ol>
+        {notes.map((note) => (
+          <NoteItem key={note.slug} {...note} />
+        ))}
+      </ol>
+    </Main>
   );
 }
 

@@ -2,8 +2,6 @@ import fs from "fs";
 import path from "path";
 import { NoteMetadata, Note } from "@/types";
 
-
-
 const parseFrontmatter = (fileContent: string) => {
   const frontmatterRegex = /---\s*([\s\S]*?)\s*---/;
   const match = frontmatterRegex.exec(fileContent);
@@ -75,8 +73,8 @@ export const formatISOToDate = (ISO: string) => {
   });
 };
 
-export const onlyInProduction = (fn: Function) => {
-  if (process.env.NODE_ENV === "production") {
+export const onlyIn = (env: typeof process.env.NODE_ENV, fn: Function) => {
+  if (process.env.NODE_ENV === env) {
     return fn();
   }
   return null;

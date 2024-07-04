@@ -1,6 +1,6 @@
-import { Database } from "@/supabase/types";
-import { getLocalNotes } from "./utils";
-import { supabase, Supabase, CookieOptions } from "@/supabase";
+import { Database } from "@/lib/supabase/types";
+import { getLocalNotes } from ".";
+import { supabase, Supabase, CookieOptions } from "@/lib/supabase";
 import type { Note, Result } from "@/types";
 
 // Schema for the notes table

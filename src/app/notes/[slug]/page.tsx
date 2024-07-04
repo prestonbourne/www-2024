@@ -1,8 +1,8 @@
 import { Heading, Body, Divider, Link } from "@/components/markdown";
 import { notFound } from "next/navigation";
 import { CustomMDX } from "@/components/markdown";
-import { calculateReadingTime, formatISOToDate } from "../utils";
-import { NoteStat } from "../NoteStat";
+import { calculateReadingTime, formatISOToDate } from "../../../lib";
+import { NoteStat } from "../../../components/notes/NoteStat";
 import {
   CalendarIcon,
   EyeOpenIcon,
@@ -10,9 +10,9 @@ import {
   HeartIcon,
 } from "@radix-ui/react-icons";
 import { cookies } from "next/headers";
-import { noteService } from "../note-service";
-import { onlyInProduction } from "../utils";
-import { BackLink } from "../BackLink";
+import { noteService } from "@/lib/note-service";
+import { onlyIn } from "@/lib";
+import { Main } from "@/components/common";
 
 export default async function Page({ params }: { params: any }) {
   const currentSlug = params.slug;
@@ -22,16 +22,17 @@ export default async function Page({ params }: { params: any }) {
   const note = noteRes.data;
 
   const { metadata } = note;
-  onlyInProduction(() => noteService.incrementViews(note.slug, cookies));
+  onlyIn("production", () => noteService.incrementViews(note.slug, cookies));
 
   return (
-    <>
-      <BackLink link="/notes" />
+    <Main>
       <article>
         <Heading level={1} className="pb-2">
           {metadata.title}
         </Heading>
-        <Body className="text-sm py-2">{metadata.description}</Body>
+        <Body className="text-sm py-2 text-sub-text">
+          {metadata.description}
+        </Body>
         <div className="flex justify-between my-2 py-0 items-center">
           <NoteStat
             text={formatISOToDate(metadata.publishedAt)}
@@ -48,12 +49,8 @@ export default async function Page({ params }: { params: any }) {
 
         <Divider className="my-4" />
         <CustomMDX source={note.content} />
-        <Divider className="my-4" />
-        <div className="flex justify-end my-8">
-          {/* <LikeCount text={note.likes} /> */}
-        </div>
       </article>
-    </>
+    </Main>
   );
 }
 
