@@ -202,8 +202,8 @@ type ImageProps = NextImageProps & {
 
 const Image = ({ src, alt }: ImageProps) => {
   return (
-    <figure className="my-12 overflow-clip rounded-md shadow-dense">
-      <figcaption className="block bg-slate-500 text-sm text-slate-100 pl-6 py-2">
+    <figure className="my-12 overflow-clip rounded-md sheen-ring dark:bg-background/30">
+      <figcaption className="block text-sm text-sub-text pl-6 py-2">
         {alt}
       </figcaption>
       <NextImage
@@ -280,7 +280,7 @@ const components: MDXComponents = {
       },
     });
 
-    return <CodeBlock code={code} />;
+    return <CodeBlock code={code} className="sheen-ring rounded-md" />;
   },
 };
 

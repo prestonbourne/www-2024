@@ -1,12 +1,14 @@
 import { ComponentProps, ReactElement } from "react";
+import { cx } from "class-variance-authority";
 
 type CodeBlockProps = {
   code: string;
 } & ComponentProps<"code">;
 
-export const CodeBlock = ({ code }: CodeBlockProps) => {
+export const CodeBlock = ({ code, className }: CodeBlockProps) => {
   return (
     <div
+      className={className}
       dangerouslySetInnerHTML={{ __html: code }}
     />
   );

@@ -11,7 +11,6 @@ const config: Config = {
     extend: {
       boxShadow: {
         dense: "rgb(var(--shadow-dense))",
-        ring: "rgb(209, 213, 219) 0px 0px 0px 1px inset",
       },
       colors: {
         'body': 'rgb(var(--body-color))',
