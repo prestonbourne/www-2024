@@ -1,10 +1,10 @@
 import { Header, Main } from "@/components/common";
 import { Body, Divider } from "@/components/markdown";
-import { NoteHeading } from "@/components/notes/NoteHeading";
+import { ContentHeading } from "@/components/common";
 import Link from "next/link";
-import { noteService } from "@/lib/note-service";
+import { noteService } from "@/lib/notes/service";
 import { cookies } from "next/headers";
-import type { Note } from "@/types";
+import type { Note } from "@/lib/notes/types";
 
 export default async function NotesHome() {
   let notes: Note[] = [];
@@ -16,7 +16,7 @@ export default async function NotesHome() {
   return (
     <>
       <Header className="py-0 px-0">
-        <NoteHeading
+        <ContentHeading
           title="Notes"
           description="Documentation of my learnings, thoughts and experiments. The
                 palest ink is more persistent than the sharpest memory."

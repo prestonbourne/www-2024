@@ -1,7 +1,7 @@
 import { Database } from "@/lib/supabase/types";
-import { getLocalNotes } from ".";
+import { getLocalNotes } from "..";
 import { supabase, Supabase, CookieOptions } from "@/lib/supabase";
-import type { Note, Result } from "@/types";
+import type { Note, Result } from "@/lib/notes/types";
 
 // Schema for the notes table
 type NoteRow = Database["public"]["Tables"]["notes"]["Row"];
