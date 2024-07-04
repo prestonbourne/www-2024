@@ -3,7 +3,6 @@ import {
   Body as BaseBody,
   Link as BaseLink,
   LinkProps,
-  Divider,
 } from "@/components/markdown";
 import { ComponentProps } from "react";
 import { Main, Header } from "@/components/common";
@@ -28,7 +27,7 @@ const Link = ({ children, href, ...rest }: LinkProps) => {
   );
 };
 
-export const Home = () => {
+export default function Page() {
   const getStaggerVal = (int: number) =>
     ({
       "--animation-order": int,
@@ -78,5 +77,3 @@ export const Home = () => {
     </>
   );
 };
-
-export default Home;
