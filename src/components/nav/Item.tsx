@@ -13,7 +13,6 @@ export const Item: React.FC<ItemProps> = ({
   href,
   selected = false,
 }) => {
-  console.log(selected)
 
   const linkClassName = cx(
     "dark:text-white cursor-pointer",
