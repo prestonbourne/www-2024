@@ -97,7 +97,7 @@ export const Link: React.FC<LinkProps> = ({
       className={cx(
         "underline decoration-dotted inline-flex flex-row items-center gap-1",
         "transition-all underline-offset-4",
-        "hover:text-primary hover:decoration-action",
+        "hover:text-primary",
         icon && "group",
         className
       )}
@@ -105,7 +105,7 @@ export const Link: React.FC<LinkProps> = ({
     >
       {children}
       {icon && (
-        <ExternalLinkIcon className="transition-all group-hover:translate-x-[2px] group-hover:-translate-y-[2px]" />
+        <ExternalLinkIcon className="transition-all group-hover:translate-x-[2px] group-hover:-translate-y-[2px] ease-out" />
       )}
     </NextLink>
   );

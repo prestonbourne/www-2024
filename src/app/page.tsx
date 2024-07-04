@@ -1,8 +1,7 @@
 import {
   Heading,
   Body as BaseBody,
-  Link as BaseLink,
-  LinkProps,
+  Link,
 } from "@/components/markdown";
 import { ComponentProps } from "react";
 import { Main, Header } from "@/components/common";
@@ -15,17 +14,6 @@ const Body = ({ children, ...rest }: ComponentProps<"p">) => {
   );
 };
 
-const Link = ({ children, href, ...rest }: LinkProps) => {
-  return (
-    <BaseLink
-      className={"dark:text-white text-sub-text"}
-      href={href!}
-      {...rest}
-    >
-      {children}
-    </BaseLink>
-  );
-};
 
 export default function Page() {
   const getStaggerVal = (int: number) =>
