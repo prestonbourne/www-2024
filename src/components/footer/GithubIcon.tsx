@@ -1,5 +1,5 @@
 import React from "react";
-import Link from "next/link";
+import { Link } from "../markdown";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 
 function getLatestCommit() {
@@ -13,13 +13,13 @@ const GithubIcon: React.FC = () => {
 
   return (
     <Link
-      className="inline-flex items-center gap-1.5 justify-self-end"
+      className="inline-flex items-center gap-2 text-sm text-sub-text"
       href="https://github.com/prestonbourne/www-2024"
       rel="noreferrer"
       target="_blank"
     >
       <GitHubLogoIcon />
-        <span className="hidden text-zinc-350 dark:text-zinc-450 sm:inline">
+        <span>
           {commit ? `#${commit}` : "Source"}
         </span>
     </Link>

@@ -79,7 +79,6 @@ function LikeCount({ text }: { text: string | number | undefined }) {
         <div className="w-4 h-4">
           <HeartIcon />
         </div>
-
         {text}
       </div>
     </button>

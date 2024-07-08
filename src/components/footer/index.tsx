@@ -11,12 +11,12 @@ export const Footer = ({ className, ...props }: ComponentProps<"footer">) => {
   return (
     <footer
       className={cx(
-        "grid grid-cols-2 gap-y-2 justify-between w-full md:pt-0 pt-5 mx-auto mt-4",
+        "w-full md:pt-0 pt-5 mx-auto mt-4 grid grid-cols-2 gap-y-2",
         className
       )}
       {...props}
     >
-      <div className="flex flex-row gap-4">
+      <div className="flex flex-row gap-4 text-sm mb-1">
         <Link
           className="text-sub-text"
           href="https://www.linkedin.com/in/prestonbourne/"
@@ -35,9 +35,11 @@ export const Footer = ({ className, ...props }: ComponentProps<"footer">) => {
         </Link>
       </div>
       <GithubIcon />
-      <Clock />
+        <Clock />
 
-      <p className="text-sub-text text-sm text-right">{year} Preston Bourne</p>
+      <p className="text-sm text-sub-text">
+        © {year} Preston Bourne. <span className="hidden sm:inline">All Rights Reserved.</span>
+      </p>
     </footer>
   );
 };
