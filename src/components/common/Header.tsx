@@ -6,5 +6,5 @@ type HeaderProps = {
 } & React.HTMLProps<HTMLDivElement>;
 
 export const Header: React.FC<HeaderProps> = ({ children, className }) => {
-  return <header className={cx(`py-2 px-4`, className)}>{children}</header>;
+  return <header className={cx(`py-2`, className)}>{children}</header>;
 };

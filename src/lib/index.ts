@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { NoteMetadata, Note } from "@/types";
+import { NoteMetadata, Note } from "@/lib/notes/types";
 
 const parseFrontmatter = (fileContent: string) => {
   const frontmatterRegex = /---\s*([\s\S]*?)\s*---/;

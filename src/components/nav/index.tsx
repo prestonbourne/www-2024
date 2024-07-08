@@ -6,7 +6,7 @@ import { Header } from "../common";
 import Link from "next/link";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 
-const ITEMS = [{ href: "/notes", label: "/notes" }];
+const ITEMS = [{ href: "/notes", label: "/notes" }, { href: "/sketches", label: "/sketches" }];
 
 export const Nav: React.FC = () => {
   const pathname = usePathname();
@@ -16,7 +16,7 @@ export const Nav: React.FC = () => {
       <nav className="mx-auto mt-4 mb-8 flex items-center justify-between">
         <HomeButton />
         <div className="flex flex-row items-center justify-center gap-4">
-          <ul>
+          <ul className="flex flex-row">
             {ITEMS.map((item, i) => (
               <Item
                 key={i}

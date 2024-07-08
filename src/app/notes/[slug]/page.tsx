@@ -10,7 +10,7 @@ import {
   HeartIcon,
 } from "@radix-ui/react-icons";
 import { cookies } from "next/headers";
-import { noteService } from "@/lib/note-service";
+import { noteService } from "@/lib/notes/service";
 import { onlyIn } from "@/lib";
 import { Main } from "@/components/common";
 

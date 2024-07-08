@@ -11,7 +11,7 @@ export const Footer = ({ className, ...props }: ComponentProps<"footer">) => {
   return (
     <footer
       className={cx(
-        "grid grid-cols-2 gap-y-2 justify-between w-full md:pt-0 pt-5 mx-auto px-4 mt-4",
+        "grid grid-cols-2 gap-y-2 justify-between w-full md:pt-0 pt-5 mx-auto mt-4",
         className
       )}
       {...props}
@@ -33,21 +33,11 @@ export const Footer = ({ className, ...props }: ComponentProps<"footer">) => {
         >
           X
         </Link>
-        <Link
-          href="https://sketches.prestonbourne.dev"
-          target="_blank"
-          className="text-sub-text"
-          icon
-        >
-          Sketches
-        </Link>
       </div>
       <GithubIcon />
       <Clock />
 
-      <p className="text-sub-text text-sm text-right">
-        © {year} Preston Bourne
-      </p>
+      <p className="text-sub-text text-sm text-right">{year} Preston Bourne</p>
     </footer>
   );
 };
