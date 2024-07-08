@@ -9,6 +9,9 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 export const SketchModal: React.FC = ({}) => {
   const { activeSketch, setActiveSketch } = useSketchContext();
 
+  const isOnClient = typeof window !== "undefined";
+  if (!isOnClient) return null;
+
   const shouldRender = !!(activeSketch && activeSketch.Component);
 
   return createPortal(
@@ -28,7 +31,7 @@ export const SketchModal: React.FC = ({}) => {
             opacity: 0,
             transform: "translate(-50%,-50%)",
           }}
-          className="fixed w-[90vw] max-h-[70vh] bg-background/65 backdrop-blur-md p-2 top-1/2 left-1/2 rounded-lg"
+          className="fixed w-[90vw] max-h-[70vh] bg-slate-100/60 dark:bg-background/65 backdrop-blur-md p-2 top-1/2 left-1/2 rounded-lg"
         >
           <div className="ml-2 flex items-center justify-between pb-1">
             <Heading render="h1" level={4} className="pb-0">
