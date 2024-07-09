@@ -40,9 +40,10 @@ export const getSketches = async (): Promise<Sketch[]> => {
         { ssr: false, loading: SketchLoading }
       );
 
-      const imageUrl = await import(`../../sketches/${id}/cover.png`).then(
-        (mod) => mod.default
-      );
+      /* this is in accordance with next.js static file serving, 
+      https://nextjs.org/docs/app/building-your-application/optimizing/static-assets
+      */
+      const imageUrl = metadata.imageUrl || `/sketches/${id}/cover.png`;
 
       return { id, ...metadata, Component, imageUrl };
     })
