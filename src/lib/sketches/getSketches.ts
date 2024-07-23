@@ -27,7 +27,7 @@ export const getSketches = async (): Promise<Sketch[]> => {
   //   return sketchIDs;
   // };
 
-  const sketchIDs = ["first-water"];
+  const sketchIDs = ["first-water", "mesh-gradient-1"];
 
   const sketches = await Promise.all(
     sketchIDs.map(async (id) => {

@@ -1,37 +1,57 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
-import { createPortal } from "react-dom";
 import { useSketchContext } from "./SketchProvider";
 import { Heading, Body } from "../markdown";
 import { Cross2Icon } from "@radix-ui/react-icons";
-
+import { ReactEventHandler } from "react";
 
 export const SketchModal: React.FC = ({}) => {
   const { activeSketch, setActiveSketch } = useSketchContext();
 
+  const shouldRender = !!(activeSketch && activeSketch.Component);
+
   const isOnClient = typeof window !== "undefined";
   if (!isOnClient) return null;
 
-  const shouldRender = !!(activeSketch && activeSketch.Component);
+  const handleCancel: ReactEventHandler<HTMLDialogElement> = (evt) => {
+    evt.preventDefault();
+    setActiveSketch(null);
+  };
 
-  return createPortal(
+  return (
     <AnimatePresence>
       {shouldRender && (
-        <motion.div
-          layout
+        <motion.dialog
+          ref={(node) => {
+            node?.showModal();
+          }}
           initial={{
             opacity: 0,
-            transform: "translate(-50%,-50%)",
+            translateX: "-50%",
+            translateY: "-50%",
+            scale: 0.92,
           }}
           animate={{
             opacity: 1,
-            transform: "translate(-50%,calc(-50% - 96px))",
+            translateY: "-75%",
+            scale: 1,
+            transition: {
+              type: "tween",
+              duration: 0.175,
+              easings: "easeInOut",
+            }
           }}
           exit={{
             opacity: 0,
-            transform: "translate(-50%,-50%)",
+            translateY: "-20%",
+            scale: 0.64,
+            transition: {
+              type: "tween",
+              duration: 0.125,
+            },
           }}
-          className="fixed w-[90vw] max-h-[70vh] bg-slate-100/60 dark:bg-background/65 backdrop-blur-md p-2 top-1/2 left-1/2 rounded-lg"
+          onCancel={handleCancel}
+          className="flex flex-col w-[90vw] h-[50vh] bg-slate-100/60 dark:bg-background/65 backdrop:backdrop-blur-sm p-2 top-1/2 left-1/2 rounded-lg backdrop:bg-background/80 sheen-ring"
         >
           <div className="ml-2 flex items-center justify-between pb-1">
             <Heading render="h1" level={4} className="pb-0">
@@ -47,10 +67,11 @@ export const SketchModal: React.FC = ({}) => {
             </button>
           </div>
           <Body className="pl-2 pb-2">{activeSketch.description}</Body>
-          <activeSketch.Component />
-        </motion.div>
+          <div className="w-full h-full rounded-md overflow-hidden">
+            <activeSketch.Component />
+          </div>
+        </motion.dialog>
       )}
-    </AnimatePresence>,
-    document.body
+    </AnimatePresence>
   );
 };
