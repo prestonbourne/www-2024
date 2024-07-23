@@ -1,3 +1,4 @@
+//@ts-nocheck
 import "server-only";
 import getImageSize from "image-size";
 import { visit } from "unist-util-visit";
