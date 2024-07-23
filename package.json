@@ -37,6 +37,7 @@
     "eslint": "^8",
     "eslint-config-next": "14.1.4",
     "postcss": "^8",
+    "server-only": "^0.0.1",
     "shiki": "^1.6.3",
     "supabase": "^1.176.10",
     "tailwindcss": "^3.3.0",

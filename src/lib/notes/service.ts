@@ -1,3 +1,4 @@
+import "server-only"
 import { Database } from "@/lib/supabase/types";
 import { getLocalNotes } from "..";
 import { supabase, Supabase, CookieOptions } from "@/lib/supabase";
