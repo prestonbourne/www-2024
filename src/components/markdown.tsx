@@ -110,7 +110,7 @@ export const NoteMDXRenderer: React.FC<{ source: string }> = ({ source }) => {
       options={{
         mdxOptions: {
           remarkPlugins: [],
-          rehypePlugins: [[rehypeImageSize, { root: process.cwd() + "/public" }]],
+          rehypePlugins: [[rehypeImageSize]],
         },
       }}
     />

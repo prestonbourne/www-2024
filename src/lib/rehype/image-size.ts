@@ -2,6 +2,7 @@
 import "server-only";
 import getImageSize from "image-size";
 import { visit } from "unist-util-visit";
+import path from "path";
 
 // credit to https://mmazzarolo.com/blog/2023-07-29-nextjs-mdx-image-size/
 
@@ -28,7 +29,7 @@ export const rehypeImageSize = (options) => {
     visit(tree, { type: "mdxJsxFlowElement", name: "Image" }, (node) => {
       const srcAttr = node.attributes?.find((attr) => attr.name === "src");
       // const imagePath = `${options?.root ?? ""}${srcAttr.value}`;
-      const imagePath = (options?.root ?? "") + extractSrcValue(node);
+      const imagePath = path.join(path.resolve('./public') + extractSrcValue(node));
       console.log("imagePath", imagePath);
       const imageSize = getImageSize(imagePath);
       const widthAttr = node.attributes?.find((attr) => attr.name === "width");
