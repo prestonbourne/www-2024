@@ -1,38 +1,23 @@
 import React from "react";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { MDXComponents } from "mdx/types";
-import { ReactNode, ReactElement } from "react";
-import NextImage, { ImageProps as NextImageProps } from "next/image";
+import { ReactElement } from "react";
 import { CodeBlock, extractCodeEl, extractLang } from "./CodeBlock";
 import { codeToHtml } from "shiki";
-import { rehypeImageSize } from "@/lib/rehype/image-size";
-import { Heading, Link, Paragraph } from "./typography";
+import { Heading, Link, Paragraph, UnorderedList, ListItem } from "./typography";
 import { Divider } from "./Divider";
 import { Callout } from "./Callout";
 import ServerImage from "./ServerImage"
+import { ImageProps as NextImageProps } from "next/image";
 
-type UnorderedListProps = {
-  children?: ReactNode;
-};
 
-export const UnorderedList: React.FC<UnorderedListProps> = ({ children }) => {
-  return <ul className="list-disc ml-6 my-4">{children}</ul>;
-};
-
-export const ListItem: React.FC = ({
-  children,
-}: React.HTMLAttributes<HTMLLIElement>) => {
-  return <li className="my-2 text-base">{children}</li>;
-};
 
 type ImageProps = NextImageProps & {
   src: string;
   alt?: string;
-  width: number;
-  height: number;
 };
 
-const Image = ({ src, alt, width, height }: ImageProps) => {
+const Image = ({ src, alt }: ImageProps) => {
   return (
     <figure className="flex flex-col my-12 max-w-full overflow-hidden rounded-md sheen-ring dark:bg-background/30">
       <figcaption className="w-full block text-sm text-sub-text pl-6 py-2">
@@ -42,10 +27,6 @@ const Image = ({ src, alt, width, height }: ImageProps) => {
         <ServerImage
           src={src}
           alt={alt}
-          objectFit="contain"
-          sizes="100%"
-          width={width}
-          height={height}
         />
       </div>
     </figure>
