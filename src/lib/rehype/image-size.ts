@@ -28,7 +28,8 @@ export const rehypeImageSize = (options) => {
     visit(tree, { type: "mdxJsxFlowElement", name: "Image" }, (node) => {
       const srcAttr = node.attributes?.find((attr) => attr.name === "src");
       // const imagePath = `${options?.root ?? ""}${srcAttr.value}`;
-      const imagePath   =  (options.root ?? "") + extractSrcValue(node);
+      const imagePath = (options?.root ?? "") + extractSrcValue(node);
+      console.log("imagePath", imagePath);
       const imageSize = getImageSize(imagePath);
       const widthAttr = node.attributes?.find((attr) => attr.name === "width");
       const heightAttr = node.attributes?.find(
@@ -73,4 +74,4 @@ const extractSrcValue = (node) => {
   }
 
   return srcValue;
-}
+};
