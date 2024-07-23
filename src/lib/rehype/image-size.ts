@@ -12,7 +12,7 @@ import path from "path";
  * Supports both markdown-style images and MDX <Image /> components.
  * @param {string} options.root - The root path when reading the image file.
  */
-export const rehypeImageSize = (options) => {
+export const rehypeImageSize = async (options) => {
   return (tree) => {
     // This matches all images that use the markdown standard format ![label](path).
     visit(tree, { type: "element", tagName: "img" }, (node) => {
@@ -29,6 +29,7 @@ export const rehypeImageSize = (options) => {
     visit(tree, { type: "mdxJsxFlowElement", name: "Image" }, (node) => {
       const srcAttr = node.attributes?.find((attr) => attr.name === "src");
       // const imagePath = `${options?.root ?? ""}${srcAttr.value}`;
+      const resolvedPath = path.resolve( process.cwd(), './public');
       const imagePath = path.join(path.resolve( process.cwd(), './public') + extractSrcValue(node));
       console.log("imagePath", imagePath);
       const imageSize = getImageSize(imagePath);

@@ -9,6 +9,7 @@ import { rehypeImageSize } from "@/lib/rehype/image-size";
 import { Heading, Link, Paragraph } from "./typography";
 import { Divider } from "./Divider";
 import { Callout } from "./Callout";
+import ServerImage from "./ServerImage"
 
 type UnorderedListProps = {
   children?: ReactNode;
@@ -38,7 +39,7 @@ const Image = ({ src, alt, width, height }: ImageProps) => {
         {alt}
       </figcaption>
       <div className="w-full relative flex-1">
-        <NextImage
+        <ServerImage
           src={src}
           alt={alt}
           objectFit="contain"
@@ -110,7 +111,6 @@ export const NoteMDXRenderer: React.FC<{ source: string }> = ({ source }) => {
       options={{
         mdxOptions: {
           remarkPlugins: [],
-          rehypePlugins: [[rehypeImageSize]],
         },
       }}
     />
