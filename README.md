@@ -1,3 +1,20 @@
+# prestonbourne.dev ⚡️
+
+my online home :)
+you're welcome to use any code snippets you find or even use the entire website as a template, obviously i can't (and won't) enforce this but if you use any code from here please give some credit, just something like
+```js
+// from https://github.com/prestonbourne/www-2024
+```
+
+## Quick Info
+- **Framework**: [Next.js](https://nextjs.org/)
+- **Deployment**: [Vercel](https://vercel.com)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Content**: [MDX](https://github.com/hashicorp/next-mdx-remote)
+
+## Development
+below is the default readme from next.js
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
