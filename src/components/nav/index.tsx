@@ -2,7 +2,7 @@
 import React from "react";
 import { Item } from "./Item";
 import { usePathname } from "next/navigation";
-import { Header } from "../common";
+import { Header } from "../Header";
 import Link from "next/link";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 

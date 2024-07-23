@@ -1,6 +1,6 @@
 "use client";
 import { Sketch } from "@/lib/sketches/types";
-import { Heading } from "../markdown";
+import { Heading } from "@/components/typography/Heading";
 import Image from "next/image";
 import { useSketchContext } from "./SketchProvider";
 import { motion } from "framer-motion";

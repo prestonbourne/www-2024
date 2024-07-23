@@ -1,6 +1,5 @@
-import { Heading, Body, Divider, Link } from "@/components/markdown";
 import { notFound } from "next/navigation";
-import { CustomMDX } from "@/components/markdown";
+import { NoteMDXRenderer } from "@/components/markdown";
 import { calculateReadingTime, formatISOToDate } from "../../../lib";
 import { NoteStat } from "../../../components/notes/NoteStat";
 import {
@@ -12,7 +11,10 @@ import {
 import { cookies } from "next/headers";
 import { noteService } from "@/lib/notes/service";
 import { onlyIn } from "@/lib";
-import { Main } from "@/components/common";
+import { Main } from "@/components/Main";
+import { Divider } from "@/components/Divider";
+import { Heading } from "@/components/typography/Heading";
+import { Paragraph as Body } from "@/components/typography/Paragraph";
 
 export default async function Page({ params }: { params: any }) {
   const currentSlug = params.slug;
@@ -48,7 +50,7 @@ export default async function Page({ params }: { params: any }) {
         </div>
 
         <Divider className="my-4" />
-        <CustomMDX source={note.content} />
+        <NoteMDXRenderer source={note.content}  />
       </article>
     </Main>
   );

@@ -1,7 +1,8 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSketchContext } from "./SketchProvider";
-import { Heading, Body } from "../markdown";
+import { Heading } from "../typography/Heading";
+import { Paragraph } from "../typography/Paragraph";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { ReactEventHandler } from "react";
 
@@ -66,7 +67,7 @@ export const SketchModal: React.FC = ({}) => {
               </div>
             </button>
           </div>
-          <Body className="pl-2 pb-2">{activeSketch.description}</Body>
+          <Paragraph className="pl-2 pb-2">{activeSketch.description}</Paragraph>
           <div className="w-full h-full rounded-md overflow-hidden">
             <activeSketch.Component />
           </div>

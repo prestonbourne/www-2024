@@ -3,7 +3,7 @@ import { cx } from "class-variance-authority";
 import type { ComponentProps } from "react";
 import { useState, useEffect } from "react";
 import GithubIcon from "./GithubIcon";
-import { Link } from "../markdown";
+import { Link } from "@/components/typography"
 
 export const Footer = ({ className, ...props }: ComponentProps<"footer">) => {
   const year = String(new Date().getFullYear());

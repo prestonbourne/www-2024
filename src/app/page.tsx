@@ -1,10 +1,10 @@
 import {
   Heading,
-  Body as BaseBody,
+  Paragraph as BaseBody,
   Link,
-} from "@/components/markdown";
+} from "@/components/typography";
 import { ComponentProps } from "react";
-import { Main, Header } from "@/components/common";
+import { Main, Header } from "@/components";
 
 const Body = ({ children, ...rest }: ComponentProps<"p">) => {
   return (
@@ -24,12 +24,6 @@ export default function Page() {
   return (
     <>
       <Header style={getStaggerVal(1)}>
-        {/* <Image
-          placeholder="blur"
-          src={srcImg}
-          alt="Headshot of Preston Bourne"
-          className="object-cover rounded-lg w-16 h-16 lg:w-20 lg:h-20 shadow-dense border-gray-400 border-2"
-        /> */}
         <Heading level={2} render="h1" className="pb-1">
           Preston Bourne
         </Heading>
@@ -60,7 +54,7 @@ export default function Page() {
             cornell tech
           </Link>
         </Body>
-        <Body>feel free to reach out or connect with me, links below</Body>
+        <Body style={getStaggerVal(4)} >feel free to reach out or connect with me, links below</Body>
       </Main>
     </>
   );

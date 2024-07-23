@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "../markdown";
+import { Link } from "@/components/typography";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 
 function getLatestCommit() {

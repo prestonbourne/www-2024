@@ -18,7 +18,7 @@ Whilst knowledge of data systems is crucial, it's more important to understand h
 
 Take an application like a todo list for example.
 
-<Image src={"/ddia-1/todo-app-architecture.png"} alt="Todo App System Design"/>
+<Image src="/ddia-1/todo-app-architecture.png" alt="Todo App System Design"/>
 
 Notice our application code, denoted by the server section, interfaces with Postgres and Redis, two different data systems. If users had a lot of long detailed todos, we could even connect to a 3rd data system optimized for full text search, companies like <Link target="_blank" href="https://www.algolia.com/">Algolia</Link> make this quite simple.
 

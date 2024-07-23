@@ -1,6 +1,5 @@
-import { ContentHeading } from "@/components/common";
-import { Divider } from "@/components/markdown";
 import { SketchList } from "@/components/sketches";
+import { ContentHeading, Divider } from "@/components";
 
 export default async function SketchesHome() {
   return (

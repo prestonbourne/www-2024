@@ -1,10 +1,10 @@
-import { Header, Main } from "@/components/common";
-import { Body, Divider } from "@/components/markdown";
-import { ContentHeading } from "@/components/common";
 import Link from "next/link";
 import { noteService } from "@/lib/notes/service";
 import { cookies } from "next/headers";
 import type { Note } from "@/lib/notes/types";
+import { ContentHeading, Divider, Header, Paragraph, Main } from "@/components";
+
+
 
 export default async function NotesHome() {
   let notes: Note[] = [];
@@ -42,16 +42,16 @@ function NoteItem(note: Note) {
         href={`/notes/${slug}`}
         className="flex flex-col justify-between py-2 my-2 group w-full"
       >
-        <Body className="transition-colors group-hover:text-primary">
+        <Paragraph className="transition-colors group-hover:text-primary">
           {title}
-        </Body>
+        </Paragraph>
         <div className="flex flex-row">
           {views ? (
-            <Body className="text-sm text-sub-text">
+            <Paragraph className="text-sm text-sub-text">
               {formattedDate}&nbsp;~&nbsp;{views} views
-            </Body>
+            </Paragraph>
           ) : (
-            <Body className="text-sm text-sub-text">{formattedDate}</Body>
+            <Paragraph className="text-sm text-sub-text">{formattedDate}</Paragraph>
           )}
         </div>
       </Link>
@@ -78,9 +78,9 @@ function NoteList({ notes }: { notes: Note[] }) {
 function FailedToLoadNotes() {
   return (
     <div className="flex flex-col items-center justify-center">
-      <Body className="text-slate-800 text-lg">
+      <Paragraph className="text-slate-800 text-lg">
         Sorry about that, something went wrong when trying to fetch my notes
-      </Body>
+      </Paragraph>
     </div>
   );
 }
