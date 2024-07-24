@@ -27,9 +27,12 @@ export const SketchItem: React.FC<SketchItemsProps> = ({ sketch }) => {
           setActiveSketch(sketch);
         }}
       >
-        <div className="relative h-40 w-full">
+        <motion.div
+          className="relative h-40 w-full"
+          layoutId={`sketch-img-${sketch.id}`}
+        >
           <Image src={imageUrl!} alt="Sketch Image" objectFit="cover" fill />
-        </div>
+        </motion.div>
         <div className="p-4">
           <Heading level={6} render="h2" className="mb-1">
             {title}

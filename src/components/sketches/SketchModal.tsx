@@ -26,36 +26,27 @@ export const SketchModal: React.FC = ({}) => {
           ref={(node) => {
             node?.showModal();
           }}
+          layoutId={`sketch-${activeSketch.id}`}
           initial={{
             opacity: 0,
-            translateX: "-50%",
-            translateY: "-50%",
-            scale: 0.92,
           }}
           animate={{
             opacity: 1,
-            translateY: "-75%",
-            scale: 1,
             transition: {
               type: "tween",
-              duration: 0.175,
-              easings: "easeInOut",
-            }
-          }}
-          exit={{
-            opacity: 0,
-            translateY: "-20%",
-            scale: 0.64,
-            transition: {
-              type: "tween",
-              duration: 0.125,
+              duration: .01,
+              easings: "easeOut",
             },
           }}
           onCancel={handleCancel}
-          className="flex flex-col w-[90vw] h-[50vh] bg-slate-100/60 dark:bg-background/65 backdrop:backdrop-blur-sm p-2 top-1/2 left-1/2 rounded-lg backdrop:bg-background/80 sheen-ring"
+          className="mx-auto top-48 flex flex-col w-[90vw] h-[50vh] bg-slate-100/60 dark:bg-background/65 backdrop:backdrop-blur-sm p-2 rounded-lg backdrop:bg-background/80 sheen-ring"
         >
           <div className="ml-2 flex items-center justify-between pb-1">
-            <Heading render="h1" level={4} className="pb-0">
+            <Heading
+              render="h1"
+              level={4}
+              className="pb-0"
+            >
               {activeSketch.title}
             </Heading>
             <button
@@ -67,10 +58,15 @@ export const SketchModal: React.FC = ({}) => {
               </div>
             </button>
           </div>
-          <Paragraph className="pl-2 pb-2">{activeSketch.description}</Paragraph>
-          <div className="w-full h-full rounded-md overflow-hidden">
+          <Paragraph className="pl-2 pb-2">
+            {activeSketch.description}
+          </Paragraph>
+          <motion.div
+            className="w-full h-full rounded-md overflow-hidden"
+            layoutId={`sketch-img-${activeSketch.id}`}
+          >
             <activeSketch.Component />
-          </div>
+          </motion.div>
         </motion.dialog>
       )}
     </AnimatePresence>

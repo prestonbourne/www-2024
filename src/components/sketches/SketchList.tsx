@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { getSketches } from "@/lib/sketches/getSketches";
 import { SketchProvider } from "./SketchProvider";
 import { SketchModal } from "./SketchModal";
+import { AnimatePresence } from "framer-motion";
 
 export const SketchList: React.FC = ({}) => {
   const [sketches, setSketches] = useState<Sketch[]>([]);
@@ -16,11 +17,13 @@ export const SketchList: React.FC = ({}) => {
 
   return (
     <SketchProvider>
+      <AnimatePresence>
       <ul className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {sketches.map((sketch) => {
           return <SketchItem key={sketch.id} sketch={sketch} />;
         })}
       </ul>
+      </AnimatePresence>
       <SketchModal />
     </SketchProvider>
   );
