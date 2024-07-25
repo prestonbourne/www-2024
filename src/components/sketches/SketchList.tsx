@@ -5,25 +5,29 @@ import React, { useEffect, useState } from "react";
 import { getSketches } from "@/lib/sketches/getSketches";
 import { SketchProvider } from "./SketchProvider";
 import { SketchModal } from "./SketchModal";
-import { AnimatePresence } from "framer-motion";
 
 export const SketchList: React.FC = ({}) => {
   const [sketches, setSketches] = useState<Sketch[]>([]);
+  /* 
+  TODO:
+  should really be able to use 
+  const sketches = await getSketchs
+  but since I'm passing a client component as prop... next is complaining
+  this artocle seems to give a nice solotion to this problem
+  https://frontendatscale.com/blog/donut-components/
+  */
   useEffect(() => {
-    getSketches().then((sketches) => {
-      setSketches(sketches);
-    });
-  }, []);
+    if (sketches.length > 0) return;
+    getSketches().then(setSketches);
+  }, [sketches]);
 
   return (
     <SketchProvider>
-      <AnimatePresence>
-      <ul className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        {sketches.map((sketch) => {
-          return <SketchItem key={sketch.id} sketch={sketch} />;
+      <ul className="grid grid-cols-1 gap-4">
+        {sketches.map((sketch, i) => {
+          return <SketchItem key={sketch.id} sketch={sketch} order={i} />;
         })}
       </ul>
-      </AnimatePresence>
       <SketchModal />
     </SketchProvider>
   );

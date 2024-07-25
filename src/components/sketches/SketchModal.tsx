@@ -1,10 +1,10 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSketchContext } from "./SketchProvider";
-import { Heading } from "../typography/Heading";
-import { Paragraph } from "../typography/Paragraph";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { ReactEventHandler } from "react";
+import { cx } from "class-variance-authority";
+import { MotionHeading } from "@/components/typography/Heading/motion";
 
 export const SketchModal: React.FC = ({}) => {
   const { activeSketch, setActiveSketch } = useSketchContext();
@@ -30,56 +30,60 @@ export const SketchModal: React.FC = ({}) => {
       setActiveSketch(null);
     }
   };
+  /* 
+  TODO:
+  would love to be able to customize exit animations here
+  but framer seemsto just ignore the exit: {transitions} prop
+  */
 
   return (
     <AnimatePresence>
       {shouldRender && (
         <motion.dialog
-        onClick={onClickOutside}
-          ref={(node) => {
-            node?.showModal();
-          }}
+          onClick={onClickOutside}
+          ref={(node) => node?.showModal()}
           layoutId={`sketch-${activeSketch.id}`}
-          initial={{
-            opacity: 0,
-          }}
-          animate={{
-            opacity: 1,
-            transition: {
-              type: "tween",
-              duration: .01,
-              easings: "easeOut",
-            },
-          }}
+          key={`sketch-${activeSketch.id}`}
+          transition={{ duration: 0.125 }}
           onCancel={handleCancel}
-          className="mx-auto top-48 flex flex-col w-[90vw] h-[50vh] bg-slate-100/90 dark:bg-background/65 backdrop:backdrop-blur-sm p-2 rounded-lg backdrop:bg-black/25 backdrop:dark:bg-background/80 sheen-ring"
+          className={cx(
+            "mx-auto top-48 flex flex-col w-[90vw] aspect-video",
+            "bg-slate-100/90 dark:bg-background/65 backdrop-blur-sm",
+            "p-2 rounded-lg sheen-ring overflow-hidden"
+          )}
         >
-          <div className="ml-2 flex items-center justify-between pb-1">
-            <Heading
-              render="h1"
-              level={4}
-              className="pb-0"
-            >
-              {activeSketch.title}
-            </Heading>
-            <button
-              className="w-7 h-7 mx-2 flex items-center justify-center group"
-              onClick={() => setActiveSketch(null)}
-            >
-              <div className="bg-red-500 rounded-full transition-colors p-1">
-                <Cross2Icon className="opacity-0 group-hover:opacity-100 transition-opacity w-2 h-2" />
-              </div>
-            </button>
-          </div>
-          <Paragraph className="pl-2 pb-2">
-            {activeSketch.description}
-          </Paragraph>
+          <button
+            className="w-7 h-7 mb-2 flex items-center justify-center group"
+            onClick={() => setActiveSketch(null)}
+          >
+            <div className="bg-red-500 rounded-full p-[2px] transition-colors text-red-900">
+              <Cross2Icon className="opacity-0 group-hover:opacity-100 transition-opacity w-3 h-3" />
+            </div>
+          </button>
           <motion.div
             className="w-full h-full rounded-md overflow-hidden"
-            layoutId={`sketch-img-${activeSketch.id}`}
+            transition={{ duration: 0.125 }}
+            exit={{ transition: { duration: 0.125 } }}
           >
             <activeSketch.Component />
           </motion.div>
+          <MotionHeading
+            render="h1"
+            level={4}
+            className="pb-0 pl-1"
+            key={`sketch-title-${activeSketch.id}`}
+            layoutId={`sketch-title-${activeSketch.id}`}
+            layout="position"
+          >
+            {activeSketch.title}
+          </MotionHeading>
+          <motion.p
+          className="pl-1"
+            layoutId={`sketch-description-${activeSketch.id}`}
+            layout="position"
+          >
+            {activeSketch.description}
+          </motion.p>
         </motion.dialog>
       )}
     </AnimatePresence>

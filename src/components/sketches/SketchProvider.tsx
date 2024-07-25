@@ -1,3 +1,4 @@
+"use client"
 import React, { createContext, useState } from "react";
 import { Sketch } from "@/lib/sketches/types";
 
@@ -8,9 +9,7 @@ interface SketchContext {
 
 export const SketchContext = createContext<SketchContext | null>(null);
 
-// Create the provider component
 export const SketchProvider = ({ children }: { children: any }) => {
-  // Define your state and methods here
   const [activeSketch, setActiveSketch] = useState<Sketch | null>(null);
 
   return (
