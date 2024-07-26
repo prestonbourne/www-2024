@@ -33,7 +33,7 @@ export const SketchModal: React.FC = ({}) => {
   /* 
   TODO:
   would love to be able to customize exit animations here
-  but framer seemsto just ignore the exit: {transitions} prop
+  but framer seems to just ignore the exit: {transitions} prop
   */
 
   return (
@@ -44,19 +44,20 @@ export const SketchModal: React.FC = ({}) => {
           ref={(node) => node?.showModal()}
           layoutId={`sketch-${activeSketch.id}`}
           key={`sketch-${activeSketch.id}`}
-          transition={{ duration: 0.125 }}
           onCancel={handleCancel}
           className={cx(
-            "mx-auto top-48 flex flex-col w-[90vw] aspect-video",
-            "bg-slate-100/90 dark:bg-background/65 backdrop-blur-sm",
-            "p-2 rounded-lg sheen-ring overflow-hidden"
+            "max-h-[60vh] max-w-none aspect-[9/16] w-[calc(100vw-32px)]",// mobile
+            "md:w-[90vw] md:aspect-video md:max-w-screen-2xl mx-auto",
+            "top-24 flex flex-col",
+            "bg-slate-100/90 dark:bg-background/85 backdrop-blur-sm",
+            "p-2 rounded-lg sheen-ring overflow-hidden",
           )}
         >
           <button
-            className="w-7 h-7 mb-2 flex items-center justify-center group"
+            className="w-7 h-7 mb-2 flex items-center justify-center group" // wider so easier to click
             onClick={() => setActiveSketch(null)}
           >
-            <div className="bg-red-500 rounded-full p-[2px] transition-colors text-red-900">
+            <div className="bg-red-500 rounded-full p-[1px] transition-colors text-red-900">
               <Cross2Icon className="opacity-0 group-hover:opacity-100 transition-opacity w-3 h-3" />
             </div>
           </button>
