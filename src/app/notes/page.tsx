@@ -13,9 +13,6 @@ export const metadata: Metadata = {
   description,
 };
 
-const TWO_HOURS = 60 * 60 * 2;
-export const revalidate = TWO_HOURS;
-
 export default async function NotesHome() {
   let notes: Note[] = [];
   const notesRes = await noteService.fetchNotes(cookies);

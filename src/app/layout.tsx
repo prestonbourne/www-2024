@@ -21,6 +21,10 @@ export const metadata: Metadata = {
     template: "%s | Preston Bourne",
   },
   description: "Chasing beautiful, performant software.",
+  openGraph: {
+    siteName: "Preston Bourne, Engineer & Designer",
+    url: "https://prestonbourne.dev",
+  },
 };
 
 export default function RootLayout({
