@@ -16,7 +16,10 @@ const firaSans = Fira_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Preston Bourne | Software Engineer",
+  title: {
+    default: "Preston Bourne | Software Engineer",
+    template: "%s | Preston Bourne",
+  },
   description: "Chasing beautiful, performant software.",
 };
 

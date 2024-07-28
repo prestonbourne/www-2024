@@ -6,7 +6,10 @@ import { Header } from "../Header";
 import Link from "next/link";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 
-const ITEMS = [{ href: "/notes", label: "/notes" }, { href: "/sketches", label: "/sketches" }];
+const ITEMS = [
+  { href: "/notes", label: "/notes" },
+  { href: "/sketches", label: "/sketches" },
+];
 
 export const Nav: React.FC = () => {
   const pathname = usePathname();
@@ -39,11 +42,12 @@ const isSelected = (pathname: string, href: string) => {
   return currRoute === hrefRoute;
 };
 
-const HomeButton: React.FC = () => {
+
+export const HomeButton: React.FC = () => {
   return (
     <Link href={"/"}>
-      <div className="px-3 py-1 rounded-lg sheen-ring hover:scale-110 transition-transform text-xl bg-slate-50 dark:bg-background/50 border border-solid border-slate-400 dark:border-none">
-        <p className="dark:text-body text-slate-400">~</p>
+      <div className="px-3 py-2 rounded-lg sheen-ring hover:scale-110 transition-transform text-xl bg-slate-50 dark:bg-background/50 border border-solid border-slate-400 dark:border-none">
+        <p className="dark:text-body text-slate-400 text-xl leading-none">P</p>
       </div>
     </Link>
   );

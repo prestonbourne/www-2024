@@ -1,10 +1,20 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { noteService } from "@/lib/notes/service";
 import { cookies } from "next/headers";
 import type { Note } from "@/lib/notes/types";
 import { ContentHeading, Divider, Header, Paragraph, Main } from "@/components";
 
 
+const description = "Documentation of my learnings, thoughts and experiments. The palest ink is more persistent than the sharpest memory.";
+
+export const metadata: Metadata = {
+  title: "Notes",
+  description,
+};
+
+const TWO_HOURS = 60 * 60 * 2;
+export const revalidate = TWO_HOURS;
 
 export default async function NotesHome() {
   let notes: Note[] = [];
@@ -18,8 +28,7 @@ export default async function NotesHome() {
       <Header className="py-0 px-0">
         <ContentHeading
           title="Notes"
-          description="Documentation of my learnings, thoughts and experiments. The
-                palest ink is more persistent than the sharpest memory."
+          description={description}
         />
         <Divider className="mt-2 mb-4" />
       </Header>

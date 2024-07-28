@@ -1,12 +1,21 @@
 import { SketchList } from "@/components/sketches";
 import { ContentHeading, Divider } from "@/components";
+import type { Metadata } from "next";
+
+
+const description = "Explorations in forward thinking user interfaces, and interactive/procedural art.";
+
+export const metadata: Metadata = {
+  title: "Sketches",
+  description,
+};
 
 export default async function SketchesHome() {
   return (
     <main>
       <ContentHeading
         title="Sketches"
-        description="My explorations into visual computing, procedural, generative and interactive art. At the time of writing, this is my favorite passtime."
+        description={description}
       />
       <Divider className="mt-2 mb-4" />
       <SketchList />

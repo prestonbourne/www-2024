@@ -1,7 +1,9 @@
+import React from "react";
 import { notFound } from "next/navigation";
 import { NoteMDXRenderer } from "@/components/markdown";
-import { calculateReadingTime, formatISOToDate } from "../../../lib";
-import { NoteStat } from "../../../components/notes/NoteStat";
+import { calculateReadingTime, formatISOToDate } from "@/lib/index";
+import { NextPageProps } from "@/lib/types";
+import { NoteStat } from "@/components/notes/NoteStat";
 import {
   CalendarIcon,
   EyeOpenIcon,
@@ -16,10 +18,25 @@ import { Divider } from "@/components/Divider";
 import { Heading } from "@/components/typography/Heading";
 import { Paragraph as Body } from "@/components/typography/Paragraph";
 
-export default async function Page({ params }: { params: any }) {
+const getNote = React.cache(noteService.fetchNoteBySlug.bind(noteService));
+
+export async function generateMetadata({ params }: NextPageProps) {
+  const currentSlug = params.slug;
+  const noteRes = await getNote(currentSlug, cookies);
+  if (noteRes.error) return notFound();
+
+  const { title, description } = noteRes.data.metadata;
+
+  return {
+    title,
+    description,
+  };
+}
+
+export default async function Page({ params }: NextPageProps) {
   const currentSlug = params.slug;
 
-  const noteRes = await noteService.fetchNoteBySlug(currentSlug, cookies);
+  const noteRes = await getNote(currentSlug, cookies);
   if (noteRes.error) return notFound();
   const note = noteRes.data;
 
@@ -50,7 +67,7 @@ export default async function Page({ params }: { params: any }) {
         </div>
 
         <Divider className="my-4" />
-        <NoteMDXRenderer source={note.content}  />
+        <NoteMDXRenderer source={note.content} />
       </article>
     </Main>
   );
