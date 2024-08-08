@@ -14,7 +14,7 @@ export const SketchList: React.FC = ({}) => {
   should really be able to use 
   const sketches = await getSketchs
   but since I'm passing a client component as prop... next is complaining
-  this artocle seems to give a nice solotion to this problem
+  this article seems to give a nice solotion to this problem
   https://frontendatscale.com/blog/donut-components/
   */
   useEffect(() => {
