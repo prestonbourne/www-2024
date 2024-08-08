@@ -13,8 +13,17 @@ you're welcome to use any code snippets you find or even use the entire website 
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/)
 - **Content**: [MDX](https://github.com/hashicorp/next-mdx-remote)
 
-## Development
+## Note Content
+Note content is generated using MDX, using the `scripts/prebuild/build-note-map.ts`, referenced in the `package.json`
+a file called `notesMap.json` is generated before each production build. 
+
+---
+
 below is the default readme from next.js
+
+---
+
+## Development
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
