@@ -26,7 +26,7 @@ const makeSupabaseError = (pgErr: PostgrestError) => {
 type NoteMap = Map<string, Note>;
 class NotesDAO {
   private supabase;
-  private notesMap: NoteMap;
+  public notesMap: NoteMap;
   private localNotes: Note[] = [];
   private remoteNotes: Note[] = [];
   private notes: Note[] = [];
@@ -183,6 +183,10 @@ class NotesDAO {
     this.remoteNotes = remoteNotes.data;
     const data = this.resolveNotes();
     return { data, error: null };
+  }
+
+  getLocalNotes(): Note[] {
+    return this.localNotes;
   }
 }
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { NoteMDXRenderer } from "@/components/markdown";
 import { formatISOToDate } from "@/lib/index";
@@ -19,14 +19,20 @@ import { Divider } from "@/components/Divider";
 import { Heading } from "@/components/typography/Heading";
 import { Paragraph as Body } from "@/components/typography/Paragraph";
 
-const getNote = React.cache(notesDAO.fetchNoteBySlug.bind(notesDAO));
+export function generateStaticParams() {
+  const notes = notesDAO.getLocalNotes();
+
+  return notes.map((note) => ({
+    slug: note.slug,
+  }));
+}
 
 export async function generateMetadata({ params }: NextPageProps) {
   const currentSlug = params.slug;
-  const noteRes = await getNote(currentSlug, cookies);
-  if (noteRes.error) return notFound();
+  const currentNote = notesDAO.notesMap.get(currentSlug);
 
-  const { title, description } = noteRes.data.metadata;
+  if (!currentNote) return notFound();
+  const { title, description } = currentNote.metadata;
 
   return {
     title,
@@ -37,9 +43,8 @@ export async function generateMetadata({ params }: NextPageProps) {
 export default async function Page({ params }: NextPageProps) {
   const currentSlug = params.slug;
 
-  const noteRes = await getNote(currentSlug, cookies);
-  if (noteRes.error) return notFound();
-  const note = noteRes.data;
+  const note = notesDAO.notesMap.get(currentSlug);
+  if (!note) return notFound();
 
   const { metadata } = note;
   onlyIn("production", () => notesDAO.incrementViews(note.slug, cookies));
@@ -81,7 +86,11 @@ function ViewCount({ text }: { text: string | number | undefined }) {
   if (isNaN(views)) return null;
   if (views < 2) return null;
 
-  return <NoteStat text={views} Icon={EyeOpenIcon} />;
+  return (
+    <Suspense fallback={<p>poop</p>}>
+      <NoteStat text={views} Icon={EyeOpenIcon} />
+    </Suspense>
+  );
 }
 
 function LikeCount({ text }: { text: string | number | undefined }) {
