@@ -1,12 +1,11 @@
 import "server-only"
 import { Database } from "@/lib/supabase/types";
-import { getLocalNotes } from "..";
 import { supabase, Supabase, CookieOptions } from "@/lib/supabase";
 import type { Note, Result } from "@/lib/notes/types";
+import notesMap from "./notesMap.json" assert { type: "json" };
 
 // Schema for the notes table
 type NoteRow = Database["public"]["Tables"]["notes"]["Row"];
-
 export const LIKES_VIEWS_SENTINEL = -1;
 
 type PostgrestError = {
@@ -24,13 +23,19 @@ const makeSupabaseError = (pgErr: PostgrestError) => {
   return error;
 };
 
-class NoteService {
+type NoteMap = Map<string, Note>;
+class NotesDAO {
   private supabase;
-  public localNotes: Note[] = [];
+  private notesMap: NoteMap;
+  private localNotes: Note[] = [];
+  private remoteNotes: Note[] = [];
+  private notes: Note[] = [];
 
-  constructor(supabase: Supabase) {
+  constructor(supabase: Supabase, notesMap: Record<string, Note>) {
     this.supabase = supabase;
-    this.localNotes = getLocalNotes();
+    this.notesMap = new Map(Object.entries(notesMap));
+    this.localNotes = Object.values(notesMap);
+    this.notes = [];
   }
 
   async getRemoteNotes(cookies: CookieOptions): Promise<Result<Note[]>> {
@@ -39,12 +44,10 @@ class NoteService {
       .select("*");
     if (error) {
       console.error("Error fetching notes", error);
-
       return { data: null, error: makeSupabaseError(error) };
     }
 
     const validData = data.filter(this.isValidNoteRow);
-
     const mappedData = validData.map(this.extractNoteFromRow.bind(this));
     return { data: mappedData, error: null };
   }
@@ -53,6 +56,11 @@ class NoteService {
     slug: string,
     cookies: CookieOptions
   ): Promise<Result<Note>> {
+
+    if(this.notesMap.has(slug)) {
+      return { data: this.notesMap.get(slug)!, error: null };
+    }
+
     const { data, error } = await this.supabase(cookies)
       .from("notes")
       .select("*")
@@ -130,14 +138,14 @@ class NoteService {
     };
   }
 
-  resolveNotes(localNotes: Note[], remoteNotes: Note[]): Note[] {
+  resolveNotes(): Note[] {
     const combinedNotes: Note[] = [];
 
     const remoteNotesMap = new Map(
-      remoteNotes.map((note) => [note.slug, note])
+      this.remoteNotes.map((note) => [note.slug, note])
     );
 
-    for (const localNote of localNotes) {
+    for (const localNote of this.localNotes) {
       const remoteNote = remoteNotesMap.get(localNote.slug);
 
       if (!remoteNote) {
@@ -160,27 +168,22 @@ class NoteService {
           views: remoteNote.views,
           likes: remoteNote.likes,
         };
-
+        this.notesMap.set(localNote.slug, combinedNote);
         combinedNotes.push(combinedNote);
       }
     }
-
     return combinedNotes;
   }
 
   async fetchNotes(cookies: CookieOptions): Promise<Result<Note[]>> {
-    await Promise.all(
-      this.localNotes.map(async (note) => {
-        await this.upsertNote(note, cookies);
-      })
-    );
 
-    const remoteNoes = await this.getRemoteNotes(cookies);
-    if (remoteNoes.error) return { data: null, error: remoteNoes.error };
+    const remoteNotes = await this.getRemoteNotes(cookies);
+    if (remoteNotes.error) return { data: null, error: remoteNotes.error };
 
-    const res = this.resolveNotes(this.localNotes, remoteNoes.data);
-    return { data: res, error: null };
+    this.remoteNotes = remoteNotes.data;
+    const data = this.resolveNotes();
+    return { data, error: null };
   }
 }
 
-export const noteService = new NoteService(supabase);
+export const notesDAO = new NotesDAO(supabase, notesMap);

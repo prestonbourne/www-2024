@@ -16,6 +16,7 @@ const firaSans = Fira_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://prestonbourne.dev"),
   title: {
     default: "Preston Bourne | Software Engineer",
     template: "%s | Preston Bourne",

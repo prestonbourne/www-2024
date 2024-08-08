@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "prebuild": "tsx ./src/scripts/runner.ts",
     "start": "next start",
     "lint": "next lint"
   },
@@ -25,9 +26,11 @@
     "react-dom": "^18",
     "remark-gfm": "^4.0.0",
     "three": "^0.162.0",
+    "tsx": "^4.16.5",
     "tweakpane": "^4.0.4"
   },
   "devDependencies": {
+    "@next/env": "^14.2.5",
     "@tweakpane/core": "^2.0.4",
     "@types/node": "^20",
     "@types/react": "^18",

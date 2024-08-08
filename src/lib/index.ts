@@ -28,7 +28,7 @@ const readMDXFile = (filePath: string) => {
   return parseFrontmatter(rawContent);
 };
 
-function getMDXData(dir: string) {
+export function getMDXData(dir: string) {
   const mdxFiles = getMDXFiles(dir);
   return mdxFiles.map((file) => {
     const { metadata, content } = readMDXFile(path.join(dir, file));
@@ -40,30 +40,6 @@ function getMDXData(dir: string) {
     };
   });
 }
-
-const localNoteCache: Note[] = [];
-export const getLocalNotes = (): Note[] => {
-  if (localNoteCache.length) {
-    return localNoteCache;
-  }
-  const data = getMDXData(path.join(process.cwd(), "src/note-content"));
-
-  data.sort((a, b) => {
-    return (
-      +new Date(b.metadata.publishedAt) - +new Date(a.metadata.publishedAt)
-    );
-  });
-  localNoteCache.push(...data);
-  return data;
-};
-
-export const calculateReadingTime = (content: string) => {
-  const wordsPerMinute = 220;
-  const words = content.split(/\s/g).length;
-  const minutes = words / wordsPerMinute;
-  const readTime = Math.floor(minutes);
-  return readTime;
-};
 
 export const formatISOToDate = (ISO: string) => {
   return new Date(ISO).toLocaleDateString("en-US", {

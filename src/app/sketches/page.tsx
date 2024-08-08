@@ -2,9 +2,7 @@ import { SketchList } from "@/components/sketches";
 import { ContentHeading, Divider } from "@/components";
 import type { Metadata } from "next";
 
-
 const description = "Explorations in forward thinking user interfaces, and interactive/procedural art.";
-
 export const metadata: Metadata = {
   title: "Sketches",
   description,

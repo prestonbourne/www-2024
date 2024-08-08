@@ -1,12 +1,12 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { noteService } from "@/lib/notes/service";
+import { notesDAO } from "@/lib/notes/dao";
 import { cookies } from "next/headers";
 import type { Note } from "@/lib/notes/types";
 import { ContentHeading, Divider, Header, Paragraph, Main } from "@/components";
 
-
-const description = "Documentation of my learnings, thoughts and experiments. The palest ink is more persistent than the sharpest memory.";
+const description =
+  "Documentation of my learnings, thoughts and experiments. The palest ink is more persistent than the sharpest memory.";
 
 export const metadata: Metadata = {
   title: "Notes",
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 export default async function NotesHome() {
   let notes: Note[] = [];
-  const notesRes = await noteService.fetchNotes(cookies);
+  const notesRes = await notesDAO.fetchNotes(cookies);
   if (!notesRes.error) {
     notes = notesRes.data;
   }
@@ -23,10 +23,7 @@ export default async function NotesHome() {
   return (
     <>
       <Header className="py-0 px-0">
-        <ContentHeading
-          title="Notes"
-          description={description}
-        />
+        <ContentHeading title="Notes" description={description} />
         <Divider className="mt-2 mb-4" />
       </Header>
       <NoteList notes={notes} />
@@ -57,7 +54,9 @@ function NoteItem(note: Note) {
               {formattedDate}&nbsp;~&nbsp;{views} views
             </Paragraph>
           ) : (
-            <Paragraph className="text-sm text-sub-text">{formattedDate}</Paragraph>
+            <Paragraph className="text-sm text-sub-text">
+              {formattedDate}
+            </Paragraph>
           )}
         </div>
       </Link>

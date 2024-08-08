@@ -1,7 +1,8 @@
 import React from "react";
 import { notFound } from "next/navigation";
 import { NoteMDXRenderer } from "@/components/markdown";
-import { calculateReadingTime, formatISOToDate } from "@/lib/index";
+import { formatISOToDate } from "@/lib/index";
+import { calculateReadingTime } from "@/lib/notes";
 import { NextPageProps } from "@/lib/types";
 import { NoteStat } from "@/components/notes/NoteStat";
 import {
@@ -11,14 +12,14 @@ import {
   HeartIcon,
 } from "@radix-ui/react-icons";
 import { cookies } from "next/headers";
-import { noteService } from "@/lib/notes/service";
+import { notesDAO } from "@/lib/notes/dao";
 import { onlyIn } from "@/lib";
 import { Main } from "@/components/Main";
 import { Divider } from "@/components/Divider";
 import { Heading } from "@/components/typography/Heading";
 import { Paragraph as Body } from "@/components/typography/Paragraph";
 
-const getNote = React.cache(noteService.fetchNoteBySlug.bind(noteService));
+const getNote = React.cache(notesDAO.fetchNoteBySlug.bind(notesDAO));
 
 export async function generateMetadata({ params }: NextPageProps) {
   const currentSlug = params.slug;
@@ -41,7 +42,7 @@ export default async function Page({ params }: NextPageProps) {
   const note = noteRes.data;
 
   const { metadata } = note;
-  onlyIn("production", () => noteService.incrementViews(note.slug, cookies));
+  onlyIn("production", () => notesDAO.incrementViews(note.slug, cookies));
 
   return (
     <Main>

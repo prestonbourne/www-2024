@@ -1,11 +1,11 @@
 import { MetadataRoute } from "next";
-import { noteService } from "@/lib/notes/service";
+import { notesDAO } from "@/lib/notes/dao";
 import { cookies } from "next/headers";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const noteEntries: MetadataRoute.Sitemap = [];
-  const notes = await noteService.fetchNotes(cookies);
+  const notes = await notesDAO.fetchNotes(cookies);
   if (notes.data) {
     noteEntries.push(
       ...notes.data.map((note) => {
