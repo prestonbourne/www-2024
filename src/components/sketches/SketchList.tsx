@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { getSketches } from "@/lib/sketches/getSketches";
 import { SketchProvider } from "./SketchProvider";
 import { SketchModal } from "./SketchModal";
+import { usePreventHydrationMismatch } from "@/lib/hooks";
 
 export const SketchList: React.FC = ({}) => {
   const [sketches, setSketches] = useState<Sketch[]>([]);
@@ -20,6 +21,9 @@ export const SketchList: React.FC = ({}) => {
     if (sketches.length > 0) return;
     getSketches().then(setSketches);
   }, [sketches]);
+
+  const isHydrated = usePreventHydrationMismatch();
+  if(!isHydrated) return null;
 
   return (
     <SketchProvider>

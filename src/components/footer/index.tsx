@@ -4,6 +4,7 @@ import type { ComponentProps } from "react";
 import { useState, useEffect } from "react";
 import GithubIcon from "./GithubIcon";
 import { Link } from "@/components/typography"
+import { usePreventHydrationMismatch } from "@/lib/hooks";
 
 export const Footer = ({ className, ...props }: ComponentProps<"footer">) => {
   const year = String(new Date().getFullYear());
@@ -36,7 +37,6 @@ export const Footer = ({ className, ...props }: ComponentProps<"footer">) => {
       </div>
       <GithubIcon />
         <Clock />
-
       <p className="text-sm text-sub-text">
         © {year} Preston Bourne. <span className="hidden sm:inline">All Rights Reserved.</span>
       </p>
@@ -56,13 +56,16 @@ const Clock = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const isHydrated = usePreventHydrationMismatch();
+  if(!isHydrated) return null;
+
   const newYorkTime = time.toLocaleTimeString(undefined, {
     timeZone: "America/New_York",
   });
 
   return (
     <p className="text-sub-text text-sm">
-      EDT / <time dateTime={newYorkTime}>{newYorkTime}</time>
+      EDT / <time dateTime={newYorkTime} suppressHydrationWarning>{newYorkTime}</time>
     </p>
   );
 };

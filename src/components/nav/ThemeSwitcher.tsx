@@ -5,18 +5,13 @@ import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { cx } from "class-variance-authority";
+import { usePreventHydrationMismatch } from "@/lib/hooks";
 
 export function ThemeSwitcher() {
   const { setTheme, resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const isHydrated = usePreventHydrationMismatch();
+  if(!isHydrated) return null;
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return null;
-  }
   const oppositeTheme = resolvedTheme === "dark" ? "light" : "dark";
 
   function onThemeChange() {
