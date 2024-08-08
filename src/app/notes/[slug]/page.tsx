@@ -47,7 +47,7 @@ export default async function Page({ params }: NextPageProps) {
   if (!note) return notFound();
 
   const { metadata } = note;
-  onlyIn("production", () => notesDAO.incrementViews(note.slug, cookies));
+  // onlyIn("production", () => notesDAO.incrementViews(note.slug, cookies));
 
   return (
     <Main>
