@@ -1,8 +1,8 @@
-import { Suspense } from "react";
 import { NoteStat } from "./NoteStat";
 import { EyeOpenIcon } from "@radix-ui/react-icons";
 import { notesDAO } from "@/lib/notes/dao";
 import { cookies } from "next/headers";
+import { incrementViews } from "./actions";
 
 type ViewCountProps = {
   slug: string;
@@ -17,7 +17,7 @@ export async function ViewCount({
   const inProd = process.env.NODE_ENV === "production";
 
   if (shouldIncrement && inProd) {
-    views = await notesDAO.incrementViews(slug, cookies);
+    views = await incrementViews(slug, cookies);
     return <NoteStat text={views} Icon={EyeOpenIcon} />;
   }
 
