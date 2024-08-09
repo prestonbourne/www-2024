@@ -34,15 +34,12 @@ the main reason we fetch the remote notes is to get the views and likes count fo
 class NotesDAO {
   private supabase;
   public localNotesMap: NoteMap;
-  public remoteNotesCache: NoteMap;
   private localNotes: Note[] = [];
-  private remoteNotes: Note[] = [];
 
   constructor(supabase: Supabase, notesMap: Record<string, Note>) {
     this.supabase = supabase;
     this.localNotesMap = new Map(Object.entries(notesMap));
     this.localNotes = Object.values(notesMap);
-    this.remoteNotesCache = new Map();
   }
 
   async getRemoteNotes(cookies: CookieOptions): Promise<Result<Note[]>> {
@@ -56,9 +53,6 @@ class NotesDAO {
 
     const validData = data.filter(this.isValidNoteRow);
     const mappedData = validData.map(this.extractNoteFromRow.bind(this));
-    this.remoteNotesCache = new Map(
-      mappedData.map((note) => [note.slug, note])
-    );
     return { data: mappedData, error: null };
   }
 
@@ -66,9 +60,6 @@ class NotesDAO {
     slug: string,
     cookies: CookieOptions
   ): Promise<Result<Note>> {
-    if (this.remoteNotesCache.has(slug)) {
-      return { data: this.remoteNotesCache.get(slug)!, error: null };
-    }
 
     const { data, error } = await this.supabase(cookies)
       .from("notes")
@@ -84,7 +75,6 @@ class NotesDAO {
     const validData = this.isValidNoteRow(data);
     if (!validData) throw new Error("Invalid note data");
     const mappedData = this.extractNoteFromRow(data);
-    this.remoteNotesCache.set(slug, mappedData);
 
     return { data: mappedData, error: null };
   }
@@ -101,10 +91,7 @@ class NotesDAO {
       console.log("Error incrementing views", error);
       throw error;
     }
-    if (this.remoteNotesCache.has(slug)) {
-      this.remoteNotesCache.get(slug)!.views = data;
-    }
-    
+
     return data;
   }
 
@@ -156,11 +143,11 @@ class NotesDAO {
     };
   }
 
-  resolveNotes(): Note[] {
+  resolveNotes(remoteNotes: Note[]): Note[] {
     const combinedNotes: Note[] = [];
 
     const remoteNotesMap = new Map(
-      this.remoteNotes.map((note) => [note.slug, note])
+      remoteNotes.map((note) => [note.slug, note])
     );
 
     for (const localNote of this.localNotes) {
@@ -197,8 +184,7 @@ class NotesDAO {
     const remoteNotes = await this.getRemoteNotes(cookies);
     if (remoteNotes.error) return { data: null, error: remoteNotes.error };
 
-    this.remoteNotes = remoteNotes.data;
-    const data = this.resolveNotes();
+    const data = this.resolveNotes(remoteNotes.data);
     return { data, error: null };
   }
 
