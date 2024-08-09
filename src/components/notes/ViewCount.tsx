@@ -16,7 +16,7 @@ export async function ViewCount({
   const inProd = process.env.NODE_ENV	 === "production";
   const onServer = typeof window === "undefined";
 
-  if (shouldIncrement && onServer && inProd) {
+  if (shouldIncrement) {
     views = await notesDAO.incrementViews(slug, cookies);
     return <NoteStat text={views} Icon={EyeOpenIcon} />;
   }

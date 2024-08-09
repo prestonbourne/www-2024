@@ -60,7 +60,6 @@ class NotesDAO {
     slug: string,
     cookies: CookieOptions
   ): Promise<Result<Note>> {
-
     const { data, error } = await this.supabase(cookies)
       .from("notes")
       .select("*")
@@ -80,6 +79,11 @@ class NotesDAO {
   }
 
   async incrementViews(slug: string, cookies: CookieOptions): Promise<number> {
+    console.log("`incrementViews` called", {
+      slug,
+      cookies,
+      views: (await this.fetchNoteBySlug(slug, cookies)).data?.views,
+    });
     const { error, data } = await this.supabase(cookies).rpc(
       "increment_note_views",
       {
@@ -92,6 +96,11 @@ class NotesDAO {
       throw error;
     }
 
+    console.log("`incrementViews` success", {
+      slug,
+      cookies,
+      views: data,
+    });
     return data;
   }
 
