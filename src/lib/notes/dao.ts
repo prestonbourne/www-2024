@@ -67,7 +67,7 @@ class NotesDAO {
     cookies: CookieOptions
   ): Promise<Result<Note>> {
     if (this.remoteNotesCache.has(slug)) {
-      return { data: this.localNotesMap.get(slug)!, error: null };
+      return { data: this.remoteNotesCache.get(slug)!, error: null };
     }
 
     const { data, error } = await this.supabase(cookies)
@@ -104,6 +104,7 @@ class NotesDAO {
     if (this.remoteNotesCache.has(slug)) {
       const note = this.remoteNotesCache.get(slug)!;
       note.views = note.views ? note.views + 1 : 1;
+      return note.views;
     }
     return data;
   }
