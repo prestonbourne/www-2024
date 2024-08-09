@@ -18,3 +18,17 @@ export const NoteStat = ({ text = 0, Icon }: NoteStatProps) => {
     </div>
   );
 };
+
+export const NoteStatLoading = ({ Icon, text }: NoteStatProps) => {
+  return (
+    <div className={`text-sm text-sub-text flex flex-row items-center gap-1`}>
+      {Icon && (
+        <div className="w-4 h-4">
+          <Icon />
+        </div>
+      )}
+      <div className="w-5 h-3 animate-pulse bg-body/20 rounded-sm" />
+      <span className="sr-only">{text}</span>
+    </div>
+  );
+};

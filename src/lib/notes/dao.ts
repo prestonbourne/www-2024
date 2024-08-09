@@ -1,4 +1,4 @@
-import "server-only"
+import "server-only";
 import { Database } from "@/lib/supabase/types";
 import { supabase, Supabase, CookieOptions } from "@/lib/supabase";
 import type { Note, Result } from "@/lib/notes/types";
@@ -24,18 +24,25 @@ const makeSupabaseError = (pgErr: PostgrestError) => {
 };
 
 type NoteMap = Map<string, Note>;
+/* 
+the DAO class for notes, which handles fetching, updating, and combining local and remote notes
+the distinction between local and remote notes is that local notes are the notes that are statically generated at build time, 
+while remote notes are the notes that are fetched from the database at runtime we prefer the local notes over the remote notes 
+because they are more up-to-date and we don't want to overwrite them with the remote notes
+the main reason we fetch the remote notes is to get the views and likes count for each note which are not available at build time
+*/
 class NotesDAO {
   private supabase;
-  public notesMap: NoteMap;
+  public localNotesMap: NoteMap;
+  public remoteNotesCache: NoteMap;
   private localNotes: Note[] = [];
   private remoteNotes: Note[] = [];
-  private notes: Note[] = [];
 
   constructor(supabase: Supabase, notesMap: Record<string, Note>) {
     this.supabase = supabase;
-    this.notesMap = new Map(Object.entries(notesMap));
+    this.localNotesMap = new Map(Object.entries(notesMap));
     this.localNotes = Object.values(notesMap);
-    this.notes = [];
+    this.remoteNotesCache = new Map();
   }
 
   async getRemoteNotes(cookies: CookieOptions): Promise<Result<Note[]>> {
@@ -49,6 +56,9 @@ class NotesDAO {
 
     const validData = data.filter(this.isValidNoteRow);
     const mappedData = validData.map(this.extractNoteFromRow.bind(this));
+    this.remoteNotesCache = new Map(
+      mappedData.map((note) => [note.slug, note])
+    );
     return { data: mappedData, error: null };
   }
 
@@ -56,9 +66,8 @@ class NotesDAO {
     slug: string,
     cookies: CookieOptions
   ): Promise<Result<Note>> {
-
-    if(this.notesMap.has(slug)) {
-      return { data: this.notesMap.get(slug)!, error: null };
+    if (this.remoteNotesCache.has(slug)) {
+      return { data: this.localNotesMap.get(slug)!, error: null };
     }
 
     const { data, error } = await this.supabase(cookies)
@@ -75,19 +84,28 @@ class NotesDAO {
     const validData = this.isValidNoteRow(data);
     if (!validData) throw new Error("Invalid note data");
     const mappedData = this.extractNoteFromRow(data);
+    this.remoteNotesCache.set(slug, mappedData);
 
     return { data: mappedData, error: null };
   }
 
-  async incrementViews(slug: string, cookies: CookieOptions): Promise<void> {
-    const { error } = await this.supabase(cookies).rpc("increment_note_views", {
-      note_slug: slug,
-    });
+  async incrementViews(slug: string, cookies: CookieOptions): Promise<number> {
+    const { error, data } = await this.supabase(cookies).rpc(
+      "increment_note_views",
+      {
+        note_slug: slug,
+      }
+    );
 
     if (error) {
-      console.log("Error incrementing likes", error);
+      console.log("Error incrementing views", error);
       throw error;
     }
+    if (this.remoteNotesCache.has(slug)) {
+      const note = this.remoteNotesCache.get(slug)!;
+      note.views = note.views ? note.views + 1 : 1;
+    }
+    return data;
   }
 
   async upsertNote(note: Note, cookies: CookieOptions): Promise<void> {
@@ -168,7 +186,7 @@ class NotesDAO {
           views: remoteNote.views,
           likes: remoteNote.likes,
         };
-        this.notesMap.set(localNote.slug, combinedNote);
+        this.localNotesMap.set(localNote.slug, combinedNote);
         combinedNotes.push(combinedNote);
       }
     }
@@ -176,7 +194,6 @@ class NotesDAO {
   }
 
   async fetchNotes(cookies: CookieOptions): Promise<Result<Note[]>> {
-
     const remoteNotes = await this.getRemoteNotes(cookies);
     if (remoteNotes.error) return { data: null, error: remoteNotes.error };
 

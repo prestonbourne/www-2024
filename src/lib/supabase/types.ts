@@ -48,7 +48,7 @@ export type Database = {
         Args: {
           note_slug: string
         }
-        Returns: undefined
+        Returns: number
       }
     }
     Enums: {

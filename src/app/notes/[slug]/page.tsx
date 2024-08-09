@@ -4,20 +4,14 @@ import { NoteMDXRenderer } from "@/components/markdown";
 import { formatISOToDate } from "@/lib/index";
 import { calculateReadingTime } from "@/lib/notes";
 import { NextPageProps } from "@/lib/types";
-import { NoteStat } from "@/components/notes/NoteStat";
-import {
-  CalendarIcon,
-  EyeOpenIcon,
-  ClockIcon,
-  HeartIcon,
-} from "@radix-ui/react-icons";
-import { cookies } from "next/headers";
+import { NoteStat, NoteStatLoading } from "@/components/notes/NoteStat";
+import { CalendarIcon, ClockIcon, EyeClosedIcon } from "@radix-ui/react-icons";
 import { notesDAO } from "@/lib/notes/dao";
-import { onlyIn } from "@/lib";
 import { Main } from "@/components/Main";
 import { Divider } from "@/components/Divider";
 import { Heading } from "@/components/typography/Heading";
 import { Paragraph as Body } from "@/components/typography/Paragraph";
+import { ViewCount } from "@/components/notes/ViewCount";
 
 export function generateStaticParams() {
   const notes = notesDAO.getLocalNotes();
@@ -29,7 +23,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: NextPageProps) {
   const currentSlug = params.slug;
-  const currentNote = notesDAO.notesMap.get(currentSlug);
+  const currentNote = notesDAO.localNotesMap.get(currentSlug);
 
   if (!currentNote) return notFound();
   const { title, description } = currentNote.metadata;
@@ -43,11 +37,9 @@ export async function generateMetadata({ params }: NextPageProps) {
 export default async function Page({ params }: NextPageProps) {
   const currentSlug = params.slug;
 
-  const note = notesDAO.notesMap.get(currentSlug);
+  const note = notesDAO.localNotesMap.get(currentSlug);
   if (!note) return notFound();
-
   const { metadata } = note;
-  // onlyIn("production", () => notesDAO.incrementViews(note.slug, cookies));
 
   return (
     <Main>
@@ -68,48 +60,14 @@ export default async function Page({ params }: NextPageProps) {
               text={`${calculateReadingTime(note.content)} mins`}
               Icon={ClockIcon}
             />
-            <ViewCount text={note.views} />
+            <Suspense fallback={<NoteStatLoading Icon={EyeClosedIcon} text={"Loading View Count"} />}>
+              <ViewCount slug={note.slug} shouldIncrement />
+            </Suspense>
           </div>
         </div>
-
         <Divider className="my-4" />
         <NoteMDXRenderer source={note.content} />
       </article>
     </Main>
-  );
-}
-
-function ViewCount({ text }: { text: string | number | undefined }) {
-  if (!text) return null;
-
-  const views = Number(text);
-  if (isNaN(views)) return null;
-  if (views < 2) return null;
-
-  return (
-    <Suspense fallback={<p>poop</p>}>
-      <NoteStat text={views} Icon={EyeOpenIcon} />
-    </Suspense>
-  );
-}
-
-function LikeCount({ text }: { text: string | number | undefined }) {
-  if (!text) return null;
-
-  const likes = Number(text);
-  // if(isNaN(likes)) return null;
-  // if(likes < 4) return null;
-
-  return (
-    <button className="border-rose-700 border bg-rose-200 py-1 px-4 rounded-full transition-colors hover:bg-rose-500 group shadow-sm hover:shadow-xl">
-      <div
-        className={`text-pink-700 text-sm flex flex-row items-center gap-1 group-hover:text-pink-200`}
-      >
-        <div className="w-4 h-4">
-          <HeartIcon />
-        </div>
-        {text}
-      </div>
-    </button>
   );
 }
