@@ -16,7 +16,7 @@ export async function ViewCount({
   let views = 0;
   const inProd = process.env.NODE_ENV === "production";
 
-  if (shouldIncrement && inProd) {
+  if (shouldIncrement) {
     views = await incrementViewsAction(slug, cookies);
     return <NoteStat text={views} Icon={EyeOpenIcon} />;
   }
