@@ -60,9 +60,9 @@ export default async function Page({ params }: NextPageProps) {
               text={`${calculateReadingTime(note.content)} mins`}
               Icon={ClockIcon}
             />
-            <Suspense fallback={<NoteStatLoading Icon={EyeClosedIcon} text={"Loading View Count"} />}>
+            {/* <Suspense fallback={<NoteStatLoading Icon={EyeClosedIcon} text={"Loading View Count"} />}>
               <ViewCount slug={note.slug} shouldIncrement />
-            </Suspense>
+            </Suspense> */}
           </div>
         </div>
         <Divider className="my-4" />

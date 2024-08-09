@@ -25,11 +25,11 @@ export function NoteListItem(note: Note) {
         </Paragraph>
         <div className="flex flex-row gap-4">
           <NoteStat Icon={CalendarIcon} text={formattedDate} />
-          <Suspense
+          {/* <Suspense
             fallback={<NoteStatLoading Icon={EyeClosedIcon} text={`Loading Views for ${note.metadata.title}`} />}
           >
             <ViewCount slug={slug} shouldIncrement={false} />
-          </Suspense>
+          </Suspense> */}
         </div>
       </Link>
     </li>
