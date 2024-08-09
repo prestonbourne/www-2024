@@ -13,7 +13,7 @@ export async function ViewCount({
   shouldIncrement = false,
 }: ViewCountProps) {
   let views = 0;
-  const inProd = process.env.NODE_ENV === "production";
+  const inProd = process.env.NEXT_PUBLIC_VERCEL_ENV	 === "production";
   const onServer = typeof window === "undefined";
 
   if (shouldIncrement && onServer && inProd) {
