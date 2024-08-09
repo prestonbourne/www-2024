@@ -103,7 +103,7 @@ class NotesDAO {
     }
     if (this.remoteNotesCache.has(slug)) {
       const note = this.remoteNotesCache.get(slug)!;
-      note.views = note.views ? note.views + 1 : 1;
+      note.views = data;
       return note.views;
     }
     return data;
