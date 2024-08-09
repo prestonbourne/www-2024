@@ -1,4 +1,3 @@
-import "server-only";
 import { Database } from "@/lib/supabase/types";
 import { supabase, Supabase, CookieOptions } from "@/lib/supabase";
 import type { Note, Result } from "@/lib/notes/types";

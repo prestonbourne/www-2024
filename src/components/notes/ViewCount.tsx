@@ -15,7 +15,7 @@ export async function ViewCount({
   console.log("`ViewCount` render", { props: { slug, shouldIncrement } });
   let views = 0;
   const inProd = process.env.NODE_ENV === "production";
-  const onServer = typeof window === "undefined";
+
 
   if (shouldIncrement) {
     views = await notesDAO.incrementViews(slug, cookies);

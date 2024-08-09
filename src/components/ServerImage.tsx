@@ -5,7 +5,6 @@ import { readFile } from "node:fs/promises";
 import { IncomingMessage } from "node:http";
 import https from "node:https";
 import path from "node:path";
-import "server-only";
 
 // https://github.com/image-size/image-size/issues/258
 // https://github.com/nickadamson/messonry/commit/1604311247f077718650435b4ca38ae87b41e55d
