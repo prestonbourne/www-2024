@@ -6,7 +6,7 @@ type NoteStatProps = {
   Icon?: React.ComponentType<IconProps>;
 } & ComponentProps<"div">;
 
-export const NoteStat = ({ text = 0, Icon }: NoteStatProps) => {
+export const NoteStat = ({ text, Icon }: NoteStatProps) => {
   return (
     <div className={`text-sm text-sub-text flex flex-row items-center gap-1`}>
       {Icon && (

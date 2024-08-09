@@ -12,12 +12,17 @@ export async function ViewCount({
   slug,
   shouldIncrement = false,
 }: ViewCountProps) {
+  console.log("`ViewCount` render", { props: { slug, shouldIncrement } });
   let views = 0;
-  const inProd = process.env.NODE_ENV	 === "production";
+  const inProd = process.env.NODE_ENV === "production";
   const onServer = typeof window === "undefined";
 
   if (shouldIncrement) {
     views = await notesDAO.incrementViews(slug, cookies);
+    console.log("`ViewCount.incrementViews`", {
+      views,
+      slug,
+    });
     return <NoteStat text={views} Icon={EyeOpenIcon} />;
   }
 
