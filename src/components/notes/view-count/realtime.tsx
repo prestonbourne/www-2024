@@ -14,7 +14,7 @@ export const _RealTimeViewCount = ({
   shouldIncrement = false,
   views,
 }: RealtimeViewCountProps) => {
-  useRealTimeViewCount(`/notes/${slug}`);
+  useRealTimeViewCount(slug, shouldIncrement);
 
   return <NoteStat text={views} Icon={EyeOpenIcon} />;
 };

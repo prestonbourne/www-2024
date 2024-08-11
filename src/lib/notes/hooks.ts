@@ -1,8 +1,12 @@
 import { useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
+import { incrementViewsBySlug } from "./index";
 
-export const useRealTimeViewCount = async (path: string) => {
+export const useRealTimeViewCount = async (
+  slug: string,
+  shouldIncrement = false
+) => {
   const router = useRouter();
   useEffect(() => {
     const channel = supabase
@@ -20,6 +24,10 @@ export const useRealTimeViewCount = async (path: string) => {
         }
       )
       .subscribe();
+
+    if (shouldIncrement && document) {
+      incrementViewsBySlug(slug);
+    }
 
     return () => {
       supabase.removeChannel(channel);

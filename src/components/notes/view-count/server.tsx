@@ -10,22 +10,6 @@ export const _ServerViewCount = async ({
   slug,
   shouldIncrement = false,
 }: ViewCountProps) => {
-  if (shouldIncrement) {
-
-    const { data, error } = await incrementViewsBySlug(slug);
-    if (error) {
-      console.error("Error incrementing views", error);
-      return null;
-    }
-    return (
-      <_RealTimeViewCount
-        slug={slug}
-        shouldIncrement={shouldIncrement}
-        views={data}
-      />
-    );
-  }
-
   const { data, error } = await fetchRemoteNoteBySlug(slug);
 
   if (error || !data || !data.views) {
