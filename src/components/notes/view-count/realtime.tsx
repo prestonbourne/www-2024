@@ -5,16 +5,14 @@ import { useRealTimeViewCount } from "@/lib/notes/hooks";
 
 type RealtimeViewCountProps = {
   slug: string;
-  shouldIncrement?: boolean;
   views: number | string;
 };
 
 export const _RealTimeViewCount = ({
   slug,
-  shouldIncrement = false,
   views,
 }: RealtimeViewCountProps) => {
-  useRealTimeViewCount(slug, shouldIncrement);
+  useRealTimeViewCount(slug);
 
   return <NoteStat text={views} Icon={EyeOpenIcon} />;
 };

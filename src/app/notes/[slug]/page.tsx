@@ -16,9 +16,7 @@ import { Heading } from "@/components/typography/Heading";
 import { Paragraph as Body } from "@/components/typography/Paragraph";
 import { ViewCount } from "@/components/notes/view-count";
 
-
-export const fetchCache = 'force-no-store';
-
+export const dynamic = 'force-dynamic';
 export function generateStaticParams() {
   const notes = getLocalNotes();
 

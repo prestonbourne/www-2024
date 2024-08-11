@@ -6,9 +6,9 @@ because they are more up-to-date and we don't want to overwrite them with the re
 the main reason we fetch the remote notes is to get the views and likes count for each note which are not available at build time
 */
 import { Database } from "@/lib/supabase/types";
-import { supabase } from "@/lib/supabase";
 import type { Note, Result } from "@/lib/notes/types";
 import notesMap from "./notesMap.json" assert { type: "json" };
+import { SupabaseClient } from "@supabase/supabase-js";
 
 // Schema for the notes table
 type NoteRow = Database["public"]["Tables"]["notes"]["Row"];
@@ -42,7 +42,8 @@ export const getLocalNoteBySlug = (slug: string): Note | undefined => {
 };
 
 export const fetchRemoteNoteBySlug = async (
-  slug: string
+  slug: string,
+  supabase: SupabaseClient
 ): Promise<Result<Note>> => {
   console.log("`fetchRemoteNoteBySlug` called");
   const { data, error } = await supabase
@@ -64,12 +65,16 @@ export const fetchRemoteNoteBySlug = async (
     };
   }
   const mappedData = extractNoteFromRow(data);
-  console.log("`fetchRemoteNoteBySlug` result", mappedData);
+  mappedData.content;
+  console.log("`fetchRemoteNoteBySlug` result", {
+    ...mappedData,
+    content: mappedData.content.slice(0, 100),
+  });
 
   return { data: mappedData, error: null };
 };
 
-async function upsertNote(note: Note): Promise<void> {
+async function upsertNote(note: Note, supabase: SupabaseClient): Promise<void> {
   const upsertData = {
     slug: note.slug,
     publish_date: note.metadata.publishedAt,
@@ -90,15 +95,13 @@ async function upsertNote(note: Note): Promise<void> {
 }
 
 export const incrementViewsBySlug = async (
-  slug: string
+  slug: string,
+  supabase: SupabaseClient
 ): Promise<Result<number>> => {
-
   console.log("`incrementViewsBySlug` called");
   const { error, data } = await supabase.rpc("increment_note_views", {
     note_slug: slug,
   });
-
-  
 
   if (error) {
     console.error("Error incrementing note views", error);
@@ -172,7 +175,9 @@ const resolveNotes = (remoteNotes: Note[]): Note[] => {
   return combinedNotes;
 };
 
-const _fetchRemoteNotes = async (): Promise<Result<Note[]>> => {
+const _fetchRemoteNotes = async (
+  supabase: SupabaseClient
+): Promise<Result<Note[]>> => {
   const { data, error } = await supabase.from("notes").select("*");
   if (error) {
     console.error("Error fetching notes", error);
@@ -184,8 +189,10 @@ const _fetchRemoteNotes = async (): Promise<Result<Note[]>> => {
   return { data: mappedData, error: null };
 };
 
-export const fetchRemoteNotes = async (): Promise<Result<Note[]>> => {
-  const remoteNotes = await _fetchRemoteNotes();
+export const fetchRemoteNotes = async (
+  supabase: SupabaseClient
+): Promise<Result<Note[]>> => {
+  const remoteNotes = await _fetchRemoteNotes(supabase);
   if (remoteNotes.error) return { data: null, error: remoteNotes.error };
 
   const data = resolveNotes(remoteNotes.data);
