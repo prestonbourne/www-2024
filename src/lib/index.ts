@@ -1,7 +1,4 @@
-import fs from "fs";
-import path from "path";
-import { NoteMetadata, Note } from "@/lib/notes/types";
-
+import { PHASE_PRODUCTION_BUILD, PHASE_DEVELOPMENT_SERVER, PHASE_PRODUCTION_SERVER } from "next/dist/shared/lib/constants";
 
 
 export const formatISOToDate = (ISO: string) => {
@@ -17,4 +14,8 @@ export const onlyIn = (env: typeof process.env.NODE_ENV, fn: Function) => {
     return fn();
   }
   return null;
+};
+
+export const isDeployedProduction = () => {
+  return process.env.NEXT_PHASE === PHASE_PRODUCTION_SERVER;
 };

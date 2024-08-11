@@ -1,3 +1,5 @@
+import { Database } from "../supabase/types";
+
 export type NoteMetadata = {
   title: string;
   publishedAt: string;
@@ -24,3 +26,5 @@ export type Result<T> =
       data: null;
       error: Error;
     };
+
+export type NoteRow = Database["public"]["Tables"]["notes"]["Row"];

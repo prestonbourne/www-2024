@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React from "react";
 import { notFound } from "next/navigation";
 import { NoteMDXRenderer } from "@/components/markdown";
 import { formatISOToDate } from "@/lib/index";
@@ -14,7 +14,7 @@ import { Main } from "@/components/Main";
 import { Divider } from "@/components/Divider";
 import { Heading } from "@/components/typography/Heading";
 import { Paragraph as Body } from "@/components/typography/Paragraph";
-import { ViewCount } from "@/components/notes/view-count";
+import { ClientViewCount } from "@/components/notes/view-count";
 
 export const dynamic = 'force-dynamic';
 export function generateStaticParams() {
@@ -64,16 +64,8 @@ export default async function Page({ params }: NextPageProps) {
               text={`${calculateReadingTime(note.content)} mins`}
               Icon={ClockIcon}
             />
-            <Suspense
-              fallback={
-                <NoteStatLoading
-                  Icon={EyeClosedIcon}
-                  text={"Loading View Count"}
-                />
-              }
-            >
-              <ViewCount slug={note.slug} shouldIncrement />
-            </Suspense>
+
+              <ClientViewCount slug={note.slug} />
           </div>
         </div>
         <Divider className="my-4" />

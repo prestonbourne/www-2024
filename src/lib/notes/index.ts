@@ -65,11 +65,6 @@ export const fetchRemoteNoteBySlug = async (
     };
   }
   const mappedData = extractNoteFromRow(data);
-  mappedData.content;
-  console.log("`fetchRemoteNoteBySlug` result", {
-    ...mappedData,
-    content: mappedData.content.slice(0, 100),
-  });
 
   return { data: mappedData, error: null };
 };
@@ -107,12 +102,10 @@ export const incrementViewsBySlug = async (
     console.error("Error incrementing note views", error);
     return { data: null, error: makeSupabaseError(error) };
   }
-  console.log("`incrementViewsBySlug` result", data);
-
   return { data, error: null };
 };
 
-const isValidNoteRow = (data: any): data is NoteRow => {
+export const isValidNoteRow = (data: any): data is NoteRow => {
   return (
     typeof data === "object" &&
     typeof data.slug === "string" &&
@@ -123,7 +116,7 @@ const isValidNoteRow = (data: any): data is NoteRow => {
   );
 };
 
-const extractNoteFromRow = (row: NoteRow): Note => {
+export const extractNoteFromRow = (row: NoteRow): Note => {
   const title = localNotesArr.find((note) => note.slug === row.slug)?.metadata
     .title;
 

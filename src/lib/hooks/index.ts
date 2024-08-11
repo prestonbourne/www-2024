@@ -15,3 +15,14 @@ export const usePreventHydrationMismatch  = () => {
 
   return hasHydrated
 }
+
+
+export const useIsFirstRender = () => {
+  const isFirst = React.useRef(true)
+
+  React.useEffect(() => {
+    isFirst.current = false
+  }, [])
+
+  return isFirst.current
+}
