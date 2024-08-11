@@ -5,6 +5,8 @@ import { isDeployedProduction } from "./lib";
 let url = process.env.NEXT_PUBLIC_SITE_URL!;
 
 export function middleware(request: NextRequest, event: NextFetchEvent) {
+
+    console.log("middleware invoked");
   const pathname = request.nextUrl.pathname;
   const isNotePathWithSlug = request.nextUrl.pathname.startsWith("/notes/");
   if (!isNotePathWithSlug) {
