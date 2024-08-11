@@ -44,6 +44,7 @@ export const getLocalNoteBySlug = (slug: string): Note | undefined => {
 export const fetchRemoteNoteBySlug = async (
   slug: string
 ): Promise<Result<Note>> => {
+  console.log("`fetchRemoteNoteBySlug` called");
   const { data, error } = await supabase
     .from("notes")
     .select("*")
@@ -63,6 +64,7 @@ export const fetchRemoteNoteBySlug = async (
     };
   }
   const mappedData = extractNoteFromRow(data);
+  console.log("`fetchRemoteNoteBySlug` result", mappedData);
 
   return { data: mappedData, error: null };
 };
