@@ -5,10 +5,13 @@ import { isDeployedProduction } from "./lib";
 let url = process.env.NEXT_PUBLIC_SITE_URL!;
 
 export function middleware(request: NextRequest, event: NextFetchEvent) {
-
-    console.log("middleware invoked");
+  console.log("middleware invoked");
   const pathname = request.nextUrl.pathname;
   const isNotePathWithSlug = request.nextUrl.pathname.startsWith("/notes/");
+  console.log("middleware invoked", {
+    pathname,
+    isNotePathWithSlug,
+  })
   if (!isNotePathWithSlug) {
     return NextResponse.next();
   }
@@ -20,6 +23,8 @@ export function middleware(request: NextRequest, event: NextFetchEvent) {
       ? `${process.env.NEXT_PUBLIC_SITE_URL!}/api/increment_note_views`
       : "http://localhost:3000/api/increment_note_views";
     
+    console.log({ url, slug });
+
     const res = await fetch(url, {
       method: "POST",
       headers: {
