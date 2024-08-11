@@ -90,14 +90,19 @@ async function upsertNote(note: Note): Promise<void> {
 export const incrementViewsBySlug = async (
   slug: string
 ): Promise<Result<number>> => {
+
+  console.log("`incrementViewsBySlug` called");
   const { error, data } = await supabase.rpc("increment_note_views", {
     note_slug: slug,
   });
+
+  
 
   if (error) {
     console.error("Error incrementing note views", error);
     return { data: null, error: makeSupabaseError(error) };
   }
+  console.log("`incrementViewsBySlug` result", data);
 
   return { data, error: null };
 };

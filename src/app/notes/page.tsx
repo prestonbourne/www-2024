@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ContentHeading, Divider, Header, Paragraph, Main } from "@/components";
+import { ContentHeading, Divider, Header } from "@/components";
 import { NoteList } from "@/components/notes/NoteList";
 
 

@@ -30,6 +30,7 @@ export const useRealTimeViewCount = async (
     }
 
     return () => {
+      console.log("Unsubscribing from channel");
       supabase.removeChannel(channel);
     };
   }, [router]);
