@@ -52,7 +52,7 @@ const fetchImageSizeFromFile = async (imagePath: string) => {
     const img = await readFile(imagePath);
     return sizeOf(img);
   } catch (error) {
-    console.log(`Error while reading image with path: ${imagePath}`);
+    console.error(`Error while reading image with path: ${imagePath}`);
     console.error(error);
   }
 };

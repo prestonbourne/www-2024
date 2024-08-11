@@ -2,9 +2,9 @@ import { Paragraph } from "@/components/typography";
 import Link from "next/link";
 import type { Note } from "@/lib/notes/types";
 import { Suspense } from "react";
-import { ViewCount } from "./ViewCount";
 import { NoteStat, NoteStatLoading } from "./NoteStat";
 import { CalendarIcon, EyeClosedIcon } from "@radix-ui/react-icons";
+import { ViewCount } from "./view-count";
 
 export function NoteListItem(note: Note) {
   const { metadata, slug } = note;
@@ -25,11 +25,16 @@ export function NoteListItem(note: Note) {
         </Paragraph>
         <div className="flex flex-row gap-4">
           <NoteStat Icon={CalendarIcon} text={formattedDate} />
-          {/* <Suspense
-            fallback={<NoteStatLoading Icon={EyeClosedIcon} text={`Loading Views for ${note.metadata.title}`} />}
+          <Suspense
+            fallback={
+              <NoteStatLoading
+                Icon={EyeClosedIcon}
+                text={`Loading Views for ${note.metadata.title}`}
+              />
+            }
           >
             <ViewCount slug={slug} shouldIncrement={false} />
-          </Suspense> */}
+          </Suspense>
         </div>
       </Link>
     </li>

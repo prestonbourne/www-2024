@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { ContentHeading, Divider, Header, Paragraph, Main } from "@/components";
 import { NoteList } from "@/components/notes/NoteList";
 
+
+export const fetchCache = 'force-no-store';
+
 const description =
   "Documentation of my learnings, thoughts and experiments. The palest ink is more persistent than the sharpest memory.";
 

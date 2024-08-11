@@ -1,27 +1,13 @@
-import { createServerClient, type CookieOptions } from "@supabase/ssr";
+import { createClient } from "@supabase/supabase-js";
 import { Database } from "./types";
 
-const getEnv = (key: string): string => {
-  if (!process.env[key]) {
-    throw new Error(`Missing env.${key}`);
-  }
-  return process.env[key]!;
-};
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY ;
 
-const supabaseUrl = getEnv("SUPABASE_URL");
-const supabaseKey = getEnv("SUPABASE_KEY");
+if(!supabaseUrl || !supabaseKey) {
+  throw new Error(`Missing env variables for Supabase. Received ${{ supabaseUrl, supabaseKey }}`);
+}
 
-export const supabase = (cookies: CookieOptions) => {
-  const cookieStore = cookies();
-
-  return createServerClient<Database>(supabaseUrl, supabaseKey, {
-    cookies: {
-      get(name: string) {
-        return cookieStore.get(name)?.value;
-      },
-    },
-  });
-};
+export const supabase = createClient<Database>(supabaseUrl, supabaseKey);
 
 export type Supabase = typeof supabase;
-export type { CookieOptions };

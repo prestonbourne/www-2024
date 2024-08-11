@@ -1,9 +1,9 @@
+import { getLocalNotes } from "@/lib/notes";
 import { NoteListItem } from "./NoteListItem";
 import { Main } from "@/components";
-import { notesDAO } from "@/lib/notes/dao";
 
 export async function NoteList() {
-  const notes = notesDAO.getLocalNotes();
+  const notes = getLocalNotes();
 
   return (
     <Main>

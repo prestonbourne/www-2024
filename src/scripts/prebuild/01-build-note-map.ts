@@ -1,7 +1,18 @@
 import fs from "fs";
 import path from "path";
 import { Note } from "@/lib/notes/types";
-import { getLocalNotes } from "@/lib/notes";
+import { getMDXData } from "../mdx-utils";
+
+export const getLocalNotes = (): Note[] => {
+  const data = getMDXData(path.join(process.cwd(), "src/note-content"));
+
+  data.sort((a, b) => {
+    return (
+      +new Date(b.metadata.publishedAt) - +new Date(a.metadata.publishedAt)
+    );
+  });
+  return data;
+};
 
 export default function script() {
   type NoteMap = Record<string, Note>;

@@ -1,9 +1,9 @@
 import { MetadataRoute } from "next";
-import { notesDAO } from "@/lib/notes/dao";
+import { getLocalNotes } from "@/lib/notes/index";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const noteEntries: MetadataRoute.Sitemap = [];
-  const notes = notesDAO.getLocalNotes();
+  const notes = getLocalNotes();
 
   noteEntries.push(
     ...notes.map((note) => {
