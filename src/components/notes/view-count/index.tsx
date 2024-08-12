@@ -6,10 +6,11 @@ import { LIKES_VIEWS_SENTINEL } from "@/lib/notes";
 
 type RealtimeViewCountProps = {
   slug: string;
+  shouldIncrement?: boolean;
 };
 
-export const ClientViewCount = ({ slug }: RealtimeViewCountProps) => {
-  const { views, loading } = useRealTimeViewCount(slug);
+export const ClientViewCount = ({ slug, shouldIncrement = false }: RealtimeViewCountProps) => {
+  const { views, loading } = useRealTimeViewCount(slug, shouldIncrement);
 
   if (loading) {
     return (
@@ -19,6 +20,11 @@ export const ClientViewCount = ({ slug }: RealtimeViewCountProps) => {
       />
     );
   }
+
+  console.log({
+    views,
+    loading,
+  });
 
   if (!views || views === 0 || views <= LIKES_VIEWS_SENTINEL) {
     return null;

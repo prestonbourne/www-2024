@@ -65,7 +65,7 @@ export default async function Page({ params }: NextPageProps) {
               Icon={ClockIcon}
             />
 
-              <ClientViewCount slug={note.slug} />
+              <ClientViewCount slug={note.slug} shouldIncrement/>
           </div>
         </div>
         <Divider className="my-4" />

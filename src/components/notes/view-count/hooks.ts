@@ -4,26 +4,18 @@ import { supabase } from "@/lib/supabase/browser-client";
 import {
   isValidNoteRow,
   extractNoteFromRow,
+  fetchRemoteNoteBySlug,
 } from "@/lib/notes";
 import { useIsFirstRender } from "@/lib/hooks";
 import { LIKES_VIEWS_SENTINEL } from "@/lib/notes";
-import { getNoteAction } from "./actions";
+import { incrementNoteViewsAction } from "./actions";
 
-type RealTimeViewCountState =
-  | {
-      loading: false;
-      views: number;
-    }
-  | {
-      loading: true;
-      views: 0;
-    }
-  | {
-      loading: false;
-      views: typeof LIKES_VIEWS_SENTINEL;
-    };
+type RealTimeViewCountState = {
+  views: number;
+  loading: boolean;
+};
 
-export const useRealTimeViewCount = (slug: string) => {
+export const useRealTimeViewCount = (slug: string, shouldIncrement = false) => {
   const [state, setState] = useState<RealTimeViewCountState>({
     views: 0,
     loading: true,
@@ -32,15 +24,14 @@ export const useRealTimeViewCount = (slug: string) => {
 
   const router = useRouter();
   useEffect(() => {
-    if (isFirstRender) {
+    if (isFirstRender && shouldIncrement) {
       (async () => {
         console.log("useRealTimeViewCount first render");
         setState({
-          views: 0,
+          views: LIKES_VIEWS_SENTINEL,
           loading: true,
         });
-        const { data, error } = await getNoteAction(slug);
-        // const { data, error } = await fetchRemoteNoteBySlug(slug, supabase);
+        const { data, error } = await incrementNoteViewsAction(slug);
         if (error) {
           console.error("Error fetching remote note", { error });
           setState({
@@ -49,8 +40,8 @@ export const useRealTimeViewCount = (slug: string) => {
           });
           return;
         }
-        if (!data || !data.views) {
-          console.error("No data returned from fetchRemoteNoteBySlug");
+        if (!data) {
+          console.error("No data returned from incrementNoteViewsAction");
           setState({
             views: LIKES_VIEWS_SENTINEL,
             loading: false,
@@ -59,12 +50,43 @@ export const useRealTimeViewCount = (slug: string) => {
         }
 
         setState({
-          views: data.views ?? LIKES_VIEWS_SENTINEL,
+          views: data,
           loading: false,
         });
-        
+      })();
+    } else if (isFirstRender && !shouldIncrement) {
+      (async () => {
+        const { data, error } = await fetchRemoteNoteBySlug(slug, supabase);
+        if (error) {
+          console.error("Error fetching remote note", { error });
+          setState({
+            views: LIKES_VIEWS_SENTINEL,
+            loading: false,
+          });
+          return;
+        }
+        if (!data) {
+          console.error("No data returned from fetchRemoteNoteBySlug");
+          setState({
+            views: LIKES_VIEWS_SENTINEL,
+            loading: false,
+          });
+          return;
+        }
+        if (!data.views) {
+          setState({
+            views: LIKES_VIEWS_SENTINEL,
+            loading: false,
+          });
+          return;
+        }
+        setState({
+          views: data.views,
+          loading: false,
+        });
       })();
     }
+
     // real time
     const channel = supabase
       .channel("realtime:notes.views")
@@ -76,18 +98,14 @@ export const useRealTimeViewCount = (slug: string) => {
           table: "notes",
         },
         (payload) => {
-          if (isValidNoteRow(payload.new)) {
-            const note = extractNoteFromRow(payload.new);
-            if (note.slug === slug) {
-              setState({
-                views: note.views ?? LIKES_VIEWS_SENTINEL,
-                loading: false,
-              });
-            }
-          } else {
-            console.log("Invalid note returned from database", { payload });
+          const hasViewCount =
+            "views_count" in payload.new &&
+            typeof payload.new.views_count === "number";
+          const sameSlug = "slug" in payload.new && payload.new.slug === slug;
+          if (hasViewCount && sameSlug) {
             setState({
-              views: LIKES_VIEWS_SENTINEL,
+              // @ts-ignore
+              views: payload.new.views_count,
               loading: false,
             });
           }
