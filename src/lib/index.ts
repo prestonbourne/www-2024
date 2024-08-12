@@ -19,6 +19,9 @@ export const isDeployedProduction = () => {
 }
 
 export const getBaseURL = () => {
+  console.log({
+    vercelUrl : process.env.VERCEL_URL,
+  })
   const inProd = isDeployedProduction();
   return inProd
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
