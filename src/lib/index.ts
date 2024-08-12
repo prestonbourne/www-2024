@@ -17,5 +17,13 @@ export const onlyIn = (env: typeof process.env.NODE_ENV, fn: Function) => {
 };
 
 export const isDeployedProduction = () => {
-  return process.env.NEXT_PHASE === PHASE_PRODUCTION_SERVER;
+  // https://vercel.com/docs/projects/environment-variables/system-environment-variables
+  return !!process.env.VERCEL_PROJECT_PRODUCTION_URL;
+}
+
+export const getBaseURL = () => {
+  const inProd = isDeployedProduction();
+  return inProd
+    ? `https://${process.env.VERCEL_URL}`
+    : "http://localhost:3000";
 };

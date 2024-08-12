@@ -1,8 +1,6 @@
 import { NextMiddleware, NextResponse } from "next/server";
 import type { NextFetchEvent, NextRequest } from "next/server";
-import { isDeployedProduction } from "./lib";
-
-let url = process.env.NEXT_PUBLIC_SITE_URL!;
+import { getBaseURL, isDeployedProduction } from "./lib";
 
 export function middleware(request: NextRequest, event: NextFetchEvent) {
   const pathname = request.nextUrl.pathname;
@@ -18,9 +16,7 @@ export function middleware(request: NextRequest, event: NextFetchEvent) {
   const updateViews = async () => {
     const slug = pathname.replace("/notes/", "");
 
-    const url = isDeployedProduction()
-      ? `${process.env.NEXT_PUBLIC_SITE_URL!}/api/increment_note_views`
-      : "http://localhost:3000/api/increment_note_views";
+    const url = getBaseURL() + "/api/increment_note_views";
     
     console.log({ url, slug });
 
