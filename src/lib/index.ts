@@ -15,7 +15,8 @@ export const onlyIn = (env: typeof process.env.NODE_ENV, fn: Function) => {
 
 export const isDeployedProduction = () => {
   // https://vercel.com/docs/projects/environment-variables/system-environment-variables
-  return !!process.env.VERCEL_PROJECT_PRODUCTION_URL;
+  // kinda annoying this only works for specfic commit hash not just the branch
+  return !!process.env.VERCEL_URL;
 }
 
 export const getBaseURL = () => {
@@ -24,6 +25,6 @@ export const getBaseURL = () => {
   })
   const inProd = isDeployedProduction();
   return inProd
-    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    ? `https://${process.env.VERCEL_URL}`
     : "http://localhost:3000";
 };
