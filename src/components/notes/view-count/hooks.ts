@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase/browser-client";
 import {
-  fetchRemoteNoteBySlug,
   isValidNoteRow,
   extractNoteFromRow,
 } from "@/lib/notes";
 import { useIsFirstRender } from "@/lib/hooks";
 import { LIKES_VIEWS_SENTINEL } from "@/lib/notes";
+import { getNoteAction } from "./actions";
 
 type RealTimeViewCountState =
   | {
@@ -39,7 +39,8 @@ export const useRealTimeViewCount = (slug: string) => {
           views: 0,
           loading: true,
         });
-        const { data, error } = await fetchRemoteNoteBySlug(slug, supabase);
+        const { data, error } = await getNoteAction(slug);
+        // const { data, error } = await fetchRemoteNoteBySlug(slug, supabase);
         if (error) {
           console.error("Error fetching remote note", { error });
           setState({
@@ -48,10 +49,20 @@ export const useRealTimeViewCount = (slug: string) => {
           });
           return;
         }
+        if (!data || !data.views) {
+          console.error("No data returned from fetchRemoteNoteBySlug");
+          setState({
+            views: LIKES_VIEWS_SENTINEL,
+            loading: false,
+          });
+          return;
+        }
+
         setState({
           views: data.views ?? LIKES_VIEWS_SENTINEL,
           loading: false,
         });
+        
       })();
     }
     // real time
