@@ -1,6 +1,3 @@
-import { PHASE_PRODUCTION_BUILD, PHASE_DEVELOPMENT_SERVER, PHASE_PRODUCTION_SERVER } from "next/dist/shared/lib/constants";
-
-
 export const formatISOToDate = (ISO: string) => {
   return new Date(ISO).toLocaleDateString("en-US", {
     year: "numeric",
@@ -24,6 +21,6 @@ export const isDeployedProduction = () => {
 export const getBaseURL = () => {
   const inProd = isDeployedProduction();
   return inProd
-    ? `https://${process.env.VERCEL_URL}`
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
     : "http://localhost:3000";
 };
