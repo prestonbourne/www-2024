@@ -27,7 +27,11 @@ export function middleware(request: NextRequest, event: NextFetchEvent) {
         }),
       });
       if (res.status !== 200) {
-        console.error("Failed to update views");
+        const resBody = await res.text();
+        console.error("Failed to update views", {
+            status: res.status,
+            body: resBody,
+        });
 
         try {
           const data = await res.json();
