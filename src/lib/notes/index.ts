@@ -45,7 +45,6 @@ export const fetchRemoteNoteBySlug = async (
   slug: string,
   supabase: SupabaseClient
 ): Promise<Result<Note>> => {
-  console.log("`fetchRemoteNoteBySlug` called");
   const { data, error } = await supabase
     .from("notes")
     .select("*")
@@ -93,7 +92,6 @@ export const incrementViewsBySlug = async (
   slug: string,
   supabase: SupabaseClient
 ): Promise<Result<number>> => {
-  console.log("`incrementViewsBySlug` called");
   const { error, data } = await supabase.rpc("increment_note_views", {
     note_slug: slug,
   });
