@@ -20,21 +20,14 @@ a file called `notesMap.json` is generated before each production build.
 
 ![Website Performance Metrics, Image shows ideal FCP, LCP, CLS, Time to first byte, etc metrics](https://github.com/prestonbourne/www-2024/blob/main/public/speed-insights.png?raw=true)
 
+## Development
 
----
-## Nextjs
 Below is the default Readme from Next
 ---
 
-## Development
-
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
-
-First, run the development server:
-
-pnpm dev
+First, run the development server, `pnpm run dev`
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
