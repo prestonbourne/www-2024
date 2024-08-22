@@ -2,25 +2,28 @@
 
 my online home :)
 
-you're welcome to use any code snippets you find or even use the entire website as a template, obviously i can't (and won't even try to) enforce this but if you use any code from here please give some credit, just something like
-```js
-// from https://github.com/prestonbourne/www-2024
-```
+you're welcome to use any code snippets you find or even use the entire website as a template, obviously i can't (and won't even try to) enforce this, but don't try to pass any of the projects of IP off as your own out
 
 ## Quick Info
+
 - **Framework**: [Next.js](https://nextjs.org/)
 - **Deployment**: [Vercel](https://vercel.com)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/)
 - **Content**: [MDX](https://github.com/hashicorp/next-mdx-remote)
 
 ## Note Content
+
 Note content is generated using MDX, using the `scripts/prebuild/build-note-map.ts`, referenced in the `package.json`
 a file called `notesMap.json` is generated before each production build. 
 
+## Speed ⚡
+
+![Website Performance Metrics, Image shows ideal FCP, LCP, CLS, Time to first byte, etc metrics](https://github.com/prestonbourne/www-2024/blob/main/speed-insights.png?raw=true)
+
+
 ---
-
-below is the default readme from next.js
-
+## Nextjs
+Below is the default Readme from Next
 ---
 
 ## Development
