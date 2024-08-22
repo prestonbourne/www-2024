@@ -18,7 +18,7 @@ a file called `notesMap.json` is generated before each production build.
 
 ## Speed ⚡
 
-![Website Performance Metrics, Image shows ideal FCP, LCP, CLS, Time to first byte, etc metrics](https://github.com/prestonbourne/www-2024/blob/main/speed-insights.png?raw=true)
+![Website Performance Metrics, Image shows ideal FCP, LCP, CLS, Time to first byte, etc metrics](https://github.com/prestonbourne/www-2024/blob/main/public/speed-insights.png?raw=true)
 
 
 ---
