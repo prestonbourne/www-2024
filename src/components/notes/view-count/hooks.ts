@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase/browser-client";
 import {
-  isValidNoteRow,
-  extractNoteFromRow,
   fetchRemoteNoteBySlug,
 } from "@/lib/notes";
 import { useIsFirstRender } from "@/lib/hooks";
