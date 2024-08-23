@@ -16,7 +16,6 @@ import { Heading } from "@/components/typography/Heading";
 import { Paragraph as Body } from "@/components/typography/Paragraph";
 import { ClientViewCount } from "@/components/notes/view-count";
 
-export const dynamic = 'force-dynamic';
 export function generateStaticParams() {
   const notes = getLocalNotes();
 
