@@ -7,8 +7,9 @@ import Link from "next/link";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 
 const ITEMS = [
-  { href: "/notes", label: "/notes" },
-  { href: "/sketches", label: "/sketches" },
+  { href: "/notes", label: "notes" },
+  { href: "/sketches", label: "sketches" },
+  { href: "/work", label: "work" },
 ];
 
 export const Nav: React.FC = () => {
@@ -41,7 +42,6 @@ const isSelected = (pathname: string, href: string) => {
   const hrefRoute = href.split("/")[1];
   return currRoute === hrefRoute;
 };
-
 
 export const HomeButton: React.FC = () => {
   return (
