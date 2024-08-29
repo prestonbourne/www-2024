@@ -2,7 +2,7 @@
 
 my online home :)
 
-you're welcome to use any code snippets you find, or even use the entire website as a template, but don't try to pass any of the projects off as your own
+you're welcome to use any code snippets you find, or even use the entire website as a template
 
 ## Quick Info
 
