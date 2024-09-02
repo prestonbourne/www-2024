@@ -17,12 +17,17 @@ type PostgrestError = {
   code: string;
 };
 
+export const isWorkWithRoute = (work: Work): work is WorkWithRoute => {
+  return (work as WorkWithRoute).slug !== undefined && (work as WorkWithRoute).content !== undefined;
+}
+
 const makeSupabaseError = (pgErr: PostgrestError) => {
   const error: Error = {
     name: "SupabaseError",
     ...pgErr,
   };
   return error;
+
 };
 
 type WorkRouteMap = Map<string, Work>;

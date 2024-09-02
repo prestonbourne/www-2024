@@ -8,6 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   workEntries.push(
     ...works.map((work) => {
       return {
+        // @ts-ignore ts not picking up the correct type at build time
         url: `${process.env.NEXT_PUBLIC_SITE_URL}/work/${work.slug}`,
       };
     })

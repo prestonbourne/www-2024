@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase/browser-client";
-import { fetchRemoteWorkBySlug } from "@/lib/work";
+// import { fetchRemoteWorkBySlug } from "@/lib/work";
 import { useIsFirstRender } from "@/lib/hooks";
-import { incrementWorkViewsAction } from "./actions";
+// import { incrementWorkViewsAction } from "./actions";
 
 type RealTimeViewCountState = {
   views: number;
@@ -54,13 +54,13 @@ export const useRealTimeViewCount = (slug: string, shouldIncrement = false) => {
   };
 
   useEffect(() => {
-    if (isFirstRender && inProd) {
-      if (shouldIncrement) {
-        doAction(() => incrementWorkViewsAction(slug));
-      }
-    } else {
-      doAction(() => fetchRemoteWorkBySlug(slug, supabase));
-    }
+    // if (isFirstRender && inProd) {
+    //   if (shouldIncrement) {
+    //     doAction(() => incrementWorkViewsAction(slug));
+    //   }
+    // } else {
+    //   doAction(() => fetchRemoteWorkBySlug(slug, supabase));
+    // }
 
     // real time
     const channel = supabase

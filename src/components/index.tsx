@@ -1,5 +1,3 @@
-export { Header } from "./Header";
-export { ContentHeading } from "./ContentHeading";
 export { Divider } from "./Divider";
 
 // typography

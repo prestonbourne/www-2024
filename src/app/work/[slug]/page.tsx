@@ -13,9 +13,14 @@ import { ClientViewCount } from "@/components/work/view-count";
 import NextLink from "next/link";
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
 import { cx } from "class-variance-authority";
+import { WorkWithRoute } from "@/lib/work/types";
+import { isWorkWithRoute } from "@/lib/work";
+
 
 export function generateStaticParams() {
-  const works = getLocalWorks().filter((work) => work.type === "work_route");
+  const works: WorkWithRoute[] = getLocalWorks().filter(
+    (work): work is WorkWithRoute => work.type === "work_route" && isWorkWithRoute(work)
+  );
 
   return works.map((work) => ({
     slug: work.slug,
