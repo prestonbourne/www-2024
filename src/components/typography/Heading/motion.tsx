@@ -15,8 +15,8 @@ export const MotionHeading: React.FC<HeadingProps & MotionProps> = ({
   
     return React.createElement(
       // @ts-ignore
-      motion[HeadingTag],
-      { className: `${headingStyles({ level })} ${className}`, ...props },
-      children
-    );
-  };
+    motion[HeadingTag],
+    { className: `${headingStyles({ level })} ${className}`, ...props },
+    children
+  );
+};

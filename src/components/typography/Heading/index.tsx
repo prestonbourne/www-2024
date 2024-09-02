@@ -17,3 +17,5 @@ export const Heading: React.FC<HeadingProps> = ({
     children
   );
 };
+
+export { MotionHeading } from "./motion";
