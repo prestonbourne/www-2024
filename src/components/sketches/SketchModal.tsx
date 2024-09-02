@@ -4,7 +4,7 @@ import { useSketchContext } from "./SketchProvider";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { ReactEventHandler } from "react";
 import { cx } from "class-variance-authority";
-import { MotionHeading } from "../typography/heading/motion";
+import { MotionHeading } from "@/components/typography";
 
 export const SketchModal: React.FC = ({}) => {
   const { activeSketch, setActiveSketch, SketchComponent } = useSketchContext();

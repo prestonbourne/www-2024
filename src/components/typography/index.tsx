@@ -1,8 +1,8 @@
 export { Heading } from "./heading";
 export { MotionHeading } from "./heading/motion";
 
-export { Link } from "./Link";
-export { UnorderedList } from "./List";
-export { Paragraph } from "./Paragraph";
-export { ListItem } from "./List";
+export { Link } from "./link";
+export { UnorderedList } from "./list";
+export { Paragraph } from "./paragraph";
+export { ListItem } from "./list";
 

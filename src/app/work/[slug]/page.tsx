@@ -8,7 +8,7 @@ import { TextWithIcon } from "@/components/TextWithIcon";
 import { CalendarIcon, ClockIcon } from "@radix-ui/react-icons";
 import { Divider } from "@/components/Divider";
 import { Heading } from "@/components/typography";
-import { Paragraph as Body } from "@/components/typography/Paragraph";
+import { Paragraph as Body } from "@/components/typography/paragraph";
 import { ClientViewCount } from "@/components/work/view-count";
 import NextLink from "next/link";
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
