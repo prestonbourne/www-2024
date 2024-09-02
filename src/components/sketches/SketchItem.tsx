@@ -3,7 +3,7 @@ import { SketchLite } from "@/lib/sketches/types";
 import Image from "next/image";
 import { useSketchContext } from "./SketchProvider";
 import { motion } from "framer-motion";
-import { MotionHeading } from "../typography/heading/motion";
+import { MotionHeading } from "@/components/typography";
 
 type SketchItemsProps = {
   sketch: SketchLite;

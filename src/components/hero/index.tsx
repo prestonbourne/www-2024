@@ -1,5 +1,4 @@
-import { Heading } from "../typography/heading";
-import { Paragraph as Body } from "../typography/Paragraph";
+import { Paragraph as Body, Heading } from "@/components/typography";
 import Image from "next/image";
 import { Clock } from "./clock";
 import { cx } from "class-variance-authority";

@@ -1,4 +1,4 @@
-import { Component, ComponentProps } from "react";
+import { ComponentProps } from "react";
 import { Heading, Paragraph } from "../typography";
 
 type HomeSectionProps = ComponentProps<"section"> & {
