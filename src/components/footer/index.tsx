@@ -12,7 +12,7 @@ export const Footer = ({ className, ...props }: ComponentProps<"footer">) => {
   return (
     <footer
       className={cx(
-        "w-full md:pt-0 pt-5 mx-auto mt-4 grid grid-cols-2 gap-y-2",
+        "w-screen-md md:pt-0 pt-5 mx-auto mt-4 grid grid-cols-2 gap-y-2",
         className
       )}
       {...props}
@@ -44,7 +44,7 @@ export const Footer = ({ className, ...props }: ComponentProps<"footer">) => {
   );
 };
 
-const Clock = () => {
+export const Clock = () => {
   const [time, setTime] = useState(new Date());
   const ONE_SECOND = 1000;
 
@@ -64,8 +64,8 @@ const Clock = () => {
   });
 
   return (
-    <p className="text-sub-text text-sm">
-      EDT / <time dateTime={newYorkTime} suppressHydrationWarning>{newYorkTime}</time>
+    <p className="text-sm">
+      EDT🗽 / <time dateTime={newYorkTime} suppressHydrationWarning>{newYorkTime}</time>
     </p>
   );
 };

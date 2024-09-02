@@ -26,3 +26,7 @@ export const useIsFirstRender = () => {
 
   return isFirst.current
 }
+
+export const useClickOutside = () => {
+  
+}

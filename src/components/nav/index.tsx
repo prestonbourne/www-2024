@@ -2,13 +2,10 @@
 import React from "react";
 import { Item } from "./Item";
 import { usePathname } from "next/navigation";
-import { Header } from "../Header";
 import Link from "next/link";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 
 const ITEMS = [
-  { href: "/notes", label: "notes" },
-  { href: "/sketches", label: "sketches" },
   { href: "/work", label: "work" },
 ];
 
@@ -16,8 +13,8 @@ export const Nav: React.FC = () => {
   const pathname = usePathname();
 
   return (
-    <Header>
-      <nav className="mx-auto mt-4 mb-8 flex items-center justify-between">
+    <div>
+      <nav className="mx-auto mt-4 mb-8 flex items-center justify-between max-w-screen-md">
         <HomeButton />
         <div className="flex flex-row items-center justify-center gap-4">
           <ul className="flex flex-row">
@@ -33,7 +30,7 @@ export const Nav: React.FC = () => {
           <ThemeSwitcher />
         </div>
       </nav>
-    </Header>
+    </div>
   );
 };
 

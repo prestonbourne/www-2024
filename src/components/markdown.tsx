@@ -4,34 +4,19 @@ import { MDXComponents } from "mdx/types";
 import { ReactElement } from "react";
 import { CodeBlock, extractCodeEl, extractLang } from "./CodeBlock";
 import { codeToHtml } from "shiki";
-import { Heading, Link, Paragraph, UnorderedList, ListItem } from "./typography";
+import {
+  Heading,
+  Link,
+  Paragraph,
+  UnorderedList,
+  ListItem,
+} from "./typography";
 import { Divider } from "./Divider";
 import { Callout } from "./Callout";
-import ServerImage from "./ServerImage"
-import { ImageProps as NextImageProps } from "next/image";
+import { Video } from "./video";
+import { Image } from "./image";
+import { PersonLink } from "./PersonLink";
 
-
-
-type ImageProps = NextImageProps & {
-  src: string;
-  alt?: string;
-};
-
-const Image = ({ src, alt }: ImageProps) => {
-  return (
-    <figure className="flex flex-col my-12 max-w-full overflow-hidden rounded-md sheen-ring dark:bg-background/30">
-      <figcaption className="w-full block text-sm text-sub-text pl-6 py-2">
-        {alt}
-      </figcaption>
-      <div className="w-full relative flex-1">
-        <ServerImage
-          src={src}
-          alt={alt}
-        />
-      </div>
-    </figure>
-  );
-};
 
 const components: MDXComponents = {
   h1: (props) => <Heading level={1} {...props} />,
@@ -64,7 +49,8 @@ const components: MDXComponents = {
   Callout,
   Link,
   Image,
-
+  Video,
+  PersonLink,
   pre: async (props) => {
     const isElement = React.isValidElement(props.children);
     if (!isElement) {
@@ -84,7 +70,7 @@ const components: MDXComponents = {
   },
 };
 
-export const NoteMDXRenderer: React.FC<{ source: string }> = ({ source }) => {
+export const WorkMDXRenderer: React.FC<{ source: string }> = ({ source }) => {
   return (
     <MDXRemote
       source={source}

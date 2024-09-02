@@ -1,26 +1,31 @@
-import { cva } from "class-variance-authority";
-import React, { DetailedHTMLProps, HTMLAttributes } from "react";
+import { cva, cx } from "class-variance-authority";
+import { DetailedHTMLProps, HTMLAttributes } from "react";
+import { displayFont } from "@/lib";
+
+
+// TODO: make this more dynamic OR just throw it in my tailwind config
+// use typescale.com to find the right ratio
 
 export const headingStyles = cva(
-    "font-bold text-slate-800 dark:text-white text-black antialised",
-    {
-      variants: {
-        level: {
-          1: "text-2xl lg:text-3xl py-4",
-          2: "text-xl lg:text-2xl py-3",
-          3: "text-lg lg:text-xl py-2",
-          4: "text-base lg:text-lg py-2",
-          5: "text-lg",
-          6: "text-base",
-        },
+  cx(displayFont.className, "font-medium antialised"),
+  {
+    variants: {
+      level: {
+        1: "text-4xl leading-relaxed font-bold",
+        2: "text-3xl leading-loose font-bold",
+        3: "text-2xl leading-loose font-bold",
+        4: "text-xl font-bold leading-loose",
+        5: "text-lg font-bold",
+        6: "text-base font-bold",
       },
-      defaultVariants: {
-        level: 1,
-      },
-    }
-  );
-  
-  export type HeadingProps = {
-    level: 1 | 2 | 3 | 4 | 5 | 6;
-    render?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
-  } & DetailedHTMLProps<HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>;
+    },
+    defaultVariants: {
+      level: 1,
+    },
+  }
+);
+
+export type HeadingProps = {
+  level: 1 | 2 | 3 | 4 | 5 | 6;
+  render?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+} & DetailedHTMLProps<HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>;

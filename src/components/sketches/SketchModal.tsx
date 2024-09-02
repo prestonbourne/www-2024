@@ -4,12 +4,12 @@ import { useSketchContext } from "./SketchProvider";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { ReactEventHandler } from "react";
 import { cx } from "class-variance-authority";
-import { MotionHeading } from "@/components/typography/Heading/motion";
+import { MotionHeading } from "@/components/typography/heading/motion";
 
 export const SketchModal: React.FC = ({}) => {
-  const { activeSketch, setActiveSketch } = useSketchContext();
+  const { activeSketch, setActiveSketch, SketchComponent } = useSketchContext();
 
-  const shouldRender = !!(activeSketch && activeSketch.Component);
+  const shouldRender = !!activeSketch && !!SketchComponent;
 
   const isOnClient = typeof window !== "undefined";
   if (!isOnClient) return null;
@@ -47,10 +47,10 @@ export const SketchModal: React.FC = ({}) => {
           onCancel={handleCancel}
           className={cx(
             "max-h-[60vh] max-w-none aspect-[9/16] w-[calc(100vw-32px)]",// mobile
-            "md:w-[90vw] md:aspect-video md:max-w-screen-2xl mx-auto",
+            "md:w-[90vw] md:aspect-video md:max-w-screen-xl mx-auto",
             "top-24 flex flex-col",
-            "bg-slate-100/90 dark:bg-background/85 backdrop-blur-sm",
-            "p-2 rounded-lg sheen-ring overflow-hidden",
+            "bg-gray-100/90 dark:bg-background/85 backdrop-blur-md",
+            "p-2 rounded-lg shadow-sheen overflow-hidden",
           )}
         >
           <button
@@ -66,7 +66,7 @@ export const SketchModal: React.FC = ({}) => {
             transition={{ duration: 0.125 }}
             exit={{ transition: { duration: 0.125 } }}
           >
-            <activeSketch.Component />
+            <SketchComponent />
           </motion.div>
           <MotionHeading
             render="h1"

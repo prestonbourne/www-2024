@@ -1,14 +1,14 @@
 import { MetadataRoute } from "next";
-import { getLocalNotes } from "@/lib/notes/index";
+import { getLocalWorks } from "@/lib/work/index";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const noteEntries: MetadataRoute.Sitemap = [];
-  const notes = getLocalNotes();
+  const workEntries: MetadataRoute.Sitemap = [];
+  const works = getLocalWorks().filter((w) => w.type === "work_route");
 
-  noteEntries.push(
-    ...notes.map((note) => {
+  workEntries.push(
+    ...works.map((work) => {
       return {
-        url: `${process.env.NEXT_PUBLIC_SITE_URL}/notes/${note.slug}`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL}/work/${work.slug}`,
       };
     })
   );
@@ -18,11 +18,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${process.env.NEXT_PUBLIC_SITE_URL}`,
     },
     {
-      url: `${process.env.NEXT_PUBLIC_SITE_URL}/notes`,
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/work`,
     },
-    ...noteEntries,
-    {
-      url: `${process.env.NEXT_PUBLIC_SITE_URL}/sketches`,
-    },
+    ...workEntries
   ];
 }

@@ -9,7 +9,7 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      notes: {
+      works: {
         Row: {
           content: string
           description: string | null
@@ -44,9 +44,9 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      increment_note_views: {
+      increment_work_views: {
         Args: {
-          note_slug: string
+          work_slug: string
         }
         Returns: number
       }

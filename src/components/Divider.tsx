@@ -5,7 +5,7 @@ export const Divider = ({ className }: ComponentProps<"hr">) => {
   return (
     <hr
       className={cx(
-        `border-t border-neutral-300 dark:border-neutral-600`,
+        `border-t border-gray-700 dark:border-gray-500`,
         className
       )}
     />
