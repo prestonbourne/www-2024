@@ -30,7 +30,7 @@ export function Hero() {
 export function Links() {
   return (
     <div className="flex flex-row gap-4 mt-4">
-      <LinkCard label="X" imageURL="/social/X.png" />
+      <LinkCard label="X" imageURL="/social/x.png" />
       <LinkCard label="LinkedIn" imageURL="/social/linkedin.png" />
       <LinkCard label="Github" imageURL="/social/github.png" />
     </div>
