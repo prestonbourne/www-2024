@@ -6,6 +6,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { Metadata } from "next";
 import { cx } from "class-variance-authority";
 import { ThemeProvider } from "@/components/providers";
+import { Flexbar } from "@/components/flexbar";
 
 
 const bodyFont = Nunito_Sans({
@@ -23,6 +24,9 @@ export const metadata: Metadata = {
   openGraph: {
     siteName: "Preston Bourne, Engineer & Designer",
     url: "https://prestonbourne.dev",
+  },
+  icons: {
+    icon: "/favicon.ico",
   },
 };
 
@@ -42,6 +46,7 @@ export default function RootLayout({
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <Flexbar />
           {children}
         </ThemeProvider>
         <SpeedInsights />

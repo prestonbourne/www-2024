@@ -9,7 +9,7 @@ export const SketchList: React.FC = async () => {
 
   return (
     <SketchProvider>
-      <ul className="grid grid-cols-2 gap-4">
+      <ul className="grid grid-cols-2 gap-3">
         {sketches.map((sketch) => {
           return <SketchItem key={sketch.id} sketch={sketch} />;
         })}

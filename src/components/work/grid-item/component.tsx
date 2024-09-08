@@ -10,7 +10,7 @@ type WorkGridItemProps = {
 
 export const WorkRouteGridItem: React.FC<WorkGridItemProps> = ({ work }) => {
   const containerClass = cx(
-    "cursor-pointer block rounded-[4px] block shadow-sheen overflow-hidden",
+    "cursor-pointer block block shadow-sheen overflow-hidden",
     "relative rounded-sm overflow-hidden max-h-96",
     "group/card"
   );

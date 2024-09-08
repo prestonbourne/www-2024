@@ -10,7 +10,7 @@ export default function Page() {
     } as React.CSSProperties);
 
   return (
-    <div className="mt-4 w-full mx-auto flex flex-col gap-6">
+    <div className="mt-16 w-full mx-auto flex flex-col gap-6">
       <Hero />
       <main className="my-4 flex flex-col gap-24">
         <HomeSection
