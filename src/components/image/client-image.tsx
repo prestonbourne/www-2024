@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import NextImage from "next/image";
 import { cx } from "class-variance-authority";
 /* 
-ideally id's use compound components here but there was a bug 
+ideally id would use compound components here but there was a bug 
 that next doesnt seem to plan on fixing anytime soon: https://github.com/orgs/mantinedev/discussions/5872
 */
 
