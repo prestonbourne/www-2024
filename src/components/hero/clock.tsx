@@ -14,28 +14,30 @@ export const Clock = ({ className }: { className?: string }) => {
     return () => clearInterval(interval);
   }, []);
 
-  const isHydrated = usePreventHydrationMismatch();
-  if (!isHydrated)
-    return (
-      <p className={"text-sm mb-8"}>
-        EDT🗽 /{" "}
-        <span
-          className="animate-pulse w-12 h-3 bg-gray-200/30 rounded-sm inline-block"
-          suppressHydrationWarning
-        />
-      </p>
-    );
+  const { hasHydrated } = usePreventHydrationMismatch();
 
   const newYorkTime = time.toLocaleTimeString(undefined, {
     timeZone: "America/New_York",
   });
 
   return (
-    <p className={"text-sm mb-8"}>
-      EDT🗽 /{" "}
-      <time dateTime={newYorkTime} suppressHydrationWarning>
-        {newYorkTime}
-      </time>
-    </p>
+    <>
+      {!hasHydrated ? (
+        <p className={"text-sm mb-8"}>
+          EDT🗽 /{" "}
+          <span
+            className="animate-pulse w-12 h-3 bg-gray-200/30 rounded-sm inline-block"
+            suppressHydrationWarning
+          />
+        </p>
+      ) : (
+        <p className={"text-sm mb-8"}>
+          EDT🗽 /{" "}
+          <time dateTime={newYorkTime} suppressHydrationWarning>
+            {newYorkTime}
+          </time>
+        </p>
+      )}
+    </>
   );
 };

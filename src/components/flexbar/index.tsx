@@ -5,7 +5,6 @@ import { cx } from "class-variance-authority";
 import { useSnap, type SnapPointsType } from "./useSnap";
 import {
   HomeIcon,
-  Pencil1Icon,
   BackpackIcon,
   SunIcon,
   MoonIcon,
@@ -14,7 +13,7 @@ import * as Separator from "@radix-ui/react-separator";
 import { FlexbarItem } from "./item";
 import NextLink from "next/link";
 import { useTheme } from "next-themes";
-import { usePreventHydrationMismatch, useIsFirstRender } from "@/lib/hooks";
+import { usePreventHydrationMismatch } from "@/lib/hooks";
 import { usePathname } from "next/navigation";
 
 export const Flexbar = () => {
@@ -57,7 +56,7 @@ export const Flexbar = () => {
 
   const themeToggleClassName = cx(itemClassName);
 
-  const hasHydrated = usePreventHydrationMismatch();
+  const { hasHydrated } = usePreventHydrationMismatch();
 
   useLayoutEffect(() => {
     if (!hasHydrated) return;
