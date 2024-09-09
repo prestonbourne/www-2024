@@ -10,7 +10,7 @@ type WorkGridItemProps = {
 
 export const WorkRouteGridItem: React.FC<WorkGridItemProps> = ({ work }) => {
   const containerClass = cx(
-    "cursor-pointer block block shadow-sheen overflow-hidden",
+    "cursor-pointer block shadow-sheen overflow-hidden",
     "relative rounded-sm overflow-hidden max-h-96",
     "group/card"
   );
@@ -25,8 +25,8 @@ export const WorkRouteGridItem: React.FC<WorkGridItemProps> = ({ work }) => {
   const linkTarget = isWorkRoute(work) ? undefined : "_blank";
 
   const iconClass = cx(
-    `text-xs flex items-center gap-1 text-white dark:bg-slate-950/80 px-1 py-1 rounded-full shadow-dense`,
-    "border border-slate-800 dark:border-slate-400",
+    `text-xs flex items-center gap-1 text-slate-300 bg-gray-950/90 px-1 py-1 rounded-full shadow-dense`,
+    "border border-slate-300",
     "opacity-0 -translate-y-3 transition-all",
     "group-hover/card:opacity-100 group-hover/card:translate-y-0",
   );

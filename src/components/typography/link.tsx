@@ -6,12 +6,15 @@ import { cx } from "class-variance-authority";
 export type LinkProps = NextLinkProps &
   ComponentProps<"a"> & {
     children: React.ReactNode;
+  } & {
+    muted?: boolean;
   };
 
 export const Link: React.FC<LinkProps> = ({
   href,
   children,
   className,
+  muted = false,
   ...props
 }) => {
   const isExternal = href.startsWith("http");
@@ -22,8 +25,10 @@ export const Link: React.FC<LinkProps> = ({
       className={cx(
         "underline decoration-dotted inline-flex flex-row gap-[2px]",
         "transition-all underline-offset-4",
-        "dark:text-lime-500 items-center hover:brightness-110",
-        isExternal && "group",
+        muted
+          ? "dark:text-slate-100 dark:hover:text-slate-300 text-slate-800 hover:text-slate-600"
+          : "text-purple-700 dark:text-lime-500 hover:brightness-110",
+        isExternal && "group items-center",
         className
       )}
       {...props}

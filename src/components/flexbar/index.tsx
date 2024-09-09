@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState, useLayoutEffect, useEffect } from "react";
+import React, { useRef, useLayoutEffect } from "react";
 import { motion } from "framer-motion";
 import { cx } from "class-variance-authority";
 import { useSnap, type SnapPointsType } from "./useSnap";
@@ -15,11 +15,16 @@ import { FlexbarItem } from "./item";
 import NextLink from "next/link";
 import { useTheme } from "next-themes";
 import { usePreventHydrationMismatch, useIsFirstRender } from "@/lib/hooks";
+import { usePathname } from "next/navigation";
 
 export const Flexbar = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const toolbarRef = useRef<HTMLDivElement>(null);
   const { theme, setTheme } = useTheme();
+  const pathname = usePathname();
+  const isSelected = (path: string) => {
+    return pathname === path;
+  };
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
@@ -28,18 +33,13 @@ export const Flexbar = () => {
   const snapPoints: SnapPointsType = {
     type: "constraints-box",
     unit: "percent",
-    points: [{ x: 0.5, y: 1 }],
+    points: [
+      { x: 0.5, y: 1 },
+      { x: 0.5, y: 0 },
+    ],
   };
 
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
-
-  useLayoutEffect(() => {
-    setWidth(containerRef.current?.getBoundingClientRect().width ?? 0);
-    setHeight(containerRef.current?.getBoundingClientRect().height ?? 0);
-  }, []);
-
-  const { dragProps, snapTo, currentSnappointIndex } = useSnap({
+  const { dragProps, snapTo, motionState } = useSnap({
     direction: "both",
     snapPoints,
     ref: toolbarRef,
@@ -48,8 +48,8 @@ export const Flexbar = () => {
 
   const itemClassName = cx(
     `bg-transparent block`,
-    `rounded-xl p-2`,
-    `dark:hover:bg-gray-200/10`,
+    `p-4`,
+    `dark:hover:bg-gray-200/10 hover:bg-slate-800/10`,
     `cursor-pointer`
   );
 
@@ -58,23 +58,28 @@ export const Flexbar = () => {
   const themeToggleClassName = cx(itemClassName);
 
   const hasHydrated = usePreventHydrationMismatch();
-  useEffect(() => {
+
+  useLayoutEffect(() => {
+    if (!hasHydrated) return;
     snapTo(0);
-    console.log(width, height);
-  }, [snapTo, width, height]);
+    
+  }, [hasHydrated, snapTo]);
 
   const toolbarClassName = cx(
-    `fixed bg-gray-900/70 rounded-full shadow-inner-shine p-2 bg-fil`,
-    `z-40 flex items-center gap-2 cursor-pointer`,
+    `fixed dark:bg-gray-950/90 rounded-full`,
+    `z-40 flex items-center gap-2 cursor-pointer bg-white/70`,
     `select-none my-4 -bottom-72 left-1/2`,
-    `backdrop-blur-md`
+    `backdrop-blur-md overflow-hidden`,
+    `dark:shadow-inner-shine shadow-dense`,
   );
-
 
   return (
     <>
-      <div ref={containerRef} className="bg-purple-500/30 top-0 left-0 fixed w-[calc(100vw-2rem)] h-[calc(100vh-2rem)] m-4">
-        {snapPoints.points.map((p, ind) => (
+      <div
+        ref={containerRef}
+        className="top-0 left-0 fixed w-[calc(100vw-4rem)] h-[calc(100vh-4rem)] m-4 pointer-events-none"
+      >
+        {/* {snapPoints.points.map((p, ind) => (
           <div
             key={ind} // Array is static so it's fine to use index as key
             className="absolute bg-red-800 rounded-full z-50"
@@ -87,22 +92,22 @@ export const Flexbar = () => {
               height: p.y === undefined ? undefined : p.x === undefined ? 4 : 8,
             }}
           />
-        ))}
+        ))} */}
       </div>
 
-      {/* Toolbar Component */}
+      {/* Flexbar Component */}
       <motion.div ref={toolbarRef} className={toolbarClassName} {...dragProps}>
-        <FlexbarItem label="Home">
+        <FlexbarItem label="Home" active={isSelected("/")}>
           <NextLink href="/" className={itemClassName}>
             <HomeIcon />
           </NextLink>
         </FlexbarItem>
-        <FlexbarItem label="Notes">
+        {/* <FlexbarItem label="Notes" active={isSelected("/notes")}>
           <NextLink href="/notes" className={itemClassName}>
             <Pencil1Icon />
           </NextLink>
-        </FlexbarItem>
-        <FlexbarItem label="Work">
+        </FlexbarItem> */}
+        <FlexbarItem label="Work" active={isSelected("/work")}>
           <NextLink href="/work" className={itemClassName}>
             <BackpackIcon />
           </NextLink>
@@ -111,7 +116,7 @@ export const Flexbar = () => {
           orientation="vertical"
           className="bg-gray-500 rounded-full h-4 w-[1px]"
         />
-        <FlexbarItem label="Toggle Theme">
+        <FlexbarItem label="Toggle Theme" >
           <button onClick={toggleTheme} className={themeToggleClassName}>
             {hasHydrated ? (
               <ThemeIcon />

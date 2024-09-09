@@ -13,12 +13,13 @@ const GithubIcon: React.FC = () => {
 
   return (
     <Link
-      className="inline-flex items-center gap-2 text-sm text-sub-text"
+      className="text-sm"
       href="https://github.com/prestonbourne/www-2024"
       rel="noreferrer"
       target="_blank"
+      muted
     >
-      <GitHubLogoIcon />
+      <GitHubLogoIcon className="mr-1" />
         <span>
           {commit ? `#${commit}` : "Source"}
         </span>

@@ -2,7 +2,7 @@ import { SketchItem } from "./SketchItem";
 import React from "react";
 import { getSketchesLite } from "@/lib/sketches/getSketches";
 import { SketchProvider } from "./SketchProvider";
-import { SketchModal } from "./SketchModal";
+import { SketchDialog } from "./dialog";
 
 export const SketchList: React.FC = async () => {
   const sketches = await getSketchesLite();
@@ -14,7 +14,7 @@ export const SketchList: React.FC = async () => {
           return <SketchItem key={sketch.id} sketch={sketch} />;
         })}
       </ul>
-      <SketchModal />
+      <SketchDialog />
     </SketchProvider>
   );
 };

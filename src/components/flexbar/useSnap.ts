@@ -1,4 +1,4 @@
-import { useRef, RefObject, useState, useCallback } from "react";
+import { useRef, RefObject, useState, useCallback, useMemo } from "react";
 import {
   BoundingBox,
   MotionProps,
@@ -11,6 +11,8 @@ export type Point = {
   x?: number;
   y?: number;
 };
+
+type MotionState = "at_rest" | "dragging" | "inertia";
 
 export type SnapPointsType =
   | { type: "absolute"; points: Point[] }
@@ -56,6 +58,7 @@ export type UseSnapResult = {
     Partial<Pick<MotionProps, "dragConstraints">>;
   snapTo: (index: number) => void;
   currentSnappointIndex: number | null;
+  motionState: MotionState;
 };
 
 const minmax = (num: number, min: number, max: number) =>
@@ -73,11 +76,17 @@ export const useSnap = ({
   onDragEnd,
   onMeasureDragConstraints,
 }: SnapOptions): UseSnapResult => {
+
+  const stableSnapPoints = useRef(snapPoints);
+  const stableSpringOptions = useRef(springOptions);
+  const motionState = useRef<MotionState>("at_rest");
+
+
   const constraintsBoxRef = useRef<BoundingBox | null>(null);
   const [currentSnappointIndex, setCurrentSnappointIndex] = useState<
     number | null
   >(null);
-  const resolveConstraints = () => {
+  const resolveConstraints = useCallback(() => {
     if (constraints === undefined) {
       return null;
     }
@@ -117,7 +126,7 @@ export const useSnap = ({
       right,
       bottom,
     };
-  };
+  }, [constraints, ref]);
 
   const convertSnapPoints = useCallback((snapPoints: SnapPointsType) => {
     if (!ref.current) {
@@ -190,7 +199,7 @@ export const useSnap = ({
         return result;
       });
     }
-  }, [ref, constraints, direction, snapPoints]);
+  }, [ref, constraints, direction, resolveConstraints]);
 
   const onDragEndHandler: DragHandlers["onDragEnd"] = (event, info) => {
     onDragEnd?.(event, info);
@@ -199,8 +208,7 @@ export const useSnap = ({
       throw new Error("element ref is not set");
     }
 
-    const points = convertSnapPoints(snapPoints);
-    console.log("Converted snappoints", points);
+    const points = convertSnapPoints(stableSnapPoints.current);
     if (!points) {
       throw new Error(`snap points weren't calculated on drag start`);
     }
@@ -331,11 +339,17 @@ export const useSnap = ({
         ref.current,
         { x: target.x },
         {
-          ...springOptions,
+          ...stableSpringOptions.current,
           type: "spring",
           velocity: info.velocity.x,
-        }
-      );
+          onPlay: () => {
+            motionState.current = "inertia";
+          },
+          onComplete: () => {
+            motionState.current = "at_rest";
+          },
+        },
+      )
     }
 
     if (direction === "y" || direction === "both") {
@@ -343,16 +357,22 @@ export const useSnap = ({
         ref.current,
         { y: target.y },
         {
-          ...springOptions,
+          ...stableSpringOptions.current,
           type: "spring",
           velocity: info.velocity.y,
+          onPlay: () => {
+            motionState.current = "inertia";
+          },
+          onComplete: () => {
+            motionState.current = "at_rest";
+          },
         }
       );
     }
   };
 
   const snapTo = useCallback((index: number) => {
-    const convertedSnapPoints = convertSnapPoints(snapPoints);
+    const convertedSnapPoints = convertSnapPoints(stableSnapPoints.current);
     if (!convertedSnapPoints || !ref.current) {
       return;
     }
@@ -376,8 +396,14 @@ export const useSnap = ({
         ref.current,
         { x: selectedPoint.x - base.x },
         {
-          ...springOptions,
+          ...stableSpringOptions.current,
           type: "spring",
+          onPlay: () => {
+            motionState.current = "inertia";
+          },
+          onComplete: () => {
+            motionState.current = "at_rest";
+          },
         }
       );
     }
@@ -387,16 +413,25 @@ export const useSnap = ({
         ref.current,
         { y: selectedPoint.y - base.y },
         {
-          ...springOptions,
+          ...stableSpringOptions.current,
           type: "spring",
+          onPlay: () => {
+            motionState.current = "inertia";
+          },
+          onComplete: () => {
+            motionState.current = "at_rest";
+          },
         }
       );
     }
-  }, [snapPoints, ref, springOptions, convertSnapPoints]);
+  }, [ref, convertSnapPoints, stableSpringOptions]);
 
   const dragProps: Partial<MotionProps> = {
     drag: direction === "both" ? true : direction,
-    onDragEnd: onDragEndHandler,
+    onDragEnd: (e, info) => {
+      motionState.current = "at_rest";
+      onDragEndHandler?.(e, info);
+    },
     onMeasureDragConstraints(constraints) {
       constraintsBoxRef.current = constraints;
       onMeasureDragConstraints?.(constraints);
@@ -406,26 +441,10 @@ export const useSnap = ({
     dragConstraints: constraints,
     onDragStart: (event, info) => {
       // Reset currentSnappointIndex when the user starts dragging an element
+      motionState.current = "dragging";
       setCurrentSnappointIndex(null);
       onDragStart?.(event, info);
     },
   };
-  return { dragProps, currentSnappointIndex, snapTo };
+  return { dragProps, currentSnappointIndex, snapTo, motionState: motionState.current };
 };
-
-// const dragProps: Partial<MotionProps> = {
-//   drag: direction === "both" ? true : direction,
-//   onDragEnd: onDragEndHandler,
-//   onMeasureDragConstraints(constraints) {
-//     constraintsBoxRef.current = constraints;
-//     onMeasureDragConstraints?.(constraints);
-//   },
-
-//   dragMomentum: false, // We'll handle this ourselves
-//   dragConstraints: constraints,
-//   onDragStart: (event, info) => {
-//     // Reset currentSnappointIndex when the user starts dragging an element
-//     setCurrentSnappointIndex(null);
-//     onDragStart?.(event, info);
-//   },
-// };

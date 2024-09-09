@@ -12,8 +12,8 @@ export const headingStyles = cva(
     variants: {
       level: {
         1: "text-4xl leading-relaxed font-bold",
-        2: "text-3xl leading-loose font-bold",
-        3: "text-2xl leading-loose font-bold",
+        2: "text-3xl leading-relaxed font-bold",
+        3: "text-2xl leading-relaxed font-bold",
         4: "text-xl font-bold leading-loose",
         5: "text-lg font-bold",
         6: "text-base font-bold",

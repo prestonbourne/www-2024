@@ -6,9 +6,9 @@ import NextLink from "next/link";
 
 export function Hero() {
   return (
-    <header className="max-w-screen-sm mt-4">
+    <header className="max-w-screen-sm leading-none">
       <Heading level={2} render="h1">
-        Preston Bourne
+        preston bourne
       </Heading>
       <Heading
         level={5}
@@ -30,9 +30,9 @@ export function Hero() {
 export function Links() {
   return (
     <div className="flex flex-row gap-4 mt-4">
-      <LinkCard label="X" imageURL="/social/x.png" />
-      <LinkCard label="LinkedIn" imageURL="/social/linkedin.png" />
-      <LinkCard label="Github" imageURL="/social/github.png" />
+      <SocialLink label="X" imageURL="/social/x.png" />
+      <SocialLink label="LinkedIn" imageURL="/social/linkedin.png" />
+      <SocialLink label="Github" imageURL="/social/github.png" />
     </div>
   );
 }
@@ -42,13 +42,13 @@ export type LinkCardProps = {
   label: string;
 };
 
-export const LinkCard = ({ imageURL, label }: LinkCardProps) => {
+export const SocialLink = ({ imageURL, label }: LinkCardProps) => {
   const containerClass = cx(
-    "relative overflow-clip py-1 px-4",
+    "relative overflow-clip py-2 px-4",
     "rounded-lg shadow-dense",
     "dark:bg-gray-900/50 dark:shadow-inner-shine",
     "transition-all w-36",
-    "hover:cursor-pointer dark:hover:brightness-[.75] hover:shadow-none hover:scale-[.99] group"
+    "hover:cursor-pointer hover:scale-[1.05] group"
   );
 
   return (
@@ -57,7 +57,7 @@ export const LinkCard = ({ imageURL, label }: LinkCardProps) => {
         <Image src={imageURL} fill alt="" className="object-cover" />
       </div>
       <div className="ml-6">
-        <NextLink className="group-hover:text-white" href="">
+        <NextLink className="dark:group-hover:text-white" href="">
           {label}
         </NextLink>
       </div>

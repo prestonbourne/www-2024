@@ -64,7 +64,7 @@ export const ClientVideoDialog = () => {
         "max-h-[80vh] max-w-none w-[calc(100vw-64px)]", // mobile
         "mx-auto",
         "top-24 flex flex-col",
-        "dark:bg-background/85 backdrop-blur-md backdrop:bg-gray-900/70 border-none",
+        "dark:bg-background/85 backdrop:backdrop-blur-md backdrop:bg-gray-900/70 border-none",
         "rounded-xl overflow-hidden"
       )}
       onClick={handleClickOutside}

@@ -24,9 +24,7 @@ export const useIsFirstRender = () => {
     isFirst.current = false
   }, [])
 
-  return isFirst.current
-}
-
-export const useClickOutside = () => {
-  
+  return  {
+    isFirst: isFirst.current,
+  }
 }

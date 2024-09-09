@@ -6,7 +6,7 @@ import { ReactEventHandler } from "react";
 import { cx } from "class-variance-authority";
 import { MotionHeading } from "@/components/typography";
 
-export const SketchModal: React.FC = ({}) => {
+export const SketchDialog: React.FC = ({}) => {
   const { activeSketch, setActiveSketch, SketchComponent } = useSketchContext();
 
   const shouldRender = !!activeSketch && !!SketchComponent;
@@ -49,7 +49,7 @@ export const SketchModal: React.FC = ({}) => {
             "max-h-[60vh] max-w-none aspect-[9/16] w-[calc(100vw-32px)]",// mobile
             "md:w-[90vw] md:aspect-video md:max-w-screen-xl mx-auto",
             "top-24 flex flex-col",
-            "bg-gray-100/90 dark:bg-background/85 backdrop-blur-md",
+            "bg-gray-100/90 dark:bg-gray-900/85 backdrop-blur-md",
             "p-2 rounded-lg shadow-sheen overflow-hidden",
           )}
         >

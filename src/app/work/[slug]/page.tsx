@@ -10,16 +10,15 @@ import { Divider } from "@/components/Divider";
 import { Heading } from "@/components/typography";
 import { Paragraph as Body } from "@/components/typography/paragraph";
 import { ClientViewCount } from "@/components/work/view-count";
-import NextLink from "next/link";
-import { ArrowLeftIcon } from "@radix-ui/react-icons";
 import { cx } from "class-variance-authority";
 import { WorkWithRoute } from "@/lib/work/types";
 import { isWorkWithRoute } from "@/lib/work";
-
+import { BackLink } from "@/components/back-link";
 
 export function generateStaticParams() {
   const works: WorkWithRoute[] = getLocalWorks().filter(
-    (work): work is WorkWithRoute => work.type === "work_route" && isWorkWithRoute(work)
+    (work): work is WorkWithRoute =>
+      work.type === "work_route" && isWorkWithRoute(work)
   );
 
   return works.map((work) => ({
@@ -49,19 +48,12 @@ export default async function Page({ params }: NextPageProps) {
   const { metadata } = work;
 
   const backButtonClasses = cx(
-    "flex flex-row gap-1 bg-gray-950/50 items-center w-fit px-2 py-1 rounded-lg",
-    "hover:bg-gray-950/50 transition-colors",
-    "shadow-inner-shine"
-  )
+    "flex flex-row gap-1 items-center w-fit px-2 py-1"
+  );
   return (
     <article className="max-w-screen-md mx-auto mt-6">
-      <div className={backButtonClasses}>
-        <ArrowLeftIcon />
-        <NextLink href="/">Back</NextLink>
-      </div>
-      <Heading level={1} >
-        {metadata.title}
-      </Heading>
+      <BackLink href="/work" />
+      <Heading level={1}>{metadata.title}</Heading>
       <Body className="text-sm py-2 text-sub-text">{metadata.description}</Body>
       <div className="flex justify-between my-2 py-0 items-center">
         <TextWithIcon

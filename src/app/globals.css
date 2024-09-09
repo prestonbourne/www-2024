@@ -65,26 +65,6 @@ h6 {
   isolation: isolate;
 }
 
-@layer base {
-  :root {
-
-    --almost-black: 12 12 12;
-    --body-color: var(--almost-black);
-    --sub-text-color: 107 114 128;
-    --background-color: theme("colors.gray.50");
-    --color-primary: theme("colors.purple.600");
-    --color-secondary: theme("colors.purple.300");
-  }
-
-  .dark {
-    --body-color: 226 232 240;
-    --sub-text-color: 209 213 219;
-    --background-color: var(--almost-black);
-    --color-primary: theme("colors.lime.400");
-    --color-secondary: theme("colors.lime.200");
-  }
-}
-
 @layer utilities {
   .text-balance {
     text-wrap: balance;

@@ -10,17 +10,18 @@ export default function Page() {
     } as React.CSSProperties);
 
   return (
-    <div className="mt-16 w-full mx-auto flex flex-col gap-6">
+    <div className="w-full mx-auto flex flex-col gap-6">
       <Hero />
       <main className="my-4 flex flex-col gap-24">
         <HomeSection
-          title="~/work"
-          description="things i shipped at my day job alongside academic research and projects, every now and then a technical article"
+          title="work"
+          description="things i shipped at my day job alongside academic research and projects, every now and then, a technical article"
+          link="/work"
         >
           <WorkGrid />
         </HomeSection>
         <HomeSection
-          title="~/sketches"
+          title="sketches"
           description="math, ai, algorithms, computer graphics, experimental design and
           interface components"
         >

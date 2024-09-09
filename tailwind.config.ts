@@ -52,12 +52,7 @@ const config: Config = {
         'inner-shine': innerShineShadow,
         'sheen': sheenShadow
 
-      },
-      colors: {
-        background: "rgb(var(--background-color))",
-        primary: "var(--color-primary)",
-        secondary: "var(--color-secondary)",
-      },
+      }
     },
   },
 };

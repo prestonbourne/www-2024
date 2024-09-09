@@ -72,8 +72,8 @@ export const ClientImageDialog = () => {
       className={cx(
         "max-h-[60vh] max-w-none aspect-[9/16] w-[calc(100vw-64px)]", // mobile
         "md:aspect-video mx-auto",
-        "top-24 flex flex-col",
-        "dark:bg-background/85 backdrop-blur-md backdrop:bg-gray-900/70 border-none",
+        "top-24 flex flex-col bg-transparent",
+        "backdrop:backdrop-blur-md backdrop:bg-gray-900/70 border-none",
         "rounded-xl overflow-hidden"
       )}
       onClick={handleClickOutside}
