@@ -51,7 +51,7 @@ export const ClientImageProvider = ({
 };
 
 export const ClientImageDialog = () => {
-  const { isOpen, setIsOpen, src, alt, caption } = useImageDialog();
+  const { isOpen, setIsOpen, src, alt } = useImageDialog();
   if (!isOpen) return null;
 
   const handleClickOutside = (evt: React.MouseEvent<HTMLDialogElement>) => {
@@ -70,7 +70,7 @@ export const ClientImageDialog = () => {
     <motion.dialog
       ref={(node) => node?.showModal()}
       className={cx(
-        "max-h-[60vh] max-w-none aspect-[9/16] w-[calc(100vw-64px)]", // mobile
+        "max-h-[60vh] max-w-none aspect-[9/16] w-[calc(100vw-64px)]",
         "md:aspect-video mx-auto",
         "top-24 flex flex-col bg-transparent",
         "backdrop:backdrop-blur-md backdrop:bg-gray-900/70 border-none",
