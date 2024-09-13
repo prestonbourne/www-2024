@@ -3,6 +3,7 @@ import type { Work, WorkExternal, WorkWithRoute } from "@/lib/work/types";
 import { cx } from "class-variance-authority";
 import { ArrowTopRightIcon } from "@radix-ui/react-icons";
 import NextLink from "next/link";
+import { ServerImage } from "@/components/image/server-image";
 
 type WorkGridItemProps = {
   work: WorkWithRoute | WorkExternal;
@@ -34,15 +35,13 @@ export const WorkRouteGridItem: React.FC<WorkGridItemProps> = ({ work }) => {
   return (
     <NextLink className={containerClass} href={link} target={linkTarget}>
       <div className="relative w-full h-fit rounded-sm overflow-hidden">
-        <Image
+        <ServerImage
           src={work.metadata.imageURL!}
           alt={`${work.metadata.title} cover`}
           className={cx(
             "w-full h-auto transition-all contrast-[.9]",
             "group-hover/card:contrast-100 group-hover/card:scale-105"
           )}
-          width={0}
-          height={0}
           sizes="(max-width: 1200px) 60vw, 30vw, (max-width: 768px) 100vw"
         />
       </div>
