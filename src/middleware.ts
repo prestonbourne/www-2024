@@ -9,7 +9,7 @@ export function middleware(request: NextRequest) {
   const workSlug = pathname.split('/').pop()
 
  // https://vercel.com/docs/projects/environment-variables/system-environment-variables
- const vercelEnv = process.env.VERCEL_URL
+ const vercelEnv = process.env.VERCEL_ENV
  const inProd = vercelEnv && vercelEnv !== 'development'
 
  // because the `public` also has /work dir, exclude anything with a file extension
