@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 import { Database } from './types.gen'
 
-if (typeof window !== undefined) {
+if (typeof window !== 'undefined') {
   throw Error(`Don't Import this on the client`)
 }
 
