@@ -1,4 +1,4 @@
-import { Database } from "../supabase/types";
+import { Database } from "../supabase/types.gen";
 import { MDXEntity, MDXEntityMetadata } from "../types";
 
 export type WorkMetadata = MDXEntityMetadata;
@@ -32,4 +32,4 @@ export type Result<T> =
       error: Error;
     };
 
-export type WorkRow = Database["public"]["Tables"]["works"]["Row"];
+export type WorkRow = Database["public"]["Tables"]["work"]["Row"];

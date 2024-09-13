@@ -1,6 +1,11 @@
-import 'server-only'
 import { createServerClient } from '@supabase/ssr'
+import { createClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
+import { Database } from './types.gen'
+
+if (typeof window !== undefined) {
+  throw Error(`Don't Import this on the client`)
+}
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseKey = process.env.SUPABASE_SERVICE_KEY
@@ -13,10 +18,10 @@ if (!supabaseKey) {
   throw new Error('Missing supabase anon key')
 }
 
-export function createAdminClient() {
+export function createAdminSSRClient() {
   const cookieStore = cookies()
 
-  return createServerClient(supabaseUrl!, supabaseKey!, {
+  return createServerClient<Database>(supabaseUrl!, supabaseKey!, {
     cookies: {
       getAll() {
         return cookieStore.getAll()
@@ -34,4 +39,8 @@ export function createAdminClient() {
       },
     },
   })
+}
+
+export const createAgnosticAdminClient = () => {
+  return createClient<Database>(supabaseUrl, supabaseKey)
 }

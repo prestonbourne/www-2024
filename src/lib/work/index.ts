@@ -1,13 +1,11 @@
 import type { Result, WorkWithRoute, Work } from '@/lib/work/types'
 import __worksMap from './worksMap.json' assert { type: 'json' }
 import { SupabaseClient } from '@/lib/supabase/types'
-import { Database } from '../supabase/types.gen'
+import { WorkRow } from '@/lib/work/types'
 
 // @ts-ignore, at build time we run a check to ensure this is a valid object (see scripts/prebuild/01-build-work-map.ts)
 let worksMap: Record<string, Work> = __worksMap
 
-// Schema for the works table
-type WorkRow = Database['public']['Tables']['work']['Row']
 export const LIKES_VIEWS_SENTINEL = -1
 
 type PostgrestError = {
@@ -47,7 +45,7 @@ export const getLocalWorkBySlug = (slug: string): WorkWithRoute | undefined => {
   return localWorksMap.get(slug) as WorkWithRoute
 }
 
-async function upsertWork(
+export async function upsertWork(
   work: WorkWithRoute,
   supabase: SupabaseClient
 ): Promise<void> {
@@ -77,7 +75,6 @@ export const incrementViewsBySlug = async (
   const { error, data } = await supabase.rpc('increment_work_views_by_slug', {
     work_slug: slug,
   })
-  console.log({data,error})
 
   if (error) {
     console.error('Error incrementing work views', error)
