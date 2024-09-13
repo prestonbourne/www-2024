@@ -1,4 +1,4 @@
-import { useRef, RefObject, useState, useCallback, useMemo } from "react";
+import { useRef, useState, useCallback } from "react";
 import {
   BoundingBox,
   MotionProps,
@@ -7,12 +7,11 @@ import {
   SpringOptions,
   DragElastic,
 } from "framer-motion";
+
 export type Point = {
   x?: number;
   y?: number;
 };
-
-type MotionState = "at_rest" | "dragging" | "inertia";
 
 export type SnapPointsType =
   | { type: "absolute"; points: Point[] }
@@ -36,10 +35,10 @@ export type SnapOptions = {
    */
   power?: number;
   direction: "x" | "y" | "both";
-  ref: RefObject<Element>;
+  ref: React.RefObject<HTMLElement>;
   snapPoints: SnapPointsType;
   springOptions?: Omit<SpringOptions, "velocity">;
-  constraints?: Partial<BoundingBox> | RefObject<Element>;
+  constraints?: Partial<BoundingBox> | React.RefObject<Element>;
   dragElastic?: DragElastic;
   onDragStart?: MotionProps["onDragStart"];
   onDragEnd?: MotionProps["onDragEnd"];
@@ -58,14 +57,13 @@ export type UseSnapResult = {
     Partial<Pick<MotionProps, "dragConstraints">>;
   snapTo: (index: number) => void;
   currentSnappointIndex: number | null;
-  motionState: MotionState;
 };
 
 const minmax = (num: number, min: number, max: number) =>
   Math.max(Math.min(max, num), min);
 
 export const useSnap = ({
-  power = 0.1,
+  power = 0.01,
   direction,
   snapPoints,
   ref,
@@ -76,16 +74,15 @@ export const useSnap = ({
   onDragEnd,
   onMeasureDragConstraints,
 }: SnapOptions): UseSnapResult => {
-
   const stableSnapPoints = useRef(snapPoints);
   const stableSpringOptions = useRef(springOptions);
-  const motionState = useRef<MotionState>("at_rest");
-
 
   const constraintsBoxRef = useRef<BoundingBox | null>(null);
   const [currentSnappointIndex, setCurrentSnappointIndex] = useState<
     number | null
   >(null);
+
+
   const resolveConstraints = useCallback(() => {
     if (constraints === undefined) {
       return null;
@@ -101,17 +98,13 @@ export const useSnap = ({
       throw new Error("Constraints wasn't measured");
     }
 
-    const elementBox = ref.current.getBoundingClientRect();
-    const style = window.getComputedStyle(ref.current);
-    const transformMatrix = new DOMMatrixReadOnly(style.transform);
-    const baseX = window.scrollX + elementBox.x - transformMatrix.e;
-    const baseY = window.scrollY + elementBox.y - transformMatrix.f;
+    const { base } = computeElementPos(ref.current);
 
-    const left = box.left !== undefined ? baseX + box.left : undefined;
-    const top = box.top !== undefined ? baseY + box.top : undefined;
+    const left = box.left !== undefined ? base.x + box.left : undefined;
+    const top = box.top !== undefined ? base.y + box.top : undefined;
 
-    const right = box.right !== undefined ? baseX + box.right : undefined;
-    const bottom = box.bottom !== undefined ? baseY + box.bottom : undefined;
+    const right = box.right !== undefined ? base.x + box.right : undefined;
+    const bottom = box.bottom !== undefined ? base.y + box.bottom : undefined;
 
     const width =
       left !== undefined && right !== undefined ? right - left : undefined;
@@ -128,78 +121,79 @@ export const useSnap = ({
     };
   }, [constraints, ref]);
 
-  const convertSnapPoints = useCallback((snapPoints: SnapPointsType) => {
-    if (!ref.current) {
-      throw new Error("Element ref is empty");
-    }
-
-    if (snapPoints.type === "absolute") {
-      return snapPoints.points;
-    }
-
-    if (snapPoints.type === "relative-to-initial") {
-      // Same trick as before
-      const elementBox = ref.current.getBoundingClientRect();
-      const style = window.getComputedStyle(ref.current);
-      const transformMatrix = new DOMMatrixReadOnly(style.transform);
-      const translateX = transformMatrix.e;
-      const translateY = transformMatrix.f;
-      const baseX = window.scrollX + elementBox.x - translateX;
-      const baseY = window.scrollY + elementBox.y - translateY;
-
-      return snapPoints.points.map((p) => {
-        return {
-          x: p.x === undefined ? undefined : baseX + p.x,
-          y: p.y === undefined ? undefined : baseY + p.y,
-        };
-      });
-    } else if (snapPoints.type === "constraints-box") {
-      if (constraints === undefined) {
-        throw new Error(
-          `When using snapPoints type constraints-box, you must provide 'constraints' property`
-        );
+  const convertSnapPoints = useCallback(
+    (snapPoints: SnapPointsType) => {
+      if (!ref.current) {
+        console.error('Element Ref Empty')
+        return
       }
 
-      const box = resolveConstraints();
-      if (!box) {
-        throw new Error("Constraints wasn't measured");
+      if (snapPoints.type === "absolute") {
+        return snapPoints.points;
       }
-      if (
-        ["x", "both"].includes(direction) &&
-        (box.left === undefined || box.right === undefined)
-      ) {
-        throw new Error(
-          `constraints should describe both sides for each used drag direction`
-        );
-      }
-      if (
-        ["y", "both"].includes(direction) &&
-        (box.top === undefined || box.bottom === undefined)
-      ) {
-        throw new Error(
-          `constraints should describe both sides for each used drag direction`
-        );
-      }
-      return snapPoints.points.map((p) => {
-        const result: Point = {};
-        if (p.x !== undefined) {
-          if (snapPoints.unit === "pixel") {
-            result.x = box.left! + p.x;
-          } else {
-            result.x = box.left! + box.width! * p.x;
-          }
+
+      if (snapPoints.type === "relative-to-initial") {
+        // Same trick as before
+        const { base } = computeElementPos(ref.current);
+
+        return snapPoints.points.map((p) => {
+          return {
+            x: p.x === undefined ? undefined : base.x + p.x,
+            y: p.y === undefined ? undefined : base.y + p.y,
+          };
+        });
+      } else if (snapPoints.type === "constraints-box") {
+        if (constraints === undefined) {
+          throw new Error(
+            `When using snapPoints type constraints-box, you must provide 'constraints' property`
+          );
         }
-        if (p.y !== undefined) {
-          if (snapPoints.unit === "pixel") {
-            result.y = box.top! + p.y;
-          } else {
-            result.y = box.top! + box.height! * p.y;
-          }
+
+        const box = resolveConstraints();
+        if (!box) {
+          throw new Error("Constraints wasn't measured");
         }
-        return result;
-      });
-    }
-  }, [ref, constraints, direction, resolveConstraints]);
+
+        if (
+          ["x", "both"].includes(direction) &&
+          (box.left === undefined || box.right === undefined)
+        ) {
+          throw new Error(
+            `constraints should describe both sides for each used drag direction`
+          );
+        }
+        if (
+          ["y", "both"].includes(direction) &&
+          (box.top === undefined || box.bottom === undefined)
+        ) {
+          throw new Error(
+            `constraints should describe both sides for each used drag direction`
+          );
+        }
+        return snapPoints.points.map((p) => {
+          const result: Point = {};
+          if (p.x !== undefined) {
+            if (snapPoints.unit === "pixel") {
+              result.x = box.left! + p.x;
+            } else {
+              result.x = box.left! + box.width! * p.x;
+            }
+          }
+          if (p.y !== undefined) {
+            if (snapPoints.unit === "pixel") {
+              result.y = box.top! + p.y;
+            } else {
+              result.y = box.top! + box.height! * p.y;
+            }
+          }
+
+          return result;
+        });
+      }
+    },
+    [ref, constraints, direction, resolveConstraints]
+  );
+
 
   const onDragEndHandler: DragHandlers["onDragEnd"] = (event, info) => {
     onDragEnd?.(event, info);
@@ -213,14 +207,7 @@ export const useSnap = ({
       throw new Error(`snap points weren't calculated on drag start`);
     }
 
-    const elementBox = ref.current.getBoundingClientRect();
-    const style = window.getComputedStyle(ref.current);
-    const transformMatrix = new DOMMatrixReadOnly(style.transform);
-    const translate = { x: transformMatrix.e, y: transformMatrix.f };
-    const base = {
-      x: window.scrollX + elementBox.x - translate.x,
-      y: window.scrollY + elementBox.y - translate.y,
-    };
+    const { elementBox, base } = computeElementPos(ref.current);
 
     // Snapping
     const dropCoordinates = {
@@ -264,8 +251,7 @@ export const useSnap = ({
       ),
     };
 
-    // After afterInertiaClamped calculations, but before `target`
-
+    // After afterInertiaClamped calculations, but before `target`, the further we go out of bounds, the harder the snap back
     const dragElasticResolved = (() => {
       if (typeof dragElastic === "number")
         return {
@@ -323,14 +309,13 @@ export const useSnap = ({
     we use afterInertiaClamped to make sure we don't move to a point outside of the constraints box
     */
     const target = {
-      x:
-        selectedPoint.x !== undefined
-          ? selectedPoint.x - base.x
-          : afterInertiaClamped.x - base.x,
-      y:
-        selectedPoint.y !== undefined
-          ? selectedPoint.y - base.y
-          : afterInertiaClamped.y - base.y,
+      x: !!selectedPoint.x
+        ? selectedPoint.x - base.x
+        : afterInertiaClamped.x - base.x,
+
+      y: !!selectedPoint.y
+        ? selectedPoint.y - base.y
+        : afterInertiaClamped.y - base.y,
     };
 
     // We should animate element coordinate only if drag is enabled for this axis
@@ -342,14 +327,8 @@ export const useSnap = ({
           ...stableSpringOptions.current,
           type: "spring",
           velocity: info.velocity.x,
-          onPlay: () => {
-            motionState.current = "inertia";
-          },
-          onComplete: () => {
-            motionState.current = "at_rest";
-          },
-        },
-      )
+        }
+      );
     }
 
     if (direction === "y" || direction === "both") {
@@ -360,76 +339,54 @@ export const useSnap = ({
           ...stableSpringOptions.current,
           type: "spring",
           velocity: info.velocity.y,
-          onPlay: () => {
-            motionState.current = "inertia";
-          },
-          onComplete: () => {
-            motionState.current = "at_rest";
-          },
         }
       );
     }
   };
 
-  const snapTo = useCallback((index: number) => {
-    const convertedSnapPoints = convertSnapPoints(stableSnapPoints.current);
-    if (!convertedSnapPoints || !ref.current) {
-      return;
-    }
-    const selectedPoint = convertedSnapPoints[index];
-    if (!selectedPoint) {
-      return;
-    }
+  const snapTo = useCallback(
+    (index: number) => {
+      const convertedSnapPoints = convertSnapPoints(stableSnapPoints.current);
 
-    const elementBox = ref.current.getBoundingClientRect();
-    const style = window.getComputedStyle(ref.current);
-    const transformMatrix = new DOMMatrixReadOnly(style.transform);
-    const translate = { x: transformMatrix.e, y: transformMatrix.f };
-    const base = {
-      x: window.scrollX + elementBox.x - translate.x,
-      y: window.scrollY + elementBox.y - translate.y,
-    };
-    setCurrentSnappointIndex(index);
+      if (!convertedSnapPoints || !ref.current) {
+        return;
+      }
+      const selectedPoint = convertedSnapPoints[index];
+      if (!selectedPoint) {
+        return;
+      }
 
-    if (selectedPoint.x !== undefined) {
-      animate(
-        ref.current,
-        { x: selectedPoint.x - base.x },
-        {
-          ...stableSpringOptions.current,
-          type: "spring",
-          onPlay: () => {
-            motionState.current = "inertia";
-          },
-          onComplete: () => {
-            motionState.current = "at_rest";
-          },
-        }
-      );
-    }
+      const { base } = computeElementPos(ref.current);
+      setCurrentSnappointIndex(index);
 
-    if (selectedPoint.y !== undefined) {
-      animate(
-        ref.current,
-        { y: selectedPoint.y - base.y },
-        {
-          ...stableSpringOptions.current,
-          type: "spring",
-          onPlay: () => {
-            motionState.current = "inertia";
-          },
-          onComplete: () => {
-            motionState.current = "at_rest";
-          },
-        }
-      );
-    }
-  }, [ref, convertSnapPoints, stableSpringOptions]);
+      if (selectedPoint.x !== undefined) {
+        animate(
+          ref.current,
+          { x: selectedPoint.x - base.x },
+          {
+            ...stableSpringOptions.current,
+            type: "spring",
+          }
+        );
+      }
 
-  const dragProps: Partial<MotionProps> = {
+      if (selectedPoint.y !== undefined) {
+        animate(
+          ref.current,
+          { y: selectedPoint.y - base.y },
+          {
+            ...stableSpringOptions.current,
+            type: "spring",
+          }
+        );
+      }
+    },
+    [ref, convertSnapPoints, stableSpringOptions]
+  );
+
+  const dragProps: Partial<MotionProps> & React.CSSProperties = {
     drag: direction === "both" ? true : direction,
     onDragEnd: (e, info) => {
-      motionState.current = "at_rest";
       onDragEndHandler?.(e, info);
     },
     onMeasureDragConstraints(constraints) {
@@ -441,10 +398,23 @@ export const useSnap = ({
     dragConstraints: constraints,
     onDragStart: (event, info) => {
       // Reset currentSnappointIndex when the user starts dragging an element
-      motionState.current = "dragging";
       setCurrentSnappointIndex(null);
       onDragStart?.(event, info);
     },
   };
-  return { dragProps, currentSnappointIndex, snapTo, motionState: motionState.current };
+  return { dragProps, currentSnappointIndex, snapTo  };
+};
+
+export const computeElementPos = (elemRef: HTMLElement) => {
+  const elementBox = elemRef.getBoundingClientRect();
+  const style = window.getComputedStyle(elemRef);
+  const transformMatrix = new DOMMatrixReadOnly(style.transform);
+  const translate = { x: transformMatrix.e, y: transformMatrix.f };
+
+  const base = {
+    x: window.scrollX + elementBox.x - translate.x,
+    y: window.scrollY + elementBox.y - translate.y,
+  };
+
+  return { elementBox, translate, base };
 };

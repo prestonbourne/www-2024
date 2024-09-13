@@ -23,7 +23,7 @@ export const SketchItem: React.FC<SketchItemsProps> = ({ sketch }) => {
     <motion.li
       aria-disabled={isActive}
       role="button"
-        whileHover={{ scale: 1.055 }}
+        whileHover={{ scale: 1.035 }}
         className="bg-background/10 rounded-sm block shadow-sheen overflow-clip"
         layoutId={`sketch-${sketch.id}`}
         key={`sketch-${sketch.id}-li`}

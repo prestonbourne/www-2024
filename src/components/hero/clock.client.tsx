@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 
 export const Clock = ({
-  className,
   initialTime,
 }: {
   className?: string;

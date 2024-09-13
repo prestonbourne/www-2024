@@ -9,20 +9,20 @@ import {
   SunIcon,
   MoonIcon,
 } from "@radix-ui/react-icons";
-import * as Separator from "@radix-ui/react-separator";
 import { FlexbarItem } from "./item";
 import NextLink from "next/link";
 import { useTheme } from "next-themes";
 import { usePreventHydrationMismatch } from "@/lib/hooks";
 import { usePathname } from "next/navigation";
+import { Separator } from "./separator";
 
 export const Flexbar = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const toolbarRef = useRef<HTMLDivElement>(null);
+  const flexbarRef = useRef<HTMLDivElement>(null);
   const { theme, setTheme } = useTheme();
   const pathname = usePathname();
   const isSelected = (path: string) => {
-    return pathname === path;
+    return pathname === path || pathname.startsWith(`${path}/`);
   };
 
   const toggleTheme = () => {
@@ -33,15 +33,14 @@ export const Flexbar = () => {
     type: "constraints-box",
     unit: "percent",
     points: [
-      { x: 0.5, y: 1 },
-      { x: 0.5, y: 0 },
+      { x: 0, y: 0.1 },
     ],
   };
 
-  const { dragProps, snapTo, motionState } = useSnap({
+  const { dragProps, snapTo } = useSnap({
     direction: "both",
     snapPoints,
-    ref: toolbarRef,
+    ref: flexbarRef,
     constraints: containerRef,
   });
 
@@ -53,30 +52,31 @@ export const Flexbar = () => {
   );
 
   const ThemeIcon = theme === "dark" ? SunIcon : MoonIcon;
-
-  const themeToggleClassName = cx(itemClassName);
-
   const { hasHydrated } = usePreventHydrationMismatch();
+
+  const toolbarClassName = cx(
+    `fixed dark:bg-gray-950/90 rounded-2xl`,
+    `z-40 flex flex-col items-center gap-2 cursor-pointer bg-white/70`,
+    `select-none`,
+    `backdrop-blur-md overflow-hidden`,
+    `dark:shadow-inner-shine shadow-dense`,
+    `transition-opacity -left-16`,
+    !hasHydrated &&`opacity-0`,
+  );
 
   useLayoutEffect(() => {
     if (!hasHydrated) return;
+    console.log('here')
     snapTo(0);
     
   }, [hasHydrated, snapTo]);
 
-  const toolbarClassName = cx(
-    `fixed dark:bg-gray-950/90 rounded-full`,
-    `z-40 flex items-center gap-2 cursor-pointer bg-white/70`,
-    `select-none my-4 -bottom-72 left-1/2`,
-    `backdrop-blur-md overflow-hidden`,
-    `dark:shadow-inner-shine shadow-dense`,
-  );
 
   return (
     <>
       <div
         ref={containerRef}
-        className="top-0 left-0 fixed w-[calc(100vw-4rem)] h-[calc(100vh-4rem)] m-4 pointer-events-none"
+        className="top-6 left-6 right-0 bottom-6 fixed pointer-events-none"
       >
         {/* {snapPoints.points.map((p, ind) => (
           <div
@@ -95,36 +95,32 @@ export const Flexbar = () => {
       </div>
 
       {/* Flexbar Component */}
-      <motion.div ref={toolbarRef} className={toolbarClassName} {...dragProps}>
-        <FlexbarItem label="Home" active={isSelected("/")}>
-          <NextLink href="/" className={itemClassName}>
-            <HomeIcon />
-          </NextLink>
-        </FlexbarItem>
-        {/* <FlexbarItem label="Notes" active={isSelected("/notes")}>
-          <NextLink href="/notes" className={itemClassName}>
-            <Pencil1Icon />
-          </NextLink>
-        </FlexbarItem> */}
-        <FlexbarItem label="Work" active={isSelected("/work")}>
-          <NextLink href="/work" className={itemClassName}>
-            <BackpackIcon />
-          </NextLink>
-        </FlexbarItem>
-        <Separator.Root
-          orientation="vertical"
-          className="bg-gray-500 rounded-full h-4 w-[1px]"
-        />
-        <FlexbarItem label="Toggle Theme" >
-          <button onClick={toggleTheme} className={themeToggleClassName}>
-            {hasHydrated ? (
-              <ThemeIcon />
-            ) : (
-              <div className="w-4 h-4 animate-pulse bg-gray-500/30 rounded-md" />
-            )}
-          </button>
-        </FlexbarItem>
-      </motion.div>
+        <motion.div
+          ref={flexbarRef}
+          className={toolbarClassName}
+          {...dragProps}
+        >
+          <FlexbarItem label="Home" active={isSelected("/")}>
+            <NextLink href="/" className={itemClassName}>
+              <HomeIcon />
+            </NextLink>
+          </FlexbarItem>
+          <FlexbarItem label="Work" active={isSelected("/work")}>
+            <NextLink href="/work" className={itemClassName}>
+              <BackpackIcon />
+            </NextLink>
+          </FlexbarItem>
+          <Separator orientation={"horizontal"} />
+          <FlexbarItem label="Toggle Theme">
+            <button onClick={toggleTheme} className={itemClassName}>
+              {hasHydrated ? (
+                <ThemeIcon />
+              ) : (
+                <div className="w-4 h-4 animate-pulse bg-gray-500/30 rounded-md" />
+              )}
+            </button>
+          </FlexbarItem>
+        </motion.div>
     </>
   );
 };

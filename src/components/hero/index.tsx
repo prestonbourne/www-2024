@@ -29,7 +29,7 @@ export function Hero() {
 
 export function Links() {
   return (
-    <div className="flex flex-row gap-4 mt-4">
+    <div className="flex flex-row gap-3 mt-2">
       <SocialLink label="X" imageURL="/social/x.png" />
       <SocialLink label="LinkedIn" imageURL="/social/linkedin.png" />
       <SocialLink label="Github" imageURL="/social/github.png" />
@@ -45,7 +45,7 @@ export type LinkCardProps = {
 export const SocialLink = ({ imageURL, label }: LinkCardProps) => {
   const containerClass = cx(
     "relative overflow-clip py-2 px-4",
-    "rounded-lg shadow-dense",
+    "rounded-md shadow-sharp",
     "dark:bg-gray-900/50 dark:shadow-inner-shine",
     "transition-all w-36",
     "hover:cursor-pointer hover:scale-[1.05] group"

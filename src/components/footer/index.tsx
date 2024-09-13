@@ -1,7 +1,6 @@
 import { cx } from "class-variance-authority";
 import type { ComponentProps } from "react";
 import GithubIcon from "./GithubIcon";
-import { Link } from "@/components/typography";
 
 
 export const Footer = ({ className, ...props }: ComponentProps<"footer">) => {

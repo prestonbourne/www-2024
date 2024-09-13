@@ -47,11 +47,8 @@ export default async function Page({ params }: NextPageProps) {
 
   const { metadata } = work;
 
-  const backButtonClasses = cx(
-    "flex flex-row gap-1 items-center w-fit px-2 py-1"
-  );
   return (
-    <article className="max-w-screen-md mx-auto mt-6">
+    <article className="max-w-screen-md mx-auto">
       <BackLink href="/work" />
       <Heading level={1}>{metadata.title}</Heading>
       <Body className="text-sm py-2 text-sub-text">{metadata.description}</Body>

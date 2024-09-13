@@ -8,8 +8,6 @@ import { ThemeProvider } from "@/components/providers";
 import { Flexbar } from "@/components/flexbar";
 import { Footer } from "@/components/footer";
 
-
-
 const bodyFont = Nunito_Sans({
   subsets: ["latin"],
   display: "swap",

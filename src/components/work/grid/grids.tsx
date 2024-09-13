@@ -11,7 +11,7 @@ export const DesktopGrid = ({ sortedWorks }: WorkGridProps) => {
   const firstCol = sortedWorks.filter((_, i) => i % cols === 0);
   const secondCol = sortedWorks.filter((_, i) => i % cols === 1)
 
-  // // still figuring out how i want to handle the layout, so this gives some nice symmetry
+  // still figuring out how i want to handle the layout, so this gives some nice symmetry
   secondCol.push(firstCol.pop()!)
   firstCol.push(secondCol.pop()!)
 
