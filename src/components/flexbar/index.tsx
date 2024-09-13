@@ -55,18 +55,17 @@ export const Flexbar = () => {
   const { hasHydrated } = usePreventHydrationMismatch();
 
   const toolbarClassName = cx(
-    `fixed dark:bg-black/70 rounded-2xl`,
+    `fixed dark:bg-black/70 rounded-full`,
     `z-40 flex flex-col items-center gap-2 cursor-pointer bg-white/70`,
     `select-none`,
     `backdrop-blur-md overflow-hidden`,
-    `dark:shadow-inner-shine shadow-dense`,
+    `dark:shadow-inner-shine shadow-dense dark:border-slate-100/20 border`,
     `transition-opacity -left-16`,
     !hasHydrated &&`opacity-0`,
   );
 
   useLayoutEffect(() => {
     if (!hasHydrated) return;
-    console.log('here')
     snapTo(0);
     
   }, [hasHydrated, snapTo]);

@@ -1,17 +1,37 @@
-import "server-only";
-import { createClient } from "@supabase/supabase-js";
-import { Database } from "./types";
+import 'server-only'
+import { createServerClient } from '@supabase/ssr'
+import { cookies } from 'next/headers'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseKey = process.env.SUPABASE_SERVICE_KEY
 
-if (!supabaseUrl || !supabaseKey) {
-  throw new Error(
-    `Missing env variables for Supabase. Received ${{
-      supabaseUrl,
-      supabaseKey,
-    }}`
-  );
+if (!supabaseUrl) {
+  throw new Error('Missing supabase url')
 }
 
-export const supabase = createClient<Database>(supabaseUrl, supabaseKey);
+if (!supabaseKey) {
+  throw new Error('Missing supabase anon key')
+}
+
+export function createAdminClient() {
+  const cookieStore = cookies()
+
+  return createServerClient(supabaseUrl!, supabaseKey!, {
+    cookies: {
+      getAll() {
+        return cookieStore.getAll()
+      },
+      setAll(cookiesToSet) {
+        try {
+          cookiesToSet.forEach(({ name, value, options }) =>
+            cookieStore.set(name, value, options)
+          )
+        } catch {
+          // The `setAll` method was called from a Server Component.
+          // This can be ignored if you have middleware refreshing
+          // user sessions.
+        }
+      },
+    },
+  })
+}

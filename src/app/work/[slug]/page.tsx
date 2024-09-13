@@ -2,7 +2,7 @@ import React from "react";
 import { notFound } from "next/navigation";
 import { WorkMDXRenderer } from "@/components/markdown";
 import { formatISOToDate } from "@/lib/index";
-import { calculateReadingTime, getWorkBySlug, getLocalWorks } from "@/lib/work";
+import { calculateReadingTime, getLocalWorkBySlug, getLocalWorks } from "@/lib/work";
 import { NextPageProps } from "@/lib/types";
 import { TextWithIcon } from "@/components/TextWithIcon";
 import { CalendarIcon, ClockIcon } from "@radix-ui/react-icons";
@@ -10,7 +10,6 @@ import { Divider } from "@/components/Divider";
 import { Heading } from "@/components/typography";
 import { Paragraph as Body } from "@/components/typography/paragraph";
 import { ClientViewCount } from "@/components/work/view-count";
-import { cx } from "class-variance-authority";
 import { WorkWithRoute } from "@/lib/work/types";
 import { isWorkWithRoute } from "@/lib/work";
 import { BackLink } from "@/components/back-link";
@@ -28,7 +27,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: NextPageProps) {
   const currentSlug = params.slug;
-  const work = getWorkBySlug(currentSlug);
+  const work = getLocalWorkBySlug(currentSlug);
 
   if (!work) return notFound();
   const { title, description } = work.metadata;
@@ -41,7 +40,7 @@ export async function generateMetadata({ params }: NextPageProps) {
 
 export default async function Page({ params }: NextPageProps) {
   const currentSlug = params.slug;
-  const work = getWorkBySlug(currentSlug);
+  const work = getLocalWorkBySlug(currentSlug);
 
   if (!work) return notFound();
 

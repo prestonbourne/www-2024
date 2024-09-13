@@ -1,97 +1,104 @@
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase/browser-client";
-// import { fetchRemoteWorkBySlug } from "@/lib/work";
-import { useIsFirstRender } from "@/lib/hooks";
-// import { incrementWorkViewsAction } from "./actions";
+import { useEffect, useReducer } from 'react'
+import { useRouter } from 'next/navigation'
+import { getClient } from '@/lib/supabase/browser-client'
+import { fetchRemoteWorkBySlug } from '@/lib/work'
+import { useIsFirstRender } from '@/lib/hooks'
+import { LIKES_VIEWS_SENTINEL } from '@/lib/work'
 
 type RealTimeViewCountState = {
-  views: number;
-  loading: boolean;
-};
+  views: number
+  loading: boolean
+  error: Error | null
+}
 
+type ViewCountAction =
+  | { type: 'LOADING' }
+  | { type: 'SUCCESS'; payload: number }
+  | { type: 'ERROR'; payload: Error }
+
+function viewCountReducer(
+  state: RealTimeViewCountState,
+  action: ViewCountAction
+): RealTimeViewCountState {
+  switch (action.type) {
+    case 'LOADING':
+      return { ...state, loading: true, error: null }
+    case 'SUCCESS':
+      return { views: action.payload, loading: false, error: null }
+    case 'ERROR':
+      return { ...state, loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
 export const useRealTimeViewCount = (slug: string, shouldIncrement = false) => {
-  const [state, setState] = useState<RealTimeViewCountState>({
-    views: 0,
+  const [state, dispatch] = useReducer(viewCountReducer, {
+    views: LIKES_VIEWS_SENTINEL,
     loading: true,
-  });
-  const isFirstRender = useIsFirstRender();
-  const inProd = process.env.NODE_ENV === "production";
-  const router = useRouter();
-
-  const doAction = async (action: () => Promise<{ data: any; error: any }>) => {
-    setState((prevState) => ({ ...prevState, loading: true }));
-
-    const { data, error } = await action();
-
-    if (error) {
-      console.error("Error fetching data", { error });
-      setState((prevState) => ({ ...prevState, loading: false }));
-      return;
-    }
-
-    //one function returns a number literal, the other returns an object with views as a key
-    const objResponse = typeof data === 'object' && 'views' in data;
-    const numberResponse = typeof data === "number";
-
-    if (!data) {
-      console.error("No data returned from action");
-      setState((prevState) => ({ ...prevState, loading: false }));
-      return;
-    } else if (numberResponse) {
-      setState((prevState) => ({ ...prevState, views: data, loading: false }));
-    } else if (objResponse) {
-      setState((prevState) => ({
-        ...prevState,
-        views: data.views,
-        loading: false,
-      }));
-    }
-
-    console.log("Unexpected data returned from action", { data });
-
-    setState((prevState) => ({ ...prevState, loading: false }));
-  };
+    error: null,
+  })
+  const isFirstRender = useIsFirstRender()
+  // const inProd = process.env.NODE_ENV === "production";
+  const inProd = true
+  const router = useRouter()
+  const supabase = getClient()
 
   useEffect(() => {
-    // if (isFirstRender && inProd) {
-    //   if (shouldIncrement) {
-    //     doAction(() => incrementWorkViewsAction(slug));
-    //   }
-    // } else {
-    //   doAction(() => fetchRemoteWorkBySlug(slug, supabase));
-    // }
+    ;(async function initializeViewCount() {
+      const { data, error } = await fetchRemoteWorkBySlug(slug, supabase)
+      if (error) {
+        dispatch({ type: 'ERROR', payload: error })
+        return
+      }
 
-    // real time
-    const channel = supabase
-      .channel("realtime:works.views")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "works",
-        },
-        (payload) => {
-          const hasViewCount =
-            "views_count" in payload.new &&
-            typeof payload.new.views_count === "number";
-          const sameSlug = "slug" in payload.new && payload.new.slug === slug;
-          if (hasViewCount && sameSlug) {
-            setState({
-              // @ts-ignore
-              views: payload.new.views_count,
-              loading: false,
-            });
+      if (!data || !data.views) {
+        dispatch({
+          type: 'ERROR',
+          payload: new Error(
+            `Unknown Error: Unable to fetch view count for ${slug}`
+          ),
+        })
+        return
+      }
+
+      dispatch({
+        type: 'SUCCESS',
+        payload: data.views,
+      })
+    })()
+  }, [inProd, shouldIncrement, slug, supabase])
+
+  useEffect(() => {
+    const subscribeToViewChanges = () => {
+      const channel = supabase
+        .channel('realtime:work.views')
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'work',
+          },
+          (payload) => {
+            const hasViewCount =
+              'views_count' in payload.new &&
+              typeof payload.new.views_count === 'number'
+            const sameSlug = 'slug' in payload.new && payload.new.slug === slug
+            if (hasViewCount && sameSlug) {
+              //@ts-ignore
+              dispatch({ type: 'SUCCESS', payload: payload.new.views_count })
+            }
           }
-        }
-      )
-      .subscribe();
+        )
+        .subscribe()
 
+      return channel
+    }
+    const channel = subscribeToViewChanges()
     return () => {
-      channel.unsubscribe();
-    };
-  }, [slug, router, isFirstRender, inProd, shouldIncrement]);
+      channel.unsubscribe()
+    }
+  }, [slug, router, isFirstRender, inProd, shouldIncrement, supabase])
 
-  return state;
-};
+  return state
+}

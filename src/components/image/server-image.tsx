@@ -73,7 +73,6 @@ const fetchImageInfoFromFile = async (imagePath: string) => {
 export const ServerImage = async ({
   src,
   quality = 60,
-  className,
   ...restProps
 }: Omit<ImageProps, "src"> & { src: string }) => {
   if (!src) return null;
