@@ -61,7 +61,7 @@ export default async function Page({ params }: NextPageProps) {
             text={`${calculateReadingTime(work.content)} mins`}
             Icon={ClockIcon}
           />
-          <ClientViewCount slug={work.slug} shouldIncrement />
+          <ClientViewCount slug={work.slug} />
         </div>
       </div>
       <Divider className="my-4" />

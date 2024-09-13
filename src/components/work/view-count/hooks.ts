@@ -31,7 +31,7 @@ function viewCountReducer(
       return state
   }
 }
-export const useRealTimeViewCount = (slug: string, shouldIncrement = false) => {
+export const useRealTimeViewCount = (slug: string) => {
   const [state, dispatch] = useReducer(viewCountReducer, {
     views: LIKES_VIEWS_SENTINEL,
     loading: true,
@@ -66,7 +66,7 @@ export const useRealTimeViewCount = (slug: string, shouldIncrement = false) => {
         payload: data.views,
       })
     })()
-  }, [inProd, shouldIncrement, slug, supabase])
+  }, [inProd, slug, supabase])
 
   useEffect(() => {
     const subscribeToViewChanges = () => {
@@ -98,7 +98,7 @@ export const useRealTimeViewCount = (slug: string, shouldIncrement = false) => {
     return () => {
       channel.unsubscribe()
     }
-  }, [slug, router, isFirstRender, inProd, shouldIncrement, supabase])
+  }, [slug, router, isFirstRender, inProd, supabase])
 
   return state
 }

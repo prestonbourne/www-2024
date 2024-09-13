@@ -6,11 +6,10 @@ import { LIKES_VIEWS_SENTINEL } from "@/lib/work";
 
 type RealtimeViewCountProps = {
   slug: string;
-  shouldIncrement?: boolean;
 };
 
-export const ClientViewCount = ({ slug, shouldIncrement = false }: RealtimeViewCountProps) => {
-  const { views, loading } = useRealTimeViewCount(slug, shouldIncrement);
+export const ClientViewCount = ({ slug }: RealtimeViewCountProps) => {
+  const { views, loading } = useRealTimeViewCount(slug);
 
   if (loading) {
     return (
