@@ -55,7 +55,7 @@ export const Flexbar = () => {
   const { hasHydrated } = usePreventHydrationMismatch();
 
   const toolbarClassName = cx(
-    `fixed dark:bg-gray-950/90 rounded-2xl`,
+    `fixed dark:bg-black/70 rounded-2xl`,
     `z-40 flex flex-col items-center gap-2 cursor-pointer bg-white/70`,
     `select-none`,
     `backdrop-blur-md overflow-hidden`,
