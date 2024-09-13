@@ -1,5 +1,4 @@
-import Image from "next/image";
-import type { Work, WorkExternal, WorkWithRoute } from "@/lib/work/types";
+import type { WorkExternal, WorkWithRoute } from "@/lib/work/types";
 import { cx } from "class-variance-authority";
 import { ArrowTopRightIcon } from "@radix-ui/react-icons";
 import NextLink from "next/link";

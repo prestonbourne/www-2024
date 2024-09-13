@@ -13,7 +13,7 @@ import {
 } from "./typography";
 import { Divider } from "./Divider";
 import { Video } from "./video";
-import { Image } from "./image";
+import { Image } from "./image/image-with-dialog";
 import { PersonLink } from "./PersonLink";
 import { Callout } from "./callout";
 

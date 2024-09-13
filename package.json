@@ -22,13 +22,13 @@
     "next": "14.2.10",
     "next-mdx-remote": "^5.0.0",
     "next-themes": "^0.3.0",
+    "plaiceholder": "^3.0.0",
     "raw-loader": "^4.0.2",
     "react": "^18",
     "react-dom": "^18",
     "remark-gfm": "^4.0.0",
     "sharp": "^0.33.4",
     "three": "^0.162.0",
-    "tsx": "^4.16.5",
     "tweakpane": "^4.0.4"
   },
   "devDependencies": {
@@ -47,6 +47,7 @@
     "shiki": "^1.6.3",
     "supabase": "^1.176.10",
     "tailwindcss": "^3.3.0",
+    "tsx": "^4.19.1",
     "typescript": "^5",
     "unist-util-visit": "^5.0.0"
   }
