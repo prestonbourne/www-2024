@@ -70,6 +70,13 @@ export default function script() {
   for (const w of works) {
     if (w.type !== 'work_route') return
     upsertWork(w, supabase)
+      .then((_) => {
+        console.log(`Successfully Updated ${w.metadata.title}`)
+      })
+      .catch((err) => {
+        console.error(`Error updating remote data for ${w.metadata.title}`)
+        console.error(err)
+      })
   }
 
   const worksMap = buildWorksMap(works)
