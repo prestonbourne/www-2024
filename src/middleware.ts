@@ -5,6 +5,9 @@ import { createAgnosticAdminClient } from './lib/supabase/server-client'
 
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
+  console.log({
+    pathname
+  })
   const workSlug = pathname.split('/').pop()
 
   /*
@@ -17,8 +20,8 @@ export function middleware(request: NextRequest) {
     'process.env': process.env,
     inProd,
   })
-  // because the `public` also has /work dir, exclude anything with a file extension
-  if (workSlug && !pathname.includes('.') && inProd) {
+  if (workSlug && inProd) {
+    console.log('invoked',)
     incrementViewsBySlug(workSlug, createAgnosticAdminClient())
   }
 
