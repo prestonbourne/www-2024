@@ -2,6 +2,8 @@ import { createServerClient } from '@supabase/ssr'
 import { createClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 import { Database } from './types.gen'
+import { unstable_noStore as noStore } from "next/cache";
+
 
 if (typeof window !== 'undefined') {
   throw Error(`Don't Import this on the client`)
@@ -19,6 +21,8 @@ if (!supabaseKey) {
 }
 
 export function createAdminSSRClient() {
+  noStore();
+
   const cookieStore = cookies()
 
   return createServerClient<Database>(supabaseUrl!, supabaseKey!, {
@@ -38,9 +42,11 @@ export function createAdminSSRClient() {
         }
       },
     },
+    
   })
 }
 
 export const createAgnosticAdminClient = () => {
+  noStore();
   return createClient<Database>(supabaseUrl, supabaseKey)
 }

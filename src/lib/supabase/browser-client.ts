@@ -16,8 +16,11 @@ if (!supabaseUrl || !supabaseKey) {
  * Uses singleton under the hood so its safe to call repeatedly
  */
 export const getClient = () => {
-  return createBrowserClient<Database>(
-    supabaseUrl!,
-    supabaseKey!
-  )
+  return createBrowserClient<Database>(supabaseUrl!, supabaseKey!, {
+    global: {
+      fetch: (url: any, options = {}) => {
+        return fetch(url, { ...options, cache: 'no-store' })
+      },
+    },
+  })
 }

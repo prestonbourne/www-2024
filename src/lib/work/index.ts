@@ -191,12 +191,7 @@ export const fetchRemoteWorkBySlug = async (
   slug: string,
   supabase: SupabaseClient
 ): Promise<Result<WorkWithRoute>> => {
-  // Check if the work is already in the cache
-  if (remotesWorkMap.has(slug)) {
-    return { data: remotesWorkMap.get(slug)!, error: null }
-  }
-
-  // If not in cache, fetch from the database
+ 
   const { data, error } = await supabase
     .from('work')
     .select('*')

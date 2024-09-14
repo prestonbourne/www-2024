@@ -1,7 +1,6 @@
 import { useEffect, useReducer } from 'react'
 import { getClient } from '@/lib/supabase/browser-client'
 import { fetchRemoteWorkBySlug } from '@/lib/work'
-import { useIsFirstRender } from '@/lib/hooks'
 import { LIKES_VIEWS_SENTINEL } from '@/lib/work'
 
 type RealTimeViewCountState = {
@@ -36,9 +35,6 @@ export const useRealTimeViewCount = (slug: string) => {
     loading: true,
     error: null,
   })
-  const isFirstRender = useIsFirstRender()
-  // const inProd = process.env.NODE_ENV === "production";
-  const inProd = true
   const supabase = getClient()
 
   useEffect(() => {
@@ -64,7 +60,7 @@ export const useRealTimeViewCount = (slug: string) => {
         payload: data.views,
       })
     })()
-  }, [inProd, slug, supabase])
+  }, [ slug, supabase])
 
   useEffect(() => {
     const subscribeToViewChanges = () => {
@@ -96,7 +92,7 @@ export const useRealTimeViewCount = (slug: string) => {
     return () => {
       channel.unsubscribe()
     }
-  }, [slug, isFirstRender, inProd, supabase])
+  }, [slug, supabase])
 
   return state
 }
