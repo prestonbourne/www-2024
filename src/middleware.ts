@@ -16,7 +16,7 @@ export function middleware(request: NextRequest) {
   allows for ensuring the views increments in previews
 */
   const inProd = !!process.env['VERCEL_ENV']
-  if (workSlug && inProd) {
+  if (workSlug) {
     incrementViewsBySlug(workSlug, createAdminSSRClient())
   }
 
