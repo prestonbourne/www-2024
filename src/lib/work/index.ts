@@ -76,7 +76,7 @@ export const incrementViewsBySlug = async (
     work_slug: slug,
   })
 
-  console.log(`\`incrementViewsBySlug\` result:`, {
+  console.log("`incrementViewsBySlug:", {
     slug,
     data,
     error

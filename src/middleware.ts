@@ -1,23 +1,21 @@
 import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import type { NextFetchEvent, NextRequest } from 'next/server'
 import { incrementViewsBySlug } from './lib/work'
 import { createAdminSSRClient } from './lib/supabase/server-client'
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest, ev: NextFetchEvent) {
   const pathname = request.nextUrl.pathname
-  console.log({
-    pathname
-  })
-  const workSlug = pathname.split('/').pop()
+
+  const pathArr = pathname.split('/')
+  const workSlug = pathArr[pathArr.length - 1]
 
   /*
-  intentionally not using this fully
+  also want to work in previews
   https://vercel.com/docs/projects/environment-variables/system-environment-variables
-  allows for ensuring the views increments in previews
 */
-  const inProd = !!process.env['VERCEL_ENV']
-  if (workSlug) {
-    incrementViewsBySlug(workSlug, createAdminSSRClient())
+  const inProd = process.env['VERCEL_ENV'] !== 'development'
+  if (workSlug && inProd) {
+    ev.waitUntil(incrementViewsBySlug(workSlug, createAdminSSRClient()))
   }
 
   return NextResponse.next()
