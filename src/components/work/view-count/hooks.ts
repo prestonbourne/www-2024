@@ -1,5 +1,4 @@
 import { useEffect, useReducer } from 'react'
-import { useRouter } from 'next/navigation'
 import { getClient } from '@/lib/supabase/browser-client'
 import { fetchRemoteWorkBySlug } from '@/lib/work'
 import { useIsFirstRender } from '@/lib/hooks'
@@ -40,7 +39,6 @@ export const useRealTimeViewCount = (slug: string) => {
   const isFirstRender = useIsFirstRender()
   // const inProd = process.env.NODE_ENV === "production";
   const inProd = true
-  const router = useRouter()
   const supabase = getClient()
 
   useEffect(() => {
@@ -98,7 +96,7 @@ export const useRealTimeViewCount = (slug: string) => {
     return () => {
       channel.unsubscribe()
     }
-  }, [slug, router, isFirstRender, inProd, supabase])
+  }, [slug, isFirstRender, inProd, supabase])
 
   return state
 }
