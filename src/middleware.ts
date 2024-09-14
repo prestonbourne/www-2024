@@ -14,6 +14,7 @@ export function middleware(request: NextRequest) {
   allows for ensuring the views increments in previews
 */
  const inProd = process.env.NODE_ENV !== 'development'
+ console.log(process.env)
 
  // because the `public` also has /work dir, exclude anything with a file extension
  if (workSlug && !pathname.includes('.') && inProd) {
