@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { incrementViewsBySlug } from './lib/work'
-import { createAgnosticAdminClient } from './lib/supabase/server-client'
+import { createAdminSSRClient } from './lib/supabase/server-client'
 
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
@@ -16,13 +16,8 @@ export function middleware(request: NextRequest) {
   allows for ensuring the views increments in previews
 */
   const inProd = !!process.env['VERCEL_ENV']
-  console.log({
-    'process.env': process.env,
-    inProd,
-  })
   if (workSlug && inProd) {
-    console.log('invoked',)
-    incrementViewsBySlug(workSlug, createAgnosticAdminClient())
+    incrementViewsBySlug(workSlug, createAdminSSRClient())
   }
 
   return NextResponse.next()

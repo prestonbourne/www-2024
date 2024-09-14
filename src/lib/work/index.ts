@@ -76,6 +76,12 @@ export const incrementViewsBySlug = async (
     work_slug: slug,
   })
 
+  console.log(`\`incrementViewsBySlug\` result:`, {
+    slug,
+    data,
+    error
+  })
+
   if (error) {
     console.error('Error incrementing work views', error)
     return { data: null, error: makeSupabaseError(error) }
