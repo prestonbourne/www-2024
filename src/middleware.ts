@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server'
 import type { NextFetchEvent, NextRequest } from 'next/server'
 import { incrementViewsBySlug } from './lib/work'
-import { createAdminSSRClient } from './lib/supabase/server-client'
+import { createAgnosticAdminClient } from './lib/supabase/server-client'
 
 export async function middleware(request: NextRequest, ev: NextFetchEvent) {
+  console.log(`${request.method}: ${request.url}`)
   const pathname = request.nextUrl.pathname
 
   const pathArr = pathname.split('/')
@@ -15,7 +16,7 @@ export async function middleware(request: NextRequest, ev: NextFetchEvent) {
 */
   const inProd = process.env['VERCEL_ENV'] !== 'development'
   if (workSlug && inProd) {
-    ev.waitUntil(incrementViewsBySlug(workSlug, createAdminSSRClient()))
+    ev.waitUntil(incrementViewsBySlug(workSlug, createAgnosticAdminClient()))
   }
 
   return NextResponse.next()
