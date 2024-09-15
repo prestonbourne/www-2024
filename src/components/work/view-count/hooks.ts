@@ -1,7 +1,9 @@
 import { useEffect, useReducer } from 'react'
 import { getClient } from '@/lib/supabase/browser-client'
-import { fetchRemoteWorkBySlug } from '@/lib/work'
+import { fetchRemoteWorkBySlug, incrementViewsBySlug } from '@/lib/work'
 import { LIKES_VIEWS_SENTINEL } from '@/lib/work'
+import { useIsFirstRender } from '@/lib/hooks'
+import { incrementViewsBySlugAction } from '@/lib/work/actions'
 
 type RealTimeViewCountState = {
   views: number
@@ -29,16 +31,35 @@ function viewCountReducer(
       return state
   }
 }
-export const useRealTimeViewCount = (slug: string) => {
+
+export const useRealTimeViewCount = (slug: string, shouldIncrement = false) => {
   const [state, dispatch] = useReducer(viewCountReducer, {
     views: LIKES_VIEWS_SENTINEL,
-    loading: true,
+    loading: false,
     error: null,
   })
   const supabase = getClient()
+  const { isFirst } = useIsFirstRender()
+  const inProd = process.env['VERCEL_ENV']
+  const canIncrement = isFirst && shouldIncrement && inProd
 
   useEffect(() => {
     ;(async function initializeViewCount() {
+      dispatch({
+        type: 'LOADING',
+      })
+      if (canIncrement) {
+        const { data, error } = await incrementViewsBySlugAction(slug)
+        if (error) {
+          /** just go to next if statement, we'll try to fetch current `view` and sacrifice the increment */
+        } else {
+          dispatch({
+            type: 'SUCCESS',
+            payload: data,
+          })
+        }
+      }
+
       const { data, error } = await fetchRemoteWorkBySlug(slug, supabase)
       if (error) {
         dispatch({ type: 'ERROR', payload: error })
@@ -60,7 +81,7 @@ export const useRealTimeViewCount = (slug: string) => {
         payload: data.views,
       })
     })()
-  }, [ slug, supabase])
+  }, [slug, supabase, canIncrement])
 
   useEffect(() => {
     const subscribeToViewChanges = () => {

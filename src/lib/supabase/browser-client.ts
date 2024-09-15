@@ -18,8 +18,13 @@ if (!supabaseUrl || !supabaseKey) {
 export const getClient = () => {
   return createBrowserClient<Database>(supabaseUrl!, supabaseKey!, {
     global: {
-      fetch: (url: any, options = {}) => {
-        return fetch(url, { ...options, cache: 'no-store' })
+      fetch: (url, init) => {
+        return fetch(url, {
+          next: {
+            tags: ['supabase_work'],
+          },
+          ...init,
+        })
       },
     },
   })

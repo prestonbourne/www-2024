@@ -1,50 +1,55 @@
-import React from "react";
-import { notFound } from "next/navigation";
-import { WorkMDXRenderer } from "@/components/markdown";
-import { formatISOToDate } from "@/lib/index";
-import { calculateReadingTime, getLocalWorkBySlug, getLocalWorks } from "@/lib/work";
-import { NextPageProps } from "@/lib/types";
-import { TextWithIcon } from "@/components/TextWithIcon";
-import { CalendarIcon, ClockIcon } from "@radix-ui/react-icons";
-import { Divider } from "@/components/Divider";
-import { Heading } from "@/components/typography";
-import { Paragraph as Body } from "@/components/typography/paragraph";
-import { ClientViewCount } from "@/components/work/view-count";
-import { WorkWithRoute } from "@/lib/work/types";
-import { isWorkWithRoute } from "@/lib/work";
-import { BackLink } from "@/components/back-link";
+import React from 'react'
+import { notFound } from 'next/navigation'
+import { WorkMDXRenderer } from '@/components/markdown'
+import { formatISOToDate } from '@/lib/index'
+import {
+  calculateReadingTime,
+  getLocalWorkBySlug,
+  getLocalWorks,
+} from '@/lib/work'
+import { NextPageProps } from '@/lib/types'
+import { TextWithIcon } from '@/components/TextWithIcon'
+import { CalendarIcon, ClockIcon } from '@radix-ui/react-icons'
+import { Divider } from '@/components/Divider'
+import { Heading } from '@/components/typography'
+import { Paragraph as Body } from '@/components/typography/paragraph'
+import { WorkWithRoute } from '@/lib/work/types'
+import { isWorkWithRoute } from '@/lib/work'
+import { BackLink } from '@/components/back-link'
+import { ClientViewCount } from '@/components/work/view-count'
 
 export function generateStaticParams() {
   const works: WorkWithRoute[] = getLocalWorks().filter(
     (work): work is WorkWithRoute =>
-      work.type === "work_route" && isWorkWithRoute(work)
-  );
+      work.type === 'work_route' && isWorkWithRoute(work)
+  )
 
   return works.map((work) => ({
     slug: work.slug,
-  }));
+  }))
 }
 
 export async function generateMetadata({ params }: NextPageProps) {
-  const currentSlug = params.slug;
-  const work = getLocalWorkBySlug(currentSlug);
+  const currentSlug = params.slug
+  const work = getLocalWorkBySlug(currentSlug)
 
-  if (!work) return notFound();
-  const { title, description } = work.metadata;
+  if (!work) return notFound()
+  const { title, description } = work.metadata
 
   return {
     title,
     description,
-  };
+  }
 }
 
+export const dynamic = 'force-dynamic'
 export default async function Page({ params }: NextPageProps) {
-  const currentSlug = params.slug;
-  const work = getLocalWorkBySlug(currentSlug);
+  const currentSlug = params.slug
+  const work = getLocalWorkBySlug(currentSlug)
 
-  if (!work) return notFound();
+  if (!work) return notFound()
 
-  const { metadata } = work;
+  const { metadata } = work
 
   return (
     <article className="max-w-screen-md mx-auto">
@@ -61,12 +66,11 @@ export default async function Page({ params }: NextPageProps) {
             text={`${calculateReadingTime(work.content)} mins`}
             Icon={ClockIcon}
           />
-          <ClientViewCount slug={work.slug} />
+          <ClientViewCount shouldIncrement slug={currentSlug} />
         </div>
       </div>
       <Divider className="my-4" />
-
       <WorkMDXRenderer source={work.content} />
     </article>
-  );
+  )
 }
