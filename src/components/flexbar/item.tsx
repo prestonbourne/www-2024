@@ -27,6 +27,7 @@ export const FlexbarItem = ({
         </Tooltip.Portal>
         <Tooltip.Trigger asChild aria-selected={active}>
           <div className="relative">
+            <div className="sr-only">{label}</div>
             {children}
             {active && (
               <div
