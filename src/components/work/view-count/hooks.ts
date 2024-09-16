@@ -40,14 +40,8 @@ export const useRealTimeViewCount = (slug: string, shouldIncrement = false) => {
   })
   const supabase = getClient()
   const { isFirst } = useIsFirstRender()
-  const inProd = process.env['VERCEL_ENV']
+  const inProd = process.env['NEXT_PUBLIC_VERCEL_ENV']
   const canIncrement = isFirst && shouldIncrement && inProd
-  console.log({
-    isFirst,
-    inProd,
-    shouldIncrement,
-    res: canIncrement
-  })
 
   useEffect(() => {
     ;(async function initializeViewCount() {
