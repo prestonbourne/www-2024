@@ -42,7 +42,6 @@ export async function generateMetadata({ params }: NextPageProps) {
   }
 }
 
-export const dynamic = 'force-dynamic'
 export default async function Page({ params }: NextPageProps) {
   const currentSlug = params.slug
   const work = getLocalWorkBySlug(currentSlug)
@@ -52,8 +51,9 @@ export default async function Page({ params }: NextPageProps) {
   const { metadata } = work
 
   return (
-    <article className="max-w-screen-md mx-auto">
+    <article className="mx-auto">
       <BackLink href="/work" />
+      <header>
       <Heading level={1}>{metadata.title}</Heading>
       <Body className="text-sm py-2 text-sub-text">{metadata.description}</Body>
       <div className="flex justify-between my-2 py-0 items-center">
@@ -69,8 +69,11 @@ export default async function Page({ params }: NextPageProps) {
           <ClientViewCount shouldIncrement slug={currentSlug} />
         </div>
       </div>
+      </header>
       <Divider className="my-4" />
+      <main>
       <WorkMDXRenderer source={work.content} />
+      </main>
     </article>
   )
 }

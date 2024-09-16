@@ -5,6 +5,19 @@ import { LIKES_VIEWS_SENTINEL } from '@/lib/work'
 import { useIsFirstRender } from '@/lib/hooks'
 import { incrementViewsBySlugAction } from '@/lib/work/actions'
 
+/**
+ * 
+ * ideally some of this would happen on the server,
+ * particularly the initial view count fetch and the incrementation in middleware
+ * however, there's some issues with vercel's multilayer caching even though i opted out
+ * the clientside cache is persisting hopefully in next 15 they improve the dx here
+ * 
+ * The issue with incrementing in middleware: for some reason, the middleware
+ * is being run in an edge function TWICE, leading to a double increment, down the line
+ * i'll mess around with moving some logic to React Server Components
+ */
+
+
 type RealTimeViewCountState = {
   views: number
   loading: boolean

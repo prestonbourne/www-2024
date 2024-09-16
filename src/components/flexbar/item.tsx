@@ -21,7 +21,7 @@ export const FlexbarItem = ({
     <Tooltip.Provider delayDuration={175}>
       <Tooltip.Root>
         <Tooltip.Portal>
-          <Tooltip.Content sideOffset={8} side="left">
+          <Tooltip.Content sideOffset={8}>
             <div className={tooltipClassName}>{label}</div>
           </Tooltip.Content>
         </Tooltip.Portal>
