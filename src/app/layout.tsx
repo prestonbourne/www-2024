@@ -42,7 +42,8 @@ export default function RootLayout({
           "dark:text-gray-200 text-slate-800",
           "selection:bg-secondary selection:text-purple-600 selection:bg-purple-200 dark:bg-gray-950 dark:selection:text-lime-100 dark:selection:bg-lime-800 px-4",
           "max-w-screen-md mx-auto pt-16",
-          "min-h-screen flex flex-col" // pins the footer to the bottom
+          "min-h-screen flex flex-col", // pins the footer to the bottom
+          "relative" // for flexbar v0
 
         )}
       >

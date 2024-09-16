@@ -1,5 +1,5 @@
 'use client'
-import React, { useRef, useLayoutEffect } from 'react'
+import React, { useRef } from 'react'
 import { motion } from 'framer-motion'
 import { cx } from 'class-variance-authority'
 import { useSnap, type SnapPointsType } from './useSnap'
@@ -38,12 +38,12 @@ export const Flexbar = () => {
     points: [{ x:1, y: 0.0 }],
   }
 
-  const { dragProps, snapTo } = useSnap({
-    direction: 'both',
-    snapPoints,
-    ref: flexbarRef,
-    constraints: containerRef,
-  })
+  // const { dragProps, snapTo } = useSnap({
+  //   direction: 'both',
+  //   snapPoints,
+  //   ref: flexbarRef,
+  //   constraints: containerRef,
+  // })
 
   const itemClassName = cx(
     `bg-transparent block`,
@@ -56,50 +56,50 @@ export const Flexbar = () => {
   const { hasHydrated } = usePreventHydrationMismatch()
 
   const toolbarClassName = cx(
-    `fixed dark:bg-black/70 rounded-full`,
+    `dark:bg-black/70 rounded-full`,
     `z-40 flex flex-row items-center gap-2 cursor-pointer bg-white/70`,
     `select-none`,
     `backdrop-blur-md overflow-hidden`,
     `dark:shadow-inner-shine shadow-dense dark:border-slate-100/20 border`,
-    `transition-opacity -left-16`,
-    !hasHydrated && `opacity-0`
+    `transition-all`,
+    !hasHydrated && `opacity-0 -translate-y-2 blur`,
+    // remove these styles when making dynamic and ensure pos fixed
+    `absolute top-16 right-2`
   )
 
-  useLayoutEffect(() => {
-    if (!hasHydrated) return
-    snapTo(0)
-  }, [hasHydrated, snapTo])
 
   return (
     <>
-      <div
+   { /* these values are hard coded 
+    based on <body> width, they account for padding + margin */}
+      {/* <div
         ref={containerRef}
         className={cx(
-          'w-[606px] md:w-[736px]',  /* these values are hard coded 
-          based on <body> width, they account for padding + margin */
+          'w-[450px] sm:w-[736px]',  
           'max-w-sc',
           'h-screen -mt-8 fixed mx-auto',
           'pointer-events-none touch-none'
         )}
-      >
-        {/* {snapPoints.points.map((p, ind) => (
+      > 
+      {snapPoints.points.map((p, ind) => (
           <div
             key={ind} // Array is static so it's fine to use index as key
             className="absolute bg-red-800 rounded-full z-50"
             style={{
-              top: p.y === undefined ? "0" : (height - 0) * p.y,
+              top: p.y === undefined ? "0" : (height - 50) * p.y,
               bottom: p.y === undefined ? "0" : undefined,
-              left: p.x === undefined ? "0" : (width - 0) * p.x,
+              left: p.x === undefined ? "0" : (width - 167) * p.x,
               right: p.x === undefined ? "0" : undefined,
               width: p.x === undefined ? undefined : p.y === undefined ? 4 : 8,
               height: p.y === undefined ? undefined : p.x === undefined ? 4 : 8,
             }}
           />
-        ))} */}
-      </div>
+        ))} 
+      </div> 
+      */}
 
       {/* Flexbar Component */}
-      <motion.div ref={flexbarRef} className={toolbarClassName} {...dragProps}>
+      <motion.div ref={flexbarRef} className={toolbarClassName} >
         <FlexbarItem label="Home" active={isSelected('/')}>
           <NextLink href="/" className={itemClassName}>
             <HomeIcon />
