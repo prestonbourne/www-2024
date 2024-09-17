@@ -4,41 +4,27 @@ import { MDXComponents } from "mdx/types";
 import { ReactElement } from "react";
 import { CodeBlock, extractCodeEl, extractLang } from "./CodeBlock";
 import { codeToHtml } from "shiki";
-import { Heading, Link, Paragraph, UnorderedList, ListItem } from "./typography";
+import {
+  Heading,
+  Link,
+  Paragraph,
+  UnorderedList,
+  ListItem,
+} from "./typography";
 import { Divider } from "./Divider";
-import { Callout } from "./Callout";
-import ServerImage from "./ServerImage"
-import { ImageProps as NextImageProps } from "next/image";
+import { Video } from "./video";
+import { Image } from "./image/image-with-dialog";
+import { PersonLink } from "./PersonLink";
+import { Callout } from "./callout";
 
 
-
-type ImageProps = NextImageProps & {
-  src: string;
-  alt?: string;
-};
-
-const Image = ({ src, alt }: ImageProps) => {
-  return (
-    <figure className="flex flex-col my-12 max-w-full overflow-hidden rounded-md sheen-ring dark:bg-background/30">
-      <figcaption className="w-full block text-sm text-sub-text pl-6 py-2">
-        {alt}
-      </figcaption>
-      <div className="w-full relative flex-1">
-        <ServerImage
-          src={src}
-          alt={alt}
-        />
-      </div>
-    </figure>
-  );
-};
 
 const components: MDXComponents = {
   h1: (props) => <Heading level={1} {...props} />,
-  h2: (props) => <Heading level={2} {...props} />,
-  h3: (props) => <Heading level={3} {...props} />,
-  h4: (props) => <Heading level={4} {...props} />,
-  h5: (props) => <Heading level={5} {...props} />,
+  h2: (props) => <Heading level={2} {...props} className="my-4" />,
+  h3: (props) => <Heading level={3} {...props} className="my-2" />,
+  h4: (props) => <Heading level={4} {...props} className="my-2" />,
+  h5: (props) => <Heading level={5} {...props} className="my-1" />,
   h6: (props) => <Heading level={6} {...props} />,
   p: ({ className = "", ...rest }) => {
     return <Paragraph {...rest} className={`${className} mb-4`} />;
@@ -64,7 +50,8 @@ const components: MDXComponents = {
   Callout,
   Link,
   Image,
-
+  Video,
+  PersonLink,
   pre: async (props) => {
     const isElement = React.isValidElement(props.children);
     if (!isElement) {
@@ -84,7 +71,7 @@ const components: MDXComponents = {
   },
 };
 
-export const NoteMDXRenderer: React.FC<{ source: string }> = ({ source }) => {
+export const WorkMDXRenderer: React.FC<{ source: string }> = ({ source }) => {
   return (
     <MDXRemote
       source={source}

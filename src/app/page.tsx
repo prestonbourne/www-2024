@@ -1,21 +1,7 @@
-import {
-  Heading,
-  Paragraph as BaseBody,
-  Link,
-} from "@/components/typography";
-import { ComponentProps } from "react";
-import { Main, Header } from "@/components";
-import { cx } from "class-variance-authority";
-
-const Body = ({ children, className, ...rest }: ComponentProps<"p">) => {
-  const classes = cx("py-2 dark:text-sub-text", className);
-  return (
-    <BaseBody className={classes}{...rest}>
-      {children}
-    </BaseBody>
-  );
-};
-
+import { Hero } from "@/components/hero";
+import { WorkGrid } from "@/components/work/grid";
+import { SketchList } from "@/components/sketches";
+import { HomeSection } from "@/components/home-section";
 
 export default function Page() {
   const getStaggerVal = (int: number) =>
@@ -24,40 +10,24 @@ export default function Page() {
     } as React.CSSProperties);
 
   return (
-    <>
-      <Header style={getStaggerVal(0)} className="fade-in-home">
-        <Heading level={2} render="h1" className="pb-1">
-          Preston Bourne
-        </Heading>
-        <BaseBody className="italic dark:text-white">
-          chasing beautiful, performant software...
-        </BaseBody>
-      </Header>
-      <Main>
-        <Body style={getStaggerVal(1)} className="fade-in-home">
-          i work as an engineer at{" "}
-          <Link href="https://www.hashicorp.com/" target="_blank" icon>
-            hashicorp
-          </Link>{" "}
-          where I build and maintain a suite of high traffic web applications,
-          alongside internal tools for marketing, engineering and design teams.
-        </Body>
-        <Body style={getStaggerVal(2)} className="fade-in-home">
-          i earned my Bachelor&rsquo;s in Design & Technology from{" "}
-          <Link
-            href="https://www.newschool.edu/parsons/bfa-design-technology/"
-            target="_blank"
-            icon
-          >
-            parsons school of design
-          </Link>{" "}
-          and had the privilege of studying as an exchange student at{" "}
-          <Link href={"https://tech.cornell.edu/"} target="_blank" icon>
-            cornell tech
-          </Link>
-        </Body>
-        <Body style={getStaggerVal(3)} className="fade-in-home" >feel free to reach out or connect with me, links below</Body>
-      </Main>
-    </>
+    <div className="w-full mx-auto flex flex-col gap-6">
+      <Hero />
+      <main className="my-4 flex flex-col gap-24">
+        <HomeSection
+          title="work"
+          description="things i shipped at my day job alongside academic research and projects, every now and then, a technical article"
+          link="/work"
+        >
+          <WorkGrid />
+        </HomeSection>
+        <HomeSection
+          title="sketches"
+          description="math, ai, algorithms, computer graphics, experimental design and
+          interface components"
+        >
+          <SketchList />
+        </HomeSection>
+      </main>
+    </div>
   );
-};
+}

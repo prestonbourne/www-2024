@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import React from "react";
-import { Heading } from "../typography";
+import { Heading } from "@/components/typography";
 
 export const SketchLoading = () => {
   const travelDist = 40;

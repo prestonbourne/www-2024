@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 export const useIsomorphicLayoutEffect =
   typeof window !== 'undefined' && (window.document?.createElement || window.navigator?.product === 'ReactNative')
@@ -9,11 +9,13 @@ export const useIsomorphicLayoutEffect =
 export const usePreventHydrationMismatch  = () => {
   const [hasHydrated, setHasHydrated] = React.useState(false)
 
-  useIsomorphicLayoutEffect(() => {
+  useEffect(() => {
     setHasHydrated(true)
   }, [])
 
-  return hasHydrated
+  return {
+    hasHydrated,
+  }
 }
 
 
@@ -24,5 +26,7 @@ export const useIsFirstRender = () => {
     isFirst.current = false
   }, [])
 
-  return isFirst.current
+  return  {
+    isFirst: isFirst.current,
+  }
 }

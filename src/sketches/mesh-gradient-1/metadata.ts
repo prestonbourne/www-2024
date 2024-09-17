@@ -1,7 +1,10 @@
-const metadata = {
-    title: "Mesh Gradient 1",
+import { SketchMetaData } from "@/lib/sketches/types";
+
+const metadata: SketchMetaData = {
+    title: "sky blue goo",
     description:
-        "Inspired by Stripe's gradient background",
+        "messing around with mesh gradients",
+    publishedAt: "2024-05-01",
 };
 
 export default metadata;

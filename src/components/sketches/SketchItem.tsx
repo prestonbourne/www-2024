@@ -1,16 +1,15 @@
 "use client";
-import { Sketch } from "@/lib/sketches/types";
+import { SketchLite } from "@/lib/sketches/types";
 import Image from "next/image";
 import { useSketchContext } from "./SketchProvider";
 import { motion } from "framer-motion";
-import { MotionHeading } from "../typography/Heading/motion";
+import { MotionHeading } from "@/components/typography";
 
 type SketchItemsProps = {
-  sketch: Sketch;
-  order: number;
+  sketch: SketchLite;
 };
 
-export const SketchItem: React.FC<SketchItemsProps> = ({ sketch, order }) => {
+export const SketchItem: React.FC<SketchItemsProps> = ({ sketch }) => {
   const { title, description, imageUrl } = sketch;
   const { activeSketch, setActiveSketch } = useSketchContext();
   const isActive = !!(activeSketch && activeSketch.id === sketch.id);
@@ -21,18 +20,11 @@ export const SketchItem: React.FC<SketchItemsProps> = ({ sketch, order }) => {
   };
 
   return (
-      <motion.li
-        aria-disabled={isActive}
-        role="button"
-        whileHover={{ scaleY: 1.075, scaleX: 1.025 }}
-        className="bg-background/10 rounded-lg block sheen-ring overflow-clip"
-        initial={{ opacity: 0, filter: "blur(4px)", translateY: 80 }}
-        animate={{
-          translateY: 0,
-          filter: "blur(0px)",
-          opacity: 1,
-          transition: { delay: 0.15 * order },
-        }}
+    <motion.li
+      aria-disabled={isActive}
+      role="button"
+        whileHover={{ scale: 1.035 }}
+        className="bg-background/10 rounded-sm block shadow-sheen overflow-clip"
         layoutId={`sketch-${sketch.id}`}
         key={`sketch-${sketch.id}-li`}
         onClick={handleClick}
@@ -52,15 +44,15 @@ export const SketchItem: React.FC<SketchItemsProps> = ({ sketch, order }) => {
         <MotionHeading
           layoutId={`sketch-title-${sketch.id}`}
           level={6}
-          render="h2"
-          className="mb-1 pl-3 pt-2"
+          render="h3"
+          className="pl-3 pt-2"
           layout="position"
         >
           {title}
         </MotionHeading>
         <motion.p
           layoutId={`sketch-description-${sketch.id}`}
-          className="text-sub-text text-sm pl-3 pb-2"
+          className="pl-3 pb-2"
           layout="position"
         >
           {description}

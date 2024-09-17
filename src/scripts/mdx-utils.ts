@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { NoteMetadata } from "@/lib/notes/types";
+import { WorkMetadata } from "@/lib/work/types";
 
 const parseFrontmatter = (fileContent: string) => {
     const frontmatterRegex = /---\s*([\s\S]*?)\s*---/;
@@ -8,16 +8,16 @@ const parseFrontmatter = (fileContent: string) => {
     const frontMatterBlock = match![1];
     const content = fileContent.replace(frontmatterRegex, "").trim();
     const frontMatterLines = frontMatterBlock.trim().split("\n");
-    const metadata: Partial<NoteMetadata> = {};
+    const metadata: Partial<WorkMetadata> = {};
   
     frontMatterLines.forEach((line) => {
       const [key, ...valueArr] = line.split(": ");
       let value = valueArr.join(": ").trim();
       value = value.replace(/^['"](.*)['"]$/, "$1"); // Remove quotes
-      metadata[key.trim() as keyof NoteMetadata] = value as any;
+      metadata[key.trim() as keyof WorkMetadata] = value as any;
     });
   
-    return { metadata: metadata as NoteMetadata, content };
+    return { metadata: metadata as WorkMetadata, content };
   };
   const getMDXFiles = (dir: string) => {
     return fs.readdirSync(dir).filter((file) => path.extname(file) === ".mdx");

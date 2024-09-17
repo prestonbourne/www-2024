@@ -1,3 +1,9 @@
+import { Spline_Sans_Mono } from "next/font/google";
+
+export const displayFont = Spline_Sans_Mono({
+  subsets: ["latin"],
+});
+
 export const formatISOToDate = (ISO: string) => {
   return new Date(ISO).toLocaleDateString("en-US", {
     year: "numeric",
@@ -15,16 +21,11 @@ export const onlyIn = (env: typeof process.env.NODE_ENV, fn: Function) => {
 
 export const isDeployedProduction = () => {
   // https://vercel.com/docs/projects/environment-variables/system-environment-variables
-  // kinda annoying this only works for specfic commit hash not just the branch
+  // this only works for specfic commit preview url not just the branch preview
   return !!process.env.VERCEL_URL;
-}
+};
 
 export const getBaseURL = () => {
-  console.log({
-    vercelUrl : process.env.VERCEL_URL,
-  })
   const inProd = isDeployedProduction();
-  return inProd
-    ? `https://${process.env.VERCEL_URL}`
-    : "http://localhost:3000";
+  return inProd ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000";
 };
