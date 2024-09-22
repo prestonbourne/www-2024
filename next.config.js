@@ -1,3 +1,6 @@
+const withVercelToolbar = require('@vercel/toolbar/plugins/next')();
+
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     webpack: (config, options) => {
@@ -15,4 +18,5 @@ const nextConfig = {
     },
 };
 
-export default nextConfig;
+module.exports = withVercelToolbar(nextConfig);
+

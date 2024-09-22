@@ -21,10 +21,8 @@ export const SketchItem: React.FC<SketchItemsProps> = ({ sketch }) => {
 
   return (
     <motion.li
-      aria-disabled={isActive}
-      role="button"
         whileHover={{ scale: 1.035 }}
-        className="bg-background/10 rounded-sm block shadow-sheen overflow-clip"
+        className="bg-background/10 rounded-sm block shadow-sheen overflow-clip cursor-pointer"
         layoutId={`sketch-${sketch.id}`}
         key={`sketch-${sketch.id}-li`}
         onClick={handleClick}

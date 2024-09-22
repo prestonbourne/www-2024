@@ -54,7 +54,7 @@ export const SocialLink = ({ imageURL, label }: LinkCardProps) => {
   return (
     <div className={containerClass}>
       <div className="top-0 left-0 absolute h-full w-8">
-        <Image src={imageURL} fill alt="" className="object-cover" />
+        <Image src={imageURL} sizes="32px" fill alt="" className="object-cover" />
       </div>
       <div className="ml-6">
         <NextLink className="dark:group-hover:text-white" href="">

@@ -25,7 +25,7 @@ export const FlexbarItem = ({
             <div className={tooltipClassName}>{label}</div>
           </Tooltip.Content>
         </Tooltip.Portal>
-        <Tooltip.Trigger asChild aria-selected={active}>
+        <Tooltip.Trigger asChild>
           <div className="relative">
             <div className="sr-only">{label}</div>
             {children}
