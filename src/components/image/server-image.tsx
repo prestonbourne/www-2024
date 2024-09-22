@@ -71,16 +71,23 @@ const fetchImageInfoFromFile = async (imagePath: string) => {
 
 export const ServerImage = async ({
   src,
-  quality = 60,
+  loading,
   ...restProps
-}: Omit<ImageProps, 'src'> & { src: string }) => {
-  if (!src) return null
+}: ImageProps) => {
+  if (!src) {
+    console.error('Missing `src` tag')
+  }
+
+  const isStaticImport = typeof src !== 'string'
+  if (isStaticImport) {
+    return <NextImage src={src} {...restProps} />
+  }
+
   const isExternalImage = src.startsWith('https')
   const isPublicImage = src.startsWith('/')
   const alt = restProps.alt || ''
 
-  const imgProps = { ...restProps, src, quality, alt }
-  let Img: typeof NextImage | string = 'img'
+  const imgProps = { ...restProps, src, alt }
 
   let size: ISizeCalculationResult | undefined
   let base64: string | undefined
@@ -101,12 +108,11 @@ export const ServerImage = async ({
     const { width, height } = size
     imgProps.width = width
     imgProps.height = height
-    Img = NextImage
   }
 
   if (base64) {
     imgProps.blurDataURL = base64
   }
 
-  return <Img placeholder={'blur'} {...imgProps} />
+  return <NextImage placeholder={'blur'} {...imgProps} />
 }

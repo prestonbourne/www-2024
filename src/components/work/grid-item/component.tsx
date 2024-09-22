@@ -41,6 +41,7 @@ export const WorkRouteGridItem: React.FC<WorkGridItemProps> = ({ work }) => {
     <NextLink className={containerClass} href={link} target={linkTarget}>
       <div className="relative w-full h-fit rounded-sm overflow-hidden">
         <ServerImage
+          loading='eager'
           src={work.metadata.imageURL!}
           alt={`${work.metadata.title} cover`}
           className={cx(
