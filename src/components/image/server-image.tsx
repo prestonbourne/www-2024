@@ -71,7 +71,6 @@ const fetchImageInfoFromFile = async (imagePath: string) => {
 
 export const ServerImage = async ({
   src,
-  loading,
   ...restProps
 }: ImageProps) => {
   if (!src) {
