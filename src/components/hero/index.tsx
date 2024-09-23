@@ -21,7 +21,7 @@ export function Hero() {
         currently a web engineer at hashicorp, where I build and maintain a
         suite of high traffic web applications.
       </Body>
-      <Clock className="mb-8" />
+      <Clock />
       <Links />
     </header>
   );
@@ -48,13 +48,20 @@ export const SocialLink = ({ imageURL, label }: LinkCardProps) => {
     "rounded-md shadow-sharp",
     "dark:bg-gray-900/50 dark:shadow-inner-shine",
     "transition-all w-36",
-    "hover:cursor-pointer hover:scale-[1.05] group"
+    "hover:cursor-pointer hover:scale-[1.05] group",
   );
 
   return (
     <div className={containerClass}>
       <div className="top-0 left-0 absolute h-full w-8">
-        <Image src={imageURL} loading="eager" sizes="32px" fill alt="" className="object-cover" />
+        <Image
+          src={imageURL}
+          loading="eager"
+          sizes="32px"
+          fill
+          alt=""
+          className="object-cover"
+        />
       </div>
       <div className="ml-6">
         <NextLink className="dark:group-hover:text-white" href="">
