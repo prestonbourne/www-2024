@@ -1,6 +1,6 @@
 ---
 title: "Soundwave"
-description: "What if you could touch pixels? Most things on your screen exist in a digital plane, but Soundwave is a game that exists in the physical world."
+description: ""
 publishedAt: "2023-11-23T20:47:40Z"
 imageURL: "/work/soundwave/cover.gif"
 ---
@@ -13,9 +13,9 @@ imageURL: "/work/soundwave/cover.gif"
 - <Link href="https://github.com/prestonbourne/web-handtracking"> Project Source </Link>
 - Collaborators: <PersonLink name="Zelong Li" url="https://www.linkedin.com/in/lizeelong/" />
 
-Built during my Junior year of college, Soundwave is a project that explores a novel method for computer interaction that moved away from traditional input devices, instead using three-dimensional input as the primary method of engagement with the digital world. Traditional controllers, which typically relied on one or two-dimensional input, offered limited interaction possibilities. By utilizing three-dimensional input, we were able to significantly increase the data captured, thereby broadening the scope for interaction and enabling innovative forms of user engagement.
+Built during my Junior year of college, Soundwave is a minigame that explores a novel method for computer interaction that moved away from traditional input devices.
 
-Our method involved tracking the user's hand position in virtual space using a webcam, a widely accessible tool. Additionally, a specially designed glove equipped with haptic feedback allowed users to interact with digital content on a tactile level, effectively merging the digital and physical realms.
+It works by tracking the user's hand position in virtual space using a webcam. Additionally, a using a collision detection algorithm I was able to trigger haptics on designed glove allowing users to interact with digital content on a tactile level, effectively merging the digital and physical realms.
 
 
 <Image 
@@ -23,7 +23,7 @@ Our method involved tracking the user's hand position in virtual space using a w
     alt="The glove used in the project. Its a black glove with haptic feedback sensors at the fingertips with wires running up to a microcontroller at the wrist."
 />
 
-The haptic feedback mechanism was activated by object contact and varied according to the color of the contact point; different colors triggered distinct vibration patterns that corresponded to their frequency.
+Soundwave leverages websockets for real time communication between the microcontroller and the web application. 
 
 <Image 
     borderless
@@ -34,7 +34,6 @@ The haptic feedback mechanism was activated by object contact and varied accordi
 
 ## Conclusion & Learnings
 
-This project was a great learning experience for me. I was able to learn a lot about comptuer vision and microcontroller programming.
 There's alot of potential for new forms of input and I'm excited to see where this line of research takes us in the coming years.
 Some ideas in this space that I think are interesting:
 - [Leap Motion](https://www.ultraleap.com/)
