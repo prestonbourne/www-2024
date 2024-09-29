@@ -21,13 +21,13 @@ import { Callout } from "./callout";
 
 const components: MDXComponents = {
   h1: (props) => <Heading level={1} {...props} />,
-  h2: (props) => <Heading level={2} {...props} className="my-4" />,
-  h3: (props) => <Heading level={3} {...props} className="my-2" />,
+  h2: (props) => <Heading level={2} {...props} className="my-3" />,
+  h3: (props) => <Heading level={3} {...props} className="my-3" />,
   h4: (props) => <Heading level={4} {...props} className="my-2" />,
   h5: (props) => <Heading level={5} {...props} className="my-1" />,
   h6: (props) => <Heading level={6} {...props} />,
   p: ({ className = "", ...rest }) => {
-    return <Paragraph {...rest} className={`${className} mb-4`} />;
+    return <Paragraph {...rest} className={`${className} mb-6`} />;
   },
   a: (props) => {
     const { href, children, ...rest } = props;

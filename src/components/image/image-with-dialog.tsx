@@ -14,7 +14,7 @@ type ImageProps = NextImageProps & {
   const Image = ({ src, alt, caption, bleed = false, borderless = false }: ImageProps) => {
 
     const className = cx(
-        "flex flex-col my-12 overflow-hidden mx-auto",
+        "flex flex-col mb-12 overflow-hidden mx-auto",
         bleed ? "relative lg:-mx-36 xl:-mx-64" : "max-w-full",
         !borderless && "rounded-md shadow-sheen dark:bg-background/30"
     );

@@ -70,7 +70,7 @@ export default async function Page({ params }: NextPageProps) {
         </div>
       </div>
       </header>
-      <Divider className="my-4" />
+      <Divider className="mt-4 mb-7" />
       <main>
       <WorkMDXRenderer source={work.content} />
       </main>

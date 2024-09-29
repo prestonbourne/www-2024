@@ -45,7 +45,7 @@ export const WorkRouteGridItem: React.FC<WorkGridItemProps> = ({ work }) => {
           src={work.metadata.imageURL!}
           alt={`${work.metadata.title} cover`}
           className={cx(
-            'w-full h-auto transition-all contrast-[.9]',
+            'w-full h-auto transition-all',
             'group-hover/card:contrast-100 group-hover/card:scale-105'
           )}
           sizes="(max-width: 1200px) 60vw, 30vw, (max-width: 768px) 100vw"
