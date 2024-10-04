@@ -30,25 +30,38 @@ export function Hero() {
 export function Links() {
   return (
     <div className="flex flex-row gap-3 mt-2">
-      <SocialLink label="X" imageURL="/social/x.png" />
-      <SocialLink label="LinkedIn" imageURL="/social/linkedin.png" />
-      <SocialLink label="Github" imageURL="/social/github.png" />
+      <SocialLink
+        label="X"
+        imageURL="/social/x.png"
+        href="https://x.com/prestonbourne_"
+      />
+      <SocialLink
+        label="LinkedIn"
+        imageURL="/social/linkedin.png"
+        href="https://www.linkedin.com/in/prestonbourne/"
+      />
+      <SocialLink
+        label="Github"
+        imageURL="/social/github.png"
+        href="https://github.com/prestonbourne"
+      />
     </div>
   );
 }
 
-export type LinkCardProps = {
+export type SocialLinkProps = {
   imageURL: string;
   label: string;
+  href: string;
 };
 
-export const SocialLink = ({ imageURL, label }: LinkCardProps) => {
+export const SocialLink = ({ imageURL, label, href }: SocialLinkProps) => {
   const containerClass = cx(
     "relative overflow-clip py-2 px-4",
     "rounded-md shadow-sharp",
     "dark:bg-gray-900/50 dark:shadow-inner-shine",
     "transition-all w-36",
-    "hover:cursor-pointer hover:scale-[1.05] group",
+    "hover:cursor-pointer hover:scale-[1.05] group"
   );
 
   return (
@@ -64,7 +77,11 @@ export const SocialLink = ({ imageURL, label }: LinkCardProps) => {
         />
       </div>
       <div className="ml-6">
-        <NextLink className="dark:group-hover:text-white" href="">
+        <NextLink
+          className="dark:group-hover:text-white"
+          href={href}
+          target="_blank"
+        >
           {label}
         </NextLink>
       </div>
