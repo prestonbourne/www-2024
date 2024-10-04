@@ -1,9 +1,9 @@
 "use client";
-import { Canvas } from "@/components/sketches/Canvas";
 import { SketchLoading } from "@/components/sketches/SketchLoading";
 import { useEffect, useState, useRef, RefObject } from "react";
+import shader from "./shader.wgsl";
 
-const GRID_SIZE = 4;
+const GRID_SIZE = 32;
 
 const Sketch: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -98,7 +98,6 @@ const Sketch: React.FC = () => {
       });
       device.queue.writeBuffer(uniformBuffer, 0, uniformArray);
 
-
       const vertexBufferLayout: GPUVertexBufferLayout = {
         arrayStride: 8, // number of bytes the GPU needs to skip forward in the buffer when it's looking for the next vertex. Each vertex of your square is made up of two 32-bit floating point numbers. 32-bit float is 4 bytes, so two floats is 8 bytes.
         attributes: [
@@ -110,27 +109,37 @@ const Sketch: React.FC = () => {
         ],
       };
 
+      const cellStateArray = new Uint32Array(GRID_SIZE * GRID_SIZE);
+
+      const cellStateStorage = [
+        device.createBuffer({
+          label: "Cell State A",
+          size: cellStateArray.byteLength,
+          usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
+        }),
+        device.createBuffer({
+          label: "Cell State B",
+          size: cellStateArray.byteLength,
+          usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
+        }),
+      ];
+
+      // Mark every third cell of the first grid as active.
+      for (let i = 0; i < cellStateArray.length; i += 3) {
+        cellStateArray[i] = 1;
+      }
+
+      device.queue.writeBuffer(cellStateStorage[0], 0, cellStateArray);
+
+      // Mark every other cell of the second grid as active.
+      for (let i = 0; i < cellStateArray.length; i++) {
+        cellStateArray[i] = i % 2;
+      }
+      device.queue.writeBuffer(cellStateStorage[1], 0, cellStateArray);
+
       const cellShaderModule = device.createShaderModule({
         label: "Cell shader",
-        code: `
-        @group(0) @binding(0) var<uniform> grid: vec2f;
-
-        @vertex
-        fn vertexMain(@location(0) pos: vec2f) -> @builtin(position) vec4f {
-            
-            let cell = vec2f(1, 1);
-            // we have to 2x because NDC coordinates are -1 to 1
-            let cellOffset = cell / grid * 2; // Updated
-            let gridPos = (pos + 1) / grid - 1 + cellOffset;
-
-            return vec4f(gridPos, 0, 1);
-        }
-
-        @fragment
-        fn fragmentMain() -> @location(0) vec4f {
-            return vec4(0.5, 0, 1, 1.0);
-        }
-        `,
+        code: shader,
       });
 
       const cellPipeline = device.createRenderPipeline({
@@ -152,19 +161,47 @@ const Sketch: React.FC = () => {
         },
       });
 
-      const bindGroup = device.createBindGroup({
-        label: "Cell renderer bind group",
-        layout: cellPipeline.getBindGroupLayout(0),
-        entries: [{
-          binding: 0,
-          resource: { buffer: uniformBuffer }
-        }],
-      });
+      const bindGroups = [
+        device.createBindGroup({
+          label: "Cell renderer bind group A",
+          layout: cellPipeline.getBindGroupLayout(0),
+          entries: [
+            {
+              binding: 0,
+              resource: { buffer: uniformBuffer },
+            },
+            {
+              binding: 1,
+              resource: { buffer: cellStateStorage[0] },
+            },
+          ],
+        }),
+        device.createBindGroup({
+          label: "Cell renderer bind group B",
+          layout: cellPipeline.getBindGroupLayout(0),
+          entries: [
+            {
+              binding: 0,
+              resource: { buffer: uniformBuffer },
+            },
+            {
+              binding: 1,
+              resource: { buffer: cellStateStorage[1] },
+            },
+          ],
+        }),
+      ];
 
-      // provides an interface for recording GPU commands.
-      const encoder = device.createCommandEncoder();
+      let step = 0;
+      const UPDATE_INTERVAL_MS = 200;
+      const instances = GRID_SIZE * GRID_SIZE;
+      const updateLoop = () => {
+        step++;
 
-      /*
+        // provides an interface for recording GPU commands.
+        const encoder = device.createCommandEncoder();
+
+        /*
         The texture is given as the view property of a colorAttachment. 
         Render passes require that you provide a GPUTextureView instead of a GPUTexture, which tells it which parts of the texture 
         to render to. This only really matters for more advanced use cases, so here you call createView() with no arguments on the texture, 
@@ -176,41 +213,44 @@ const Sketch: React.FC = () => {
         A storeOp value of "store" indicates that once the render pass is finished you want the results 
         of any drawing done during the render pass saved into the texture.
        */
-      const pass = encoder.beginRenderPass({
-        colorAttachments: [
-          {
-            view: context.getCurrentTexture().createView(),
-            loadOp: "clear",
-            storeOp: "store",
-            clearValue: { r: 1, g: 0, b: 0.4, a: 1 },
-          },
-        ],
-      });
+        const renderPass = encoder.beginRenderPass({
+          colorAttachments: [
+            {
+              view: context.getCurrentTexture().createView(),
+              loadOp: "clear",
+              storeOp: "store",
+              clearValue: { r: 0, g: 0, b: 0, a: 1 },
+            },
+          ],
+        });
 
-      pass.setPipeline(cellPipeline);
-      pass.setVertexBuffer(0, vertexBuffer);
+        renderPass.setPipeline(cellPipeline);
+        renderPass.setBindGroup(0, bindGroups[step % 2]);
+        renderPass.setVertexBuffer(0, vertexBuffer);
+       
+        renderPass.draw(vertices.length / 2, instances); // 2 vertices per cell, in 3d it would be 3
 
-      pass.setBindGroup(0, bindGroup);
-      const instances = GRID_SIZE * GRID_SIZE;
-      pass.draw(vertices.length / 2, instances); // 2 vertices per cell, in 3d it would be 3
+        renderPass.end();
 
-      pass.end();
-
-      /*
+        /*
     so far we haven't actually done anything
     simply making these calls does not cause the GPU to actually do anything. 
     They're just recording commands for the GPU to do later.
     */
 
-      // In order to create a GPUCommandBuffer, call finish() on the command encoder
-      // this is an interface to handle the recorded commands, these are not reuasable
+        // In order to create a GPUCommandBuffer, call finish() on the command encoder
+        // this is an interface to handle the recorded commands, these are not reuasable
 
-      // const commandBuffer = encoder.finish();
-      // device.queue.submit([commandBuffer]);
+        // const commandBuffer = encoder.finish();
+        // device.queue.submit([commandBuffer]);
 
-      // so we prefer to use it like this
-      // Finish the command buffer and immediately submit it.
-      device.queue.submit([encoder.finish()]);
+        // so we prefer to use it like this
+        // Finish the command buffer and immediately submit it.
+        device.queue.submit([encoder.finish()]);
+      };
+
+      const intervalId = setInterval(updateLoop, UPDATE_INTERVAL_MS);
+      return () => { clearInterval(intervalId); }
     };
     mountCallback(canvasRef);
   }, [hasWebGPUBrowser, hasWebGPUHardware]);
@@ -229,7 +269,16 @@ const Sketch: React.FC = () => {
     );
   }
 
-  return <Canvas ref={canvasRef} />;
+  return (
+    <canvas
+      ref={canvasRef}
+      width={512}
+      height={512}
+      style={{
+        margin: "0 auto",
+      }}
+    />
+  );
 };
 
 export default Sketch;
