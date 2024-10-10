@@ -66,25 +66,19 @@ export const SocialLink = ({ imageURL, label, href }: SocialLinkProps) => {
 
   return (
     <div className={containerClass}>
-      <div className="top-0 left-0 absolute h-full w-8">
-        <Image
-          src={imageURL}
-          loading="eager"
-          sizes="32px"
-          fill
-          alt=""
-          className="object-cover"
-        />
-      </div>
-      <div className="ml-6">
-        <NextLink
-          className="dark:group-hover:text-white"
-          href={href}
-          target="_blank"
-        >
-          {label}
-        </NextLink>
-      </div>
+      <NextLink href={href} target="_blank">
+        <div className="top-0 left-0 absolute h-full w-8">
+          <Image
+            src={imageURL}
+            loading="eager"
+            sizes="32px"
+            fill
+            alt=""
+            className="object-cover"
+          />
+        </div>
+        <div className="ml-6 dark:group-hover:text-white">{label}</div>
+      </NextLink>
     </div>
   );
 };
