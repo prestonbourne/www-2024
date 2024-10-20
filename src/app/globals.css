@@ -84,13 +84,6 @@ h6 {
   }
 }
 
-body {
-  background-image: url("/bg-noise.png");
-  background-size: 200px;
-  background-position: 0 0;
-  background-repeat: repeat;
-}
-
 details summary .arrow-icon {
   transition: transform 0.225s ease;
 }

@@ -46,11 +46,11 @@ export const SketchDialog: React.FC = ({}) => {
           key={`sketch-${activeSketch.id}`}
           onCancel={handleCancel}
           className={cx(
-            "max-h-[60vh] max-w-none aspect-[9/16] w-[calc(100vw-32px)]",// mobile
+            "max-h-[60vh] max-w-none aspect-[9/16] w-[calc(100vw-32px)]", // mobile
             "md:w-[90vw] md:aspect-video md:max-w-screen-xl mx-auto",
-            "top-24 flex flex-col",
-            "bg-gray-100/90 dark:bg-gray-900/85 backdrop-blur-md",
-            "p-2 rounded-lg shadow-sheen overflow-hidden",
+            "top-24 flex flex-col backdrop:bg-transparent",
+            "bg-gray-100/90 dark:bg-gray-900/85 backdrop-blur-sm",
+            "p-2 rounded-lg shadow-sheen overflow-hidden"
           )}
         >
           <button
@@ -68,23 +68,23 @@ export const SketchDialog: React.FC = ({}) => {
           >
             <SketchComponent />
           </motion.div>
-          <MotionHeading
-            render="h1"
-            level={4}
-            className="pb-0 pl-1"
-            key={`sketch-title-${activeSketch.id}`}
-            layoutId={`sketch-title-${activeSketch.id}`}
-            layout="position"
-          >
-            {activeSketch.title}
-          </MotionHeading>
-          <motion.p
-          className="pl-1"
-            layoutId={`sketch-description-${activeSketch.id}`}
-            layout="position"
-          >
-            {activeSketch.description}
-          </motion.p>
+          <div className="mt-1">
+            <MotionHeading
+              render="h1"
+              level={4}
+              key={`sketch-title-${activeSketch.id}`}
+              layoutId={`sketch-title-${activeSketch.id}`}
+              layout="position"
+            >
+              {activeSketch.title}
+            </MotionHeading>
+            <motion.p
+              layoutId={`sketch-description-${activeSketch.id}`}
+              layout="position"
+            >
+              {activeSketch.description}
+            </motion.p>
+          </div>
         </motion.dialog>
       )}
     </AnimatePresence>

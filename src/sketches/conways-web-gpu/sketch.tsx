@@ -2,6 +2,7 @@
 import { SketchLoading } from "@/components/sketches/SketchLoading";
 import { useEffect, useState, useRef, RefObject } from "react";
 import shader from "./shader.wgsl";
+import simulationShader from "./compute-shader.wgsl";
 
 const GRID_SIZE = 32;
 
@@ -124,9 +125,11 @@ const Sketch: React.FC = () => {
         }),
       ];
 
-      // Mark every third cell of the first grid as active.
-      for (let i = 0; i < cellStateArray.length; i += 3) {
-        cellStateArray[i] = 1;
+      // initialize state
+      for (let i = 0; i < cellStateArray.length; i++) {
+        const rndValue = Math.random();
+        const state = rndValue > 0.4 ? 1 : 0;
+        cellStateArray[i] = state;
       }
 
       device.queue.writeBuffer(cellStateStorage[0], 0, cellStateArray);
@@ -142,9 +145,91 @@ const Sketch: React.FC = () => {
         code: shader,
       });
 
+      const simulationShaderModule = device.createShaderModule({
+        label: "Simulation shader",
+        code: simulationShader,
+      });
+
+      const bindGroupLayout = device.createBindGroupLayout({
+        label: "Cell Bind Group Layout",
+        entries: [
+          {
+            binding: 0,
+            // Add GPUShaderStage.FRAGMENT here if you are using the `grid` uniform in the fragment shader.
+            visibility: GPUShaderStage.VERTEX | GPUShaderStage.COMPUTE | GPUShaderStage.FRAGMENT,
+            buffer: {}, // Grid uniform buffer
+          },
+          {
+            binding: 1,
+            visibility: GPUShaderStage.VERTEX | GPUShaderStage.COMPUTE,
+            buffer: { type: "read-only-storage" }, // Cell state input buffer
+          },
+          {
+            binding: 2,
+            visibility: GPUShaderStage.COMPUTE,
+            buffer: { type: "storage" }, // Cell state output buffer
+          },
+        ],
+      });
+
+      // A bind group is a collection of resources (like buffers and textures) that are
+      // bound together and made accessible to a shader. It maps directly to the @group
+      // declarations in WGSL shaders, allowing efficient access to these resources.
+
+      // We need two bind groups here to implement double buffering for the cellular automaton:
+      // 1. It allows us to read from one buffer and write to another in each simulation step.
+      // 2. We can then swap them for the next step, preventing race conditions.
+      // 3. This ensures all cells are updated based on the same initial state.
+
+      // In GPU terms, these bind groups correspond to sets of memory locations and
+      // their access patterns, optimized for parallel processing on the GPU.
+      const bindGroups = [
+        device.createBindGroup({
+          label: "Cell renderer bind group A",
+          layout: bindGroupLayout,
+          entries: [
+            {
+              binding: 0,
+              resource: { buffer: uniformBuffer },
+            },
+            {
+              binding: 1,
+              resource: { buffer: cellStateStorage[0] },
+            },
+            {
+              binding: 2,
+              resource: { buffer: cellStateStorage[1] },
+            },
+          ],
+        }),
+        device.createBindGroup({
+          label: "Cell renderer bind group B",
+          layout: bindGroupLayout,
+          entries: [
+            {
+              binding: 0,
+              resource: { buffer: uniformBuffer },
+            },
+            {
+              binding: 1,
+              resource: { buffer: cellStateStorage[1] },
+            },
+            {
+              binding: 2,
+              resource: { buffer: cellStateStorage[0] },
+            },
+          ],
+        }),
+      ];
+
+      const pipelineLayout = device.createPipelineLayout({
+        label: "Cell Pipeline Layout",
+        bindGroupLayouts: [bindGroupLayout],
+      });
+
       const cellPipeline = device.createRenderPipeline({
         label: "Cell pipeline",
-        layout: "auto",
+        layout: pipelineLayout,
         vertex: {
           module: cellShaderModule,
           entryPoint: "vertexMain",
@@ -161,46 +246,44 @@ const Sketch: React.FC = () => {
         },
       });
 
-      const bindGroups = [
-        device.createBindGroup({
-          label: "Cell renderer bind group A",
-          layout: cellPipeline.getBindGroupLayout(0),
-          entries: [
-            {
-              binding: 0,
-              resource: { buffer: uniformBuffer },
-            },
-            {
-              binding: 1,
-              resource: { buffer: cellStateStorage[0] },
-            },
-          ],
-        }),
-        device.createBindGroup({
-          label: "Cell renderer bind group B",
-          layout: cellPipeline.getBindGroupLayout(0),
-          entries: [
-            {
-              binding: 0,
-              resource: { buffer: uniformBuffer },
-            },
-            {
-              binding: 1,
-              resource: { buffer: cellStateStorage[1] },
-            },
-          ],
-        }),
-      ];
+      const simulationPipeline = device.createComputePipeline({
+        label: "Simulation pipeline",
+        layout: pipelineLayout,
+        compute: {
+          module: simulationShaderModule,
+          entryPoint: "computeMain",
+        },
+      });
 
       let step = 0;
-      const UPDATE_INTERVAL_MS = 200;
+      const UPDATE_INTERVAL_MS = 120;
+      const WORKGROUP_SIZE = 8;
       const instances = GRID_SIZE * GRID_SIZE;
       const updateLoop = () => {
-        step++;
-
         // provides an interface for recording GPU commands.
         const encoder = device.createCommandEncoder();
 
+        const computePass = encoder.beginComputePass();
+
+        // New lines
+        computePass.setPipeline(simulationPipeline);
+        computePass.setBindGroup(0, bindGroups[step % 2]);
+
+        /*
+        Something very important to note here is that the number you pass into dispatchWorkgroups() 
+        is not the number of invocations! Instead, it's the number of workgroups to execute, 
+        as defined by the @workgroup_size in your shader.
+
+        If you want the shader to execute 32x32 times in order to cover your entire grid, 
+        and your workgroup size is 8x8, you need to dispatch 4x4 workgroups (4 * 8 = 32). 
+        That's why you divide the grid size by the workgroup size and pass that value into dispatchWorkgroups().
+        */
+        const workgroupCount = Math.ceil(GRID_SIZE / WORKGROUP_SIZE);
+        computePass.dispatchWorkgroups(workgroupCount, workgroupCount);
+
+        computePass.end();
+
+        step++;
         /*
         The texture is given as the view property of a colorAttachment. 
         Render passes require that you provide a GPUTextureView instead of a GPUTexture, which tells it which parts of the texture 
@@ -227,16 +310,16 @@ const Sketch: React.FC = () => {
         renderPass.setPipeline(cellPipeline);
         renderPass.setBindGroup(0, bindGroups[step % 2]);
         renderPass.setVertexBuffer(0, vertexBuffer);
-       
+
         renderPass.draw(vertices.length / 2, instances); // 2 vertices per cell, in 3d it would be 3
 
         renderPass.end();
 
         /*
-    so far we haven't actually done anything
-    simply making these calls does not cause the GPU to actually do anything. 
-    They're just recording commands for the GPU to do later.
-    */
+          so far we haven't actually done anything
+          simply making these calls does not cause the GPU to actually do anything. 
+          They're just recording commands for the GPU to do later.
+        */
 
         // In order to create a GPUCommandBuffer, call finish() on the command encoder
         // this is an interface to handle the recorded commands, these are not reuasable
@@ -250,7 +333,9 @@ const Sketch: React.FC = () => {
       };
 
       const intervalId = setInterval(updateLoop, UPDATE_INTERVAL_MS);
-      return () => { clearInterval(intervalId); }
+      return () => {
+        clearInterval(intervalId);
+      };
     };
     mountCallback(canvasRef);
   }, [hasWebGPUBrowser, hasWebGPUHardware]);
@@ -267,6 +352,10 @@ const Sketch: React.FC = () => {
         <a href="https://www.w3.org/TR/webgpu/">WebGPU</a>:(
       </p>
     );
+  }
+
+  if (error) {
+    return <p>{error}</p>;
   }
 
   return (

@@ -20,6 +20,11 @@ fn vertexMain(input: VertexInput) -> VertexOutput  {
   let cellY = floor(i / grid.x);
   let binaryCellState = f32(cellState[u32(i)]);
   
+ // Calculate the cell coordinates in the grid
+ // The x-coordinate is found by taking the remainder of the instance index divided by the grid width.
+ // This effectively wraps the instance index around when it exceeds the grid width, placing it in the correct column.
+ // The y-coordinate is found by dividing the instance index by the grid width and flooring the result.
+ // This gives the row number by counting how many full rows fit into the instance index.
  let cell = vec2f(i % grid.x, floor(i / grid.x));
 
   let cellOffset = cell / grid * 2;
