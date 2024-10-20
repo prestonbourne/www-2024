@@ -1,7 +1,7 @@
 const metadata = {
-    title: "Conway's Web GPU",
+    title: "Conway's WebGPU",
     description:
-        "Game of Life implementation using WebGPU with no dependencies.",
+      "implemented using compute shaders in webgpu with no dependencies.",
     publishedAt: "2024-10-20",
     imageUrl: "/sketches/conways-web-gpu/cover.gif",
 };
