@@ -5,7 +5,7 @@ const withVercelToolbar = require('@vercel/toolbar/plugins/next')();
 const nextConfig = {
     webpack: (config, options) => {
         config.module.rules.push({
-            test: /\.glsl/,
+            test: /\.(glsl|wgsl)$/,
             use: ["raw-loader"],
         });
 

@@ -6,7 +6,7 @@ type MetadataModule = {
   default: SketchMetaData;
 };
 
-const sketchIDs = ["first-water", "mesh-gradient-1"];
+const sketchIDs = ["first-water", "mesh-gradient-1", "conways-web-gpu"];
 
 /**
  * we have to store the component seperately to by pass this nextjs v14 error

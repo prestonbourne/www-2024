@@ -10,9 +10,9 @@ export default function Page() {
     } as React.CSSProperties);
 
   return (
-    <div className="w-full mx-auto flex flex-col gap-6">
+    <main className="w-full mx-auto flex flex-col gap-6">
       <Hero />
-      <main className="my-4 flex flex-col gap-24">
+      <div className="my-4 flex flex-col gap-24">
         <HomeSection
           title="work"
           description="things i shipped at my day job alongside academic research and projects, every now and then, a technical article"
@@ -27,7 +27,7 @@ export default function Page() {
         >
           <SketchList />
         </HomeSection>
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }
