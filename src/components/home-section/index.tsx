@@ -18,14 +18,14 @@ export const HomeSection: React.FC<HomeSectionProps> = ({
   ...rest
 }) => {
   const headerLink = link ? (
-    <Heading level={3} render="h2" >
+    <Heading level={2} >
       <NextLink href={link} className="group hover:text-purple-600 dark:hover:text-lime-500">
         {title}
         <Link2Icon className="ml-2 w-6 h-6 group-hover:opacity-100 opacity-0 inline-block" />
       </NextLink>
     </Heading>
   ) : (
-    <Heading level={3} render="h2" className="mb-0 pb-0">
+    <Heading level={2} className="mb-0 pb-0">
       {title}
     </Heading>
   );

@@ -68,10 +68,9 @@ export const SketchDialog: React.FC = ({}) => {
           >
             <SketchComponent />
           </motion.div>
-          <div className="mt-1">
+          <div className="mt-2">
             <MotionHeading
-              render="h1"
-              level={4}
+              level={3}
               key={`sketch-title-${activeSketch.id}`}
               layoutId={`sketch-title-${activeSketch.id}`}
               layout="position"
@@ -81,6 +80,7 @@ export const SketchDialog: React.FC = ({}) => {
             <motion.p
               layoutId={`sketch-description-${activeSketch.id}`}
               layout="position"
+              className="text-slate-300"
             >
               {activeSketch.description}
             </motion.p>

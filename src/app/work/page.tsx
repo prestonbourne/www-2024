@@ -7,7 +7,7 @@ export default function WorkPage() {
   return (
       <main>
         <BackLink href="/" />
-        <Heading level={1} render="h1" className="mb-0 pb-0">
+        <Heading level={1}>
           work
         </Heading>
         <Paragraph className="mb-4">

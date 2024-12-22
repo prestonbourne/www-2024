@@ -7,16 +7,14 @@ import NextLink from "next/link";
 export function Hero() {
   return (
     <header className="max-w-screen-sm leading-none">
-      <Heading level={2} render="h1">
+      <Heading level={1}>
         preston bourne
       </Heading>
-      <Heading
-        level={5}
-        render="h2"
-        className="mt-0 pt-0 mb-6 dark:text-gray-300"
+      <p
+        className="text-sm mt-0 pt-0 mb-6 dark:text-gray-300"
       >
         chasing beautiful, performant software
-      </Heading>
+      </p>
       <Body className={"mb-2"}>
         currently a web engineer at hashicorp, where I build and maintain a
         suite of high traffic web applications.

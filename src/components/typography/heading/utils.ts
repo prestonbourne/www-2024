@@ -6,7 +6,7 @@ import { DetailedHTMLProps, HTMLAttributes } from "react";
 // use typescale.com to find the right ratio
 
 export const headingStyles = cva(
-  "antialiased text-white",
+  "antialiased text-white relative",
   {
     variants: {
       level: {
@@ -17,13 +17,41 @@ export const headingStyles = cva(
         5: "text-sm font-medium leading-normal md:text-sm",
         6: "text-sm font-medium leading-normal md:text-sm",
       },
+      showHash: {
+        true: "",
+        false: "",
+      }
     },
+    compoundVariants: [
+      {
+        showHash: true,
+        level: 1,
+        className: "pl-6 before:content-['#'] before:absolute before:left-0 before:text-slate-500"
+      },
+      {
+        showHash: true,
+        level: 2,
+        className: "pl-8 before:content-['##'] before:absolute before:left-0 before:text-slate-500"
+      },
+      {
+        showHash: true,
+        level: 3,
+        className: "pl-10 before:content-['###'] before:absolute before:left-0 before:text-slate-500"
+      },
+      {
+        showHash: true,
+        level: 4,
+        className: "pl-12 before:content-['####'] before:absolute before:left-0 before:text-slate-500"
+      }
+    ],
     defaultVariants: {
       level: 1,
+      showHash: true
     },
   }
 );
 export type HeadingProps = {
   level: 1 | 2 | 3 | 4 | 5 | 6;
   render?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+  showHash?: boolean;
 } & DetailedHTMLProps<HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>;

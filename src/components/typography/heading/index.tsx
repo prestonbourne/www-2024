@@ -7,13 +7,14 @@ export const Heading: React.FC<HeadingProps> = ({
   children,
   className = "",
   render,
+  showHash = true,
   ...props
 }) => {
   const HeadingTag = render ?? (`h${level}` as keyof JSX.IntrinsicElements);
 
   return React.createElement(
     HeadingTag,
-    { className: `${headingStyles({ level })} ${className}`, ...props },
+    { className: `${headingStyles({ level, showHash })} ${className}`, ...props },
     children
   );
 };

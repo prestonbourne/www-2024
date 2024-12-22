@@ -9,6 +9,7 @@ export const MotionHeading: React.FC<HeadingProps & MotionProps> = ({
     children,
     className = "",
     render,
+    showHash = false,
     ...props
   }) => {
     const HeadingTag = render ?? (`h${level}` as keyof JSX.IntrinsicElements);
@@ -16,7 +17,7 @@ export const MotionHeading: React.FC<HeadingProps & MotionProps> = ({
     return React.createElement(
       // @ts-ignore
     motion[HeadingTag],
-    { className: `${headingStyles({ level })} ${className}`, ...props },
+    { className: `${headingStyles({ level, showHash })} ${className}`, ...props },
     children
   );
 };
