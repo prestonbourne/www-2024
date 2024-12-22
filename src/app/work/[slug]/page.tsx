@@ -17,7 +17,7 @@ import { WorkWithRoute } from '@/lib/work/types'
 import { isWorkWithRoute } from '@/lib/work'
 import { BackLink } from '@/components/back-link'
 import { ClientViewCount } from '@/components/work/view-count'
-
+import { TableOfContents } from '@/components/work/table-of-contents'
 export function generateStaticParams() {
   const works: WorkWithRoute[] = getLocalWorks().filter(
     (work): work is WorkWithRoute =>
@@ -71,6 +71,7 @@ export default async function Page({ params }: NextPageProps) {
       </div>
       </header>
       <Divider className="mt-4 mb-7" />
+      <TableOfContents />
       <main>
       <WorkMDXRenderer source={work.content} />
       </main>

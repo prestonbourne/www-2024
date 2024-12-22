@@ -16,6 +16,7 @@ import { Video } from "./video";
 import { Image } from "./image/image-with-dialog";
 import { PersonLink } from "./PersonLink";
 import { Callout } from "./callout";
+import rehypeSlug from "rehype-slug";
 
 
 
@@ -79,6 +80,7 @@ export const WorkMDXRenderer: React.FC<{ source: string }> = ({ source }) => {
       options={{
         mdxOptions: {
           remarkPlugins: [],
+          rehypePlugins: [rehypeSlug],
         },
       }}
     />
