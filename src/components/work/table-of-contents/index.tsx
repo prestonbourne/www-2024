@@ -10,7 +10,7 @@ import React, {
 import { useOnChange } from "@/lib/hooks";
 import { cx as cn } from "class-variance-authority";
 
-type TOCItemType = {
+type TOCItem = {
   title: ReactNode;
   url: string;
   depth: number;
@@ -34,31 +34,25 @@ export function TableOfContents(): React.ReactElement {
     height: number;
   }>();
 
-  const [headings, setHeadings] = useState<TOCItemType[]>([]);
+  const [headings, setHeadings] = useState<TOCItem[]>([]);
   const [visibleHeadings, setVisibleHeadings] = useState<Set<string>>(
     new Set()
   );
 
   useEffect(function collectHeadings() {
-    const headingElements = Array.from(
+    const tocItems: TOCItem[] = Array.from(
       document.querySelectorAll("h1, h2, h3, h4")
     )
-      .filter((heading) => heading.id)
-      .map((heading) => ({
-        id: heading.id,
-        text: heading.textContent || "",
-        depth: heading.tagName.toLowerCase(),
-        top: (heading as HTMLElement).offsetTop,
-      }));
-
-    const tocItems = headingElements.map((heading) => {
-      return {
-        title: heading.text,
-        url: `#${heading.id}`,
-        // @ts-ignore
-        depth: headingToIndentMap[heading.depth],
-      };
-    });
+      .filter((heading) => heading.id && heading.textContent)
+      .map((heading) => {
+        const depth =
+          heading.tagName.toLowerCase() as keyof typeof headingToIndentMap;
+        return {
+          title: heading.textContent!,
+          url: `#${heading.id}`,
+          depth: headingToIndentMap[depth],
+        };
+      });
 
     setHeadings(tocItems);
   }, []);
@@ -115,19 +109,16 @@ export function TableOfContents(): React.ReactElement {
           const element: HTMLElement | null = document.querySelector(
             `a[href="${headings[i].url}"]`
           );
-          console.log({
-            element,
-          });
 
           if (!element) continue;
           const styles = getComputedStyle(element);
 
-          const offset = getLineOffset(headings[i].depth) + 1,
-            top = element.offsetTop + parseFloat(styles.paddingTop),
-            bottom =
-              element.offsetTop +
-              element.clientHeight -
-              parseFloat(styles.paddingBottom);
+          const offset = getLineOffset(headings[i].depth) + 1;
+          const top = element.offsetTop + parseFloat(styles.paddingTop);
+          const bottom =
+            element.offsetTop +
+            element.clientHeight -
+            parseFloat(styles.paddingBottom);
           w = Math.max(offset, w);
           h = Math.max(h, bottom);
 
@@ -152,11 +143,7 @@ export function TableOfContents(): React.ReactElement {
   );
 
   if (headings.length === 0) {
-    return (
-      <div className="rounded-lg border bg-purple-100 p-3 text-xs">
-        No headings found
-      </div>
-    );
+    return <></>
   }
 
   return (
@@ -187,7 +174,7 @@ export function TableOfContents(): React.ReactElement {
             <TocThumb
               active={Array.from(visibleHeadings)}
               containerRef={containerRef}
-              className="mt-[var(--fd-top)] h-[var(--fd-height)] bg-slate-500 transition-all"
+              className="mt-[var(--toc-thumb-top)] h-[var(--toc-thumb-height)] bg-white transition-all"
               data-testid="toc-thumb"
             />
           </div>
@@ -220,8 +207,8 @@ function getLineOffset(depth: number): number {
 }
 
 function update(element: HTMLElement, info: TOCThumb): void {
-  element.style.setProperty("--fd-top", `${info[0]}px`);
-  element.style.setProperty("--fd-height", `${info[1]}px`);
+  element.style.setProperty("--toc-thumb-top", `${info[0]}px`);
+  element.style.setProperty("--toc-thumb-height", `${info[1]}px`);
 }
 
 type TOCThumbProps = HTMLAttributes<HTMLDivElement> & {
@@ -272,7 +259,7 @@ function TOCItem({
   lower = item.depth,
 }: {
   isActive: boolean;
-  item: TOCItemType;
+  item: TOCItem;
   upper?: number;
   lower?: number;
 }): React.ReactElement {
@@ -287,7 +274,7 @@ function TOCItem({
         paddingInlineStart: getItemOffset(item.depth),
       }}
       data-active={isActive}
-      className="prose relative py-2 text-sm text-red-500 transition-colors [overflow-wrap:anywhere] first:pt-0 last:pb-0 data-[active=true]:text-red-100"
+      className="text-slate-300 relative py-2 text-sm transition-colors [overflow-wrap:anywhere] first:pt-0 last:pb-0 data-[active=true]:text-white data-[active=true]:font-bold"
     >
       {offset !== upperOffset ? (
         <svg
@@ -300,14 +287,14 @@ function TOCItem({
             y1="0"
             x2={offset}
             y2="16"
-            className="stroke-purple-500/20"
+            className="stroke-slate-300/30"
             strokeWidth="1"
           />
         </svg>
       ) : null}
       <div
         className={cn(
-          "absolute inset-y-0 w-px bg-purple-500/20",
+          "absolute inset-y-0 w-px bg-slate-300/30",
           offset !== upperOffset && "top-2",
           offset !== lowerOffset && "bottom-2"
         )}
@@ -325,8 +312,8 @@ function calc(container: HTMLElement, active: string[]): TOCThumb {
     return [0, 0];
   }
 
-  let upper = Number.MAX_VALUE,
-    lower = 0;
+  let upper = Number.MAX_VALUE
+  let lower = 0
 
   for (const item of active) {
     const element: HTMLElement | null = document.querySelector(

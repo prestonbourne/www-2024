@@ -1,8 +1,3 @@
-import { Spline_Sans_Mono } from "next/font/google";
-
-export const displayFont = Spline_Sans_Mono({
-  subsets: ["latin"],
-});
 
 export const formatISOToDate = (ISO: string) => {
   return new Date(ISO).toLocaleDateString("en-US", {

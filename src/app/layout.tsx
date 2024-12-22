@@ -1,4 +1,4 @@
-import { Nunito_Sans } from 'next/font/google'
+import { JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { Analytics } from '@vercel/analytics/react'
@@ -8,12 +8,13 @@ import { ThemeProvider } from '@/components/providers'
 import { Footer } from '@/components/footer'
 import { VercelToolbar } from '@vercel/toolbar/next'
 
-const bodyFont = Nunito_Sans({
+const bodyFont = JetBrains_Mono({
   subsets: ['latin'],
   display: 'swap',
 })
 
 export const metadata: Metadata = {
+
   metadataBase: new URL('https://prestonbourne.dev'),
   title: {
     default: 'Preston Bourne | Software Engineer',
@@ -41,8 +42,7 @@ export default function RootLayout({
       <body
         className={cx(
           bodyFont.className,
-          'dark:text-gray-200 text-slate-800',
-          'selection:bg-secondary selection:text-purple-600 selection:bg-purple-200 dark:bg-gray-950 dark:selection:text-lime-100 dark:selection:bg-lime-800 px-4',
+          'selection:bg-secondary selection:text-purple-600 selection:bg-purple-200 dark:bg-black dark:selection:text-lime-100 dark:selection:bg-lime-800 px-4',
           'max-w-screen-md mx-auto pt-16',
           'min-h-screen flex flex-col', // pins the footer to the bottom
           'relative' // for flexbar v0

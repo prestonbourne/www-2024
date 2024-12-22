@@ -19,7 +19,7 @@ export const Clock = () => {
 
   return (
     <p className="text-sm mb-8">
-      EDT 🗽 /{" "}
+      New York, NY (GMT-5) 🗽 /{" "}
       {!!time ? (
         <time dateTime={time} suppressHydrationWarning>
           {time}
