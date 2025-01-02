@@ -1,7 +1,12 @@
 import * as React from "react"
-import { ThemeProvider as NextThemesProvider } from "next-themes"
-import { type ThemeProviderProps } from "next-themes/dist/types"
+import { AppThemeProvider } from "@/components/providers/theme";
 
-export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
-  return <NextThemesProvider {...props}>{children}</NextThemesProvider>
-}
+import { ViewTransitions } from "next-view-transitions";
+
+export const Providers = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <ViewTransitions>
+      <AppThemeProvider>{children}</AppThemeProvider>
+    </ViewTransitions>
+  );
+};

@@ -9,7 +9,7 @@ export const Paragraph: React.FC<React.HTMLAttributes<HTMLParagraphElement>> = (
     return (
       <p
         className={cx(
-          `leading-relaxed antialiased text-base dark:text-slate-300 text-slate-800'`,
+          `leading-relaxed antialiased`,
           className
         )}
         {...props}

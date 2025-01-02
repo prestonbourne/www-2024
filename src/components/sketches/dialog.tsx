@@ -80,7 +80,6 @@ export const SketchDialog: React.FC = ({}) => {
             <motion.p
               layoutId={`sketch-description-${activeSketch.id}`}
               layout="position"
-              className="text-slate-300"
             >
               {activeSketch.description}
             </motion.p>

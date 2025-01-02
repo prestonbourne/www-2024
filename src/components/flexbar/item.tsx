@@ -22,7 +22,10 @@ export const FlexbarItem = ({
       <Tooltip.Root>
         <Tooltip.Portal>
           <Tooltip.Content sideOffset={8}>
-            <div className={tooltipClassName}>{label}</div>
+            <div className={cx(
+              `dark:bg-gray-900 bg-white rounded-md py-[2px] px-2 mb-3 font-semibold`,
+              `dark:shadow-inner-shine shadow-dense`
+            )}>{label}</div>
           </Tooltip.Content>
         </Tooltip.Portal>
         <Tooltip.Trigger asChild>

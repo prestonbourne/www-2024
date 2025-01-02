@@ -65,6 +65,53 @@ h6 {
   isolation: isolate;
 }
 
+@layer base {
+  :root {
+
+    --background: 10 10 27;
+    --background-surface: 20 20 47;
+
+
+    --surface-border: 30 30 69;
+
+    --foreground: 203 213 225;
+    --foreground-muted: 148 163 184;
+    --foreground-highlight: 255 255 255;
+
+    --action: 110 220 252;
+
+    --callout-info: 110 220 252;
+
+
+
+    --shadow-dense: rgba(0, 0, 0, 0.07) 0px -1px 1px,
+        rgba(0, 0, 0, 0.14) 0px 1px 1px,
+        rgba(0, 0, 0, 0.07) 0px 2px 2px, 
+        rgba(0, 0, 0, 0.07) 0px 4px 4px, 
+        rgba(0, 0, 0, 0.07) 0px 8px 8px;
+
+    --shadow-sharp: rgba(0, 0, 0, 0.07) 0px -1px 1px,
+        rgba(0, 0, 0, 0.14) 0px 1px 1px,
+        rgba(0, 0, 0, 0.07) 0px 2px 2px, 
+        rgba(0, 0, 0, 0.07) 0px 4px 4px;
+
+    --shadow-inner-shine: 0px 1px 0px 0px hsla(0,0%,100%,.03) inset, 
+        0px 0px 0px 1px hsla(0,0%,100%,.03) inset, 
+        0px 0px 0px 1px rgba(0,0,0,.1), 
+        0px 2px 2px 0px rgba(0,0,0,.1), 
+        0px 4px 4px 0px rgba(0,0,0,.1), 
+        0px 8px 8px 0px rgba(0,0,0,.1), var(--shadow-dense);
+
+    /*
+    *  not sure why the /.5 works here, that should send it out of bounds, src: joebell.studio
+    * @see: https://joebell.studio/
+    */
+    --shadow-sheen: 0 -1px 0 rgb(180, 197, 202), 
+        0 0 0 1px rgba(180, 197, 202, 0.5), 
+        var(--shadow-dense);
+  }
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
@@ -111,24 +158,100 @@ details[open] summary .arrow-icon {
   }
 }
 
-pre.shiki {
-  padding: 16px;
-  border-radius: 8px;
-  overflow-x: auto;
-  margin: 24px 0;
-  box-shadow: var(--shadow-dense);
-}
 
-@media (prefers-color-scheme: dark) {
-  .shiki,
-  .shiki span {
-    color: var(--shiki-dark) !important;
-    background-color: var(--shiki-dark-bg) !important;
-    /* Optional, if you also want font styles */
-    font-style: var(--shiki-dark-font-style) !important;
-    font-weight: var(--shiki-dark-font-weight) !important;
-    text-decoration: var(--shiki-dark-text-decoration) !important;
+  /* 
+  * We are using rehypye-pretty to style the code blocks in the project.
+  * rehype-pretty-code is a Rehype plugin powered by the shiki syntax highlighter that provides beautiful code blocks for Markdown or MDX. 
+  * It works on both the server at build-time (avoiding runtime syntax highlighting) and on the client for dynamic highlighting.
+  * @see: https://rehype-pretty.pages.dev/
+  */
+
+  /* 
+  * Here we are setting up the styles needed to enable theme-aware code blocks.
+  * @see: https://rehype-pretty.pages.dev/#multiple-themes-dark-and-light-mode
+  */
+
+  html {
+    code[data-theme*=" "],
+    code[data-theme*=" "] span {
+      color: var(--shiki-light);
+      background-color: var(--shiki-light-bg);
+    }
+
+    &.dark {
+      code[data-theme*=" "],
+      code[data-theme*=" "] span {
+        color: var(--shiki-dark);
+        background-color: var(--shiki-dark-bg);
+      }
+    }
   }
+
+  /* 
+  * Here we are setting up the styles needed to enable line numbers in code blocks.
+  * @see: https://rehype-pretty.pages.dev/#line-numbers
+  */
+
+  html {
+    code[data-line-numbers] {
+      counter-reset: line;
+    }
+
+    code[data-line-numbers] > [data-line]::before {
+      display: inline-block;
+      width: 12px;
+      margin-right: 2rem;
+      color: gray;
+      text-align: right;
+      content: counter(line);
+      counter-increment: line;
+    }
+
+    code[data-line-numbers-max-digits="2"] > [data-line]::before {
+      width: 1.25rem;
+    }
+
+    code[data-line-numbers-max-digits="3"] > [data-line]::before {
+      width: 1.75rem;
+    }
+
+    code[data-line-numbers-max-digits="4"] > [data-line]::before {
+      width: 2.25rem;
+    }
+
+    p [data-line] {
+      padding: 2px 4px;
+      margin-right: 2px;
+      margin-left: 2px;
+      text-align: center;
+      background-color: var(--kbd-background) !important;
+      border-radius: 4px;
+      box-shadow: 0 0 0 1px var(--kbd-border);
+    }
+  }
+
+  /* 
+  * Here we are just some additional styles to make the code blocks look better.
+  * @see: https://rehype-pretty.pages.dev/#styles
+  */
+
+  * {
+    pre {
+      padding: 16px;
+      overflow-x: auto;
+      font-size: 14px;
+      background-color: rgb(var(--background-surface));
+      [data-line] {
+        margin-top: 0 !important;
+      }
+    }
+
+    figure {
+      width: 100%;
+      margin: theme('spacing.2') 0 theme('spacing.10') 0;
+      border: 1px solid rgb(var(--surface-border));
+      border-radius: theme('borderRadius.md');
+    }
 }
 
 /* Home screen animation */

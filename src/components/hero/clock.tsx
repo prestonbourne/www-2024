@@ -18,15 +18,16 @@ export const Clock = () => {
   }, []);
 
   return (
-    <p className="text-sm mb-8 text-slate-300">
-      New York, NY (GMT-5) 🗽 /{" "}
+    <p className="text-foreground antialiased">
+     
       {!!time ? (
         <time dateTime={time} suppressHydrationWarning>
           {time}
         </time>
       ) : (
-        <span className="ml-1 rounded-sm inline-block w-16 h-3 animate-pulse bg-slate-500/40"></span>
+        <span className="ml-1 rounded-sm inline-block w-16 h-3 animate-pulse bg-foreground/30"></span>
       )}
+      {" 🗽"}
     </p>
   );
 };

@@ -1,49 +1,48 @@
-import { Paragraph as Body, Heading } from "@/components/typography";
+import { Paragraph as Body, Heading, Link } from "@/components/typography";
 import Image from "next/image";
 import { Clock } from "./clock";
 import { cx } from "class-variance-authority";
 import NextLink from "next/link";
+import { PersonLink } from "@/components/person-link";
 
 export function Hero() {
   return (
     <header className="max-w-screen-sm leading-none">
-      <Heading level={1}>
-        preston bourne
-      </Heading>
-      <p
-        className="text-sm mt-0 pt-0 mb-6 dark:text-gray-300"
-      >
-        chasing beautiful, performant software
-      </p>
+      <Heading level={1}>preston bourne</Heading>
+      <Body className={"my-2"}>(web ∧ graphics ∧ design) engineer</Body>
       <Body className={"mb-2"}>
-        currently a web engineer at hashicorp, where I build and maintain a
-        suite of high traffic web applications.
+        currently a{" "}
+        <PersonLink name="hashicorp" url="https://www.hashicorp.com" />{" "}
+        engineer, responsible for a suite of high traffic web applications.
       </Body>
-      <Clock />
-      <Links />
+      <div className="flex flex-row gap-3 my-7 items-center">
+        <Links />
+        <span className="text-foreground-muted">|</span>
+        <Clock />
+      </div>
     </header>
   );
 }
 
 export function Links() {
   return (
-    <div className="flex flex-row gap-3 mt-2">
-      <SocialLink
-        label="X"
-        imageURL="/social/x.png"
-        href="https://x.com/prestonbourne_"
-      />
-      <SocialLink
-        label="LinkedIn"
-        imageURL="/social/linkedin.png"
-        href="https://www.linkedin.com/in/prestonbourne/"
-      />
-      <SocialLink
-        label="Github"
-        imageURL="/social/github.png"
-        href="https://github.com/prestonbourne"
-      />
-    </div>
+    <>
+      <Body>
+        <Link href="https://x.com/prestonb0urne" target="_blank">
+          X
+        </Link>
+      </Body>
+      <Body>
+        <Link href="https://www.linkedin.com/in/prestonbourne/" target="_blank">
+          LinkedIn
+        </Link>
+      </Body>
+      <Body>
+        <Link href="https://github.com/prestonbourne" target="_blank">
+          Github
+        </Link>
+      </Body>
+    </>
   );
 }
 

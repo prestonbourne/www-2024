@@ -1,26 +1,31 @@
 import { MetadataRoute } from "next";
-import { getLocalWorks } from "@/lib/work/index";
+import { getPosts } from "@/lib/posts";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const workEntries: MetadataRoute.Sitemap = [];
-  const works = getLocalWorks().filter((w) => w.type === "work_route");
+  const allPosts = getPosts("projects")
+    .concat(getPosts("sketches"))
+    .concat(getPosts("notes"));
 
-  workEntries.push(
-    ...works.map((work) => {
-      return {
-        // @ts-ignore ts not picking up the correct type at build time
-        url: `${process.env.NEXT_PUBLIC_SITE_URL}/work/${work.slug}`,
-      };
-    })
-  );
+  const allPostsEntries: MetadataRoute.Sitemap = allPosts.map((post) => {
+    return {
+      // @ts-ignore ts not picking up the correct type at build time
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/${post.type}/${post.slug}`,
+    };
+  });
 
   return [
     {
       url: `${process.env.NEXT_PUBLIC_SITE_URL}`,
     },
     {
-      url: `${process.env.NEXT_PUBLIC_SITE_URL}/work`,
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/projects`,
     },
-    ...workEntries
+    {
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/sketches`,
+    },
+    {
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/notes`,
+    },
+    ...allPostsEntries,
   ];
 }

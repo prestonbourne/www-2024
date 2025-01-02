@@ -1,5 +1,6 @@
 import React from "react";
 import { headingStyles, type HeadingProps } from "./utils";
+import { cx } from "class-variance-authority";
 
 
 export const Heading: React.FC<HeadingProps> = ({
@@ -14,7 +15,7 @@ export const Heading: React.FC<HeadingProps> = ({
 
   return React.createElement(
     HeadingTag,
-    { className: `${headingStyles({ level, showHash })} ${className}`, ...props },
+    { className: cx(headingStyles({ level, showHash }), className), ...props },
     children
   );
 };

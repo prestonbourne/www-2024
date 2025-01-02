@@ -60,7 +60,7 @@ export const Flexbar = () => {
     `z-40 flex flex-row items-center gap-2 cursor-pointer bg-white/70`,
     `select-none`,
     `backdrop-blur-md overflow-hidden`,
-    `dark:shadow-inner-shine shadow-dense dark:border-slate-100/20 border`,
+    `shadow-inner-shine shadow-dense dark:border-slate-100/20 border`,
     `transition-all`,
     !hasHydrated && `opacity-0 -translate-y-2 blur`,
     // remove these styles when making dynamic and ensure pos fixed
