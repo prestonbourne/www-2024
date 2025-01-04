@@ -1,0 +1,40 @@
+---
+title: "Soundwave"
+description: "What if you could touch pixels? Most things on your screen exist in a digital plane, but Soundwave is a game that exists in the physical world."
+publishedAt: "2023-11-23T20:47:40Z"
+imageURL: "/posts/projects/soundwave/cover.gif"
+---
+
+<Image
+    src="/posts/projects/soundwave/cover.gif"
+    alt="The glove used in the project. Its a black glove with haptic feedback sensors at the fingertips with wires running up to a microcontroller at the wrist."
+/>
+
+- <Link href="https://github.com/prestonbourne/web-handtracking"> Project Source </Link>
+- Collaborators: <PersonLink name="Zelong Li" url="https://www.linkedin.com/in/lizeelong/" />
+
+Built during my Junior year of college, Soundwave is a minigame that explores a novel method for computer interaction that moved away from traditional input devices.
+
+It works by tracking the user's hand position in virtual space using a webcam. Additionally, a using a collision detection algorithm I was able to trigger haptics on designed glove allowing users to interact with digital content on a tactile level, effectively merging the digital and physical realms.
+
+
+<Image 
+    src="/posts/projects/soundwave/glove.png"
+    alt="The glove used in the project. Its a black glove with haptic feedback sensors at the fingertips with wires running up to a microcontroller at the wrist."
+/>
+
+Soundwave leverages websockets for real time communication between the microcontroller and the web application. 
+
+<Image 
+    borderless
+    src="/posts/projects/soundwave/architecture.png"
+    alt="Architecture diagram of the system. The webcam captures video which is processed by an on device computer vision algorithm supplied by MediaPipe to track the hand position. The hand position is then sent to Web Socket server that broadcasts to the arduino microcontroller which controls the vibration of the glove."
+/>
+
+## Conclusion & Learnings
+
+There's alot of potential for new forms of input and I'm excited to see where this line of research takes us in the coming years.
+Some ideas in this space that I think are interesting:
+- [Leap Motion](https://www.ultraleap.com/)
+- [Project Aria](https://www.projectaria.com/)
+- [Apple Gloves](https://www.patentlyapple.com/2022/03/apple-invents-mixed-reality-smart-gloves-designed-to-provide-vr-gamers-with-heightened-sensory-experiences.html)
