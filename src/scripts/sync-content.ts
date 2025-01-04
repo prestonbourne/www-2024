@@ -2,13 +2,15 @@ import { getPosts } from "@/lib/posts";
 import { createAdminClient } from "@/lib/supabase/server-client";
 import { PostType } from "@/lib/types";
 import { inspect } from "node:util";
+import { loadEnvConfig } from "@next/env";
 
-const TYPES: PostType[] = ["projects", "notes", "sketches"];
-const supabase = createAdminClient();
+export default async function ({ env }: { env: typeof process.env }) {
+  loadEnvConfig(process.cwd(), true, console);
+  const TYPES: PostType[] = ["projects", "notes", "sketches"];
+  const supabase = createAdminClient();
 
-(async () => {
   for (const type of TYPES) {
-    const localPosts = getPosts(type);
+    const localPosts = await getPosts(type);
     for (const post of localPosts) {
       const { error } = await supabase.from("posts").upsert(
         {
@@ -31,4 +33,4 @@ const supabase = createAdminClient();
       }
     }
   }
-})();
+}

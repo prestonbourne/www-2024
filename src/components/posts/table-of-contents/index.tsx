@@ -8,7 +8,7 @@ import React, {
   type RefObject,
 } from "react";
 import { useOnChange } from "@/lib/hooks";
-import { cx as cn } from "class-variance-authority";
+import { cx } from "class-variance-authority";
 import { usePathname } from "next/navigation";
 
 type TOCItem = {
@@ -296,14 +296,14 @@ function TOCItem({
             y1="0"
             x2={offset}
             y2="16"
-            className="stroke-slate-300/30"
+            className="stroke-foreground-muted/70"
             strokeWidth="1"
           />
         </svg>
       ) : null}
       <div
-        className={cn(
-          "absolute inset-y-0 w-px bg-slate-300/30",
+        className={cx(
+          "absolute inset-y-0 w-px bg-foreground-muted/70",
           offset !== upperOffset && "top-2",
           offset !== lowerOffset && "bottom-2"
         )}

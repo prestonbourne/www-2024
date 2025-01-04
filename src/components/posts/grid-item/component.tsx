@@ -3,7 +3,7 @@ import { ArrowTopRightIcon } from '@radix-ui/react-icons'
 import NextLink from 'next/link'
 import { ServerImage } from '@/components/image/server-image'
 import { Heading } from '@/components/typography'
-import { WorkItemViewsIcon } from '../view-count/icon'
+// import { WorkItemViewsIcon } from '../view-count/icon'
 import type { Post } from '@/lib/types'
 
 type PostGridItemProps = {

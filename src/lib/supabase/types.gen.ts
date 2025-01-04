@@ -51,41 +51,17 @@ export type Database = {
         }
         Relationships: []
       }
-      work: {
-        Row: {
-          content: string
-          description: string | null
-          id: number
-          likes_count: number | null
-          publish_date: string
-          slug: string
-          views_count: number | null
-        }
-        Insert: {
-          content?: string
-          description?: string | null
-          id?: never
-          likes_count?: number | null
-          publish_date: string
-          slug: string
-          views_count?: number | null
-        }
-        Update: {
-          content?: string
-          description?: string | null
-          id?: never
-          likes_count?: number | null
-          publish_date?: string
-          slug?: string
-          views_count?: number | null
-        }
-        Relationships: []
-      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      increment_post_views_by_slug: {
+        Args: {
+          post_slug: string
+        }
+        Returns: number
+      }
       increment_work_views_by_slug: {
         Args: {
           work_slug: string

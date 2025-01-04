@@ -1,13 +1,9 @@
-import { PostsGrid } from "@/components/posts/grid";
-import { Heading } from "@/components/typography";
+import { PostListPage } from "@/components/posts/post-list-page";
+import { NextPageProps } from "@/lib/types";
 
-export default function Page() {
-  return (
-    <>
-      <main>
-        <Heading level={1}>projects</Heading>
-        <PostsGrid />
-      </main>
-    </>
-  );
+const ROUTE = "projects";
+
+export default function Page({ params }: NextPageProps) {
+  return <PostListPage params={params} postType={ROUTE} />;
 }
+

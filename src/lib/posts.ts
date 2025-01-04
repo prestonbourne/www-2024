@@ -2,9 +2,9 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import { Post, PostType } from "./types";
-import { getClient } from "./supabase/browser-client";
+import { createAdminClient } from "./supabase/server-client";
 
-const supabase = getClient();
+const supabase = createAdminClient();
 
 function readPostFile(filePath: string): Post | null {
   try {

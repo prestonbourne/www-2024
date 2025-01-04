@@ -1,21 +1,9 @@
-import { HomeSection } from "@/components/home-section";
-import { getPosts } from "@/lib/posts";
-import postTypes from "@/post-types.json";
+import { PostListPage } from "@/components/posts/post-list-page";
+import { NextPageProps } from "@/lib/types";
 
-export default async function Page() {
-  const description = postTypes.find((post) => post.slug === "sketches")?.description ?? "";
-  return (
-    <>
-      <main>
-        <HomeSection
-          title="sketches"
-          description={description}
-          link="/sketches"
-          category="sketches"
-          posts={await getPosts("sketches")}
-          level={1}
-        />
-      </main>
-    </>
-  );
+const ROUTE = "sketches";
+
+export default function Page({ params }: NextPageProps) {
+  return <PostListPage params={params} postType={ROUTE} />;
 }
+

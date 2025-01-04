@@ -103,7 +103,7 @@ h6 {
     --background: 247 243 234;
     --background-surface: rgba(255, 255, 255, 0.8);
     --foreground: 51 65 85;
-    --foreground-muted: 100 116 139;
+    --foreground-muted: 71 85 105;
     --foreground-highlight: 15 23 42;
     --action: 7 81 207;
     --callout-info: var(--action);
@@ -127,7 +127,7 @@ h6 {
 
 @layer components {
   .surface {
-    border: 1px solid rgb(var(--foreground-muted) / 0.4);
+    border: 1px solid rgb(var(--foreground-muted) / 0.3);
     border-radius: theme("borderRadius.md");
     background-color: var(--background-surface);
   }
