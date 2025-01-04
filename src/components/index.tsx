@@ -1,4 +1,4 @@
-export { Divider } from "./Divider";
+export { Divider } from "./divider";
 
 // typography
 export { Paragraph } from "./typography/paragraph";

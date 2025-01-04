@@ -1,2 +1,2 @@
-export { SketchItem } from "./SketchItem";
-export { SketchList } from "./SketchList";
+export { SketchItem } from "./item";
+export { SketchList } from "./list";

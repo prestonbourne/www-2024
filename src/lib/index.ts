@@ -7,6 +7,10 @@ export const formatISOToDate = (ISO: string) => {
   });
 };
 
+export const trimIsoToDate = (ISO: string) => {
+  return ISO.split("T")[0];
+};
+
 export const onlyIn = (env: typeof process.env.NODE_ENV, fn: Function) => {
   if (process.env.NODE_ENV === env) {
     return fn();

@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
-import { Canvas } from "@/components/sketches/Canvas";
+import { Canvas } from "@/components/sketches/canvas";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { getResizer, TWEAK_PANE_CONTAINER_ID } from "@/lib/sketches";
 import vertexShader from "./waterVert.glsl";
@@ -16,11 +16,14 @@ const Sketch: React.FC = () => {
     useEffect(() => {
         if (canvasRef.current) {
             const canvas = canvasRef.current;
-            const width = canvas.clientWidth;
-            const height = canvas.clientHeight;
+            const parent = canvas.parentElement || canvas;
+            if (!parent) return;
+            const width = parent.clientWidth;
+            const height = parent.clientHeight;
             const renderer = new THREE.WebGLRenderer({ canvas });
+            renderer.setClearColor(0x000000, 0);
 
-            renderer.setSize(width, height);
+            renderer.setSize(width, height, false);
 
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(
@@ -174,7 +177,17 @@ const Sketch: React.FC = () => {
             };
 
             animate();
-            const { handleResize } = getResizer(renderer, camera);
+            // const { handleResize } = getResizer(renderer, camera);
+
+    const handleResize = () => {
+        if (!canvas || !canvas.parentElement) return;
+        const width = canvas.parentElement.clientWidth;
+        const height = canvas.parentElement.clientHeight;
+
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+                renderer.setSize(width, height, false);
+            };
             window.addEventListener("resize", handleResize);
             return () => {
                 window.cancelAnimationFrame(reqID);

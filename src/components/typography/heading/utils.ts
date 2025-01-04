@@ -6,7 +6,7 @@ import { DetailedHTMLProps, HTMLAttributes } from "react";
 // use typescale.com to find the right ratio
 
 export const headingStyles = cva(
-  "antialiased text-white relative",
+  "antialiased text-foreground-highlight relative",
   {
     variants: {
       level: {
@@ -26,22 +26,22 @@ export const headingStyles = cva(
       {
         showHash: true,
         level: 1,
-        className: "pl-6 before:content-['#'] before:absolute before:left-0 before:text-slate-500"
+        className: "pl-6 before:content-['#'] before:absolute before:left-0 before:text-foreground-muted"
       },
       {
         showHash: true,
         level: 2,
-        className: "pl-8 before:content-['##'] before:absolute before:left-0 before:text-slate-500"
+        className: "pl-8 before:content-['##'] before:absolute before:left-0 before:text-foreground-muted"
       },
       {
         showHash: true,
         level: 3,
-        className: "pl-10 before:content-['###'] before:absolute before:left-0 before:text-slate-500"
+        className: "pl-10 before:content-['###'] before:absolute before:left-0 before:text-foreground-muted"
       },
       {
         showHash: true,
         level: 4,
-        className: "pl-12 before:content-['####'] before:absolute before:left-0 before:text-slate-500"
+        className: "pl-12 before:content-['####'] before:absolute before:left-0 before:text-foreground-muted"
       }
     ],
     defaultVariants: {

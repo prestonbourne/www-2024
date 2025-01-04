@@ -1,9 +1,9 @@
 "use client";
-import { SketchLoading } from "@/components/sketches/SketchLoading";
+import { SketchLoading } from "@/components/sketches/loading";
 import { useEffect, useState, useRef, RefObject } from "react";
 import shader from "./shader.wgsl";
 import simulationShader from "./compute-shader.wgsl";
-
+import { SketchWrapper } from "@/components/sketch-wrapper";
 const GRID_SIZE = 32;
 
 const Sketch: React.FC = () => {
@@ -54,6 +54,7 @@ const Sketch: React.FC = () => {
       context.configure({
         device: device,
         format: canvasFormat,
+        alphaMode: "premultiplied",
       });
 
       // two triangles that share an edge
@@ -302,7 +303,7 @@ const Sketch: React.FC = () => {
               view: context.getCurrentTexture().createView(),
               loadOp: "clear",
               storeOp: "store",
-              clearValue: { r: 0, g: 0, b: 0, a: 1 },
+              clearValue: { r: 0, g: 0, b: 0, a: 0 },
             },
           ],
         });
@@ -359,14 +360,16 @@ const Sketch: React.FC = () => {
   }
 
   return (
-    <canvas
-      ref={canvasRef}
-      width={512}
-      height={512}
-      style={{
-        margin: "0 auto",
-      }}
-    />
+    <SketchWrapper>
+      <canvas
+        ref={canvasRef}
+        width={512}
+        height={512}
+        style={{
+          margin: "0 auto",
+        }}
+      />
+    </SketchWrapper>
   );
 };
 

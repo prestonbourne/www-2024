@@ -9,33 +9,45 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      work: {
+      posts: {
         Row: {
-          content: string
+          audience_likes: number | null
+          audience_views: number | null
+          content_mdx: string | null
           description: string | null
-          id: number
-          likes_count: number | null
-          publish_date: string
+          external_url: string | null
+          id: string
+          published_at: string | null
           slug: string
-          views_count: number | null
+          title: string
+          type: Database["public"]["Enums"]["post_type"]
+          updated_at: string | null
         }
         Insert: {
-          content?: string
+          audience_likes?: number | null
+          audience_views?: number | null
+          content_mdx?: string | null
           description?: string | null
-          id?: never
-          likes_count?: number | null
-          publish_date: string
+          external_url?: string | null
+          id?: string
+          published_at?: string | null
           slug: string
-          views_count?: number | null
+          title: string
+          type: Database["public"]["Enums"]["post_type"]
+          updated_at?: string | null
         }
         Update: {
-          content?: string
+          audience_likes?: number | null
+          audience_views?: number | null
+          content_mdx?: string | null
           description?: string | null
-          id?: never
-          likes_count?: number | null
-          publish_date?: string
+          external_url?: string | null
+          id?: string
+          published_at?: string | null
           slug?: string
-          views_count?: number | null
+          title?: string
+          type?: Database["public"]["Enums"]["post_type"]
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -44,6 +56,12 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      increment_post_views_by_slug: {
+        Args: {
+          post_slug: string
+        }
+        Returns: number
+      }
       increment_work_views_by_slug: {
         Args: {
           work_slug: string
@@ -52,7 +70,7 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      post_type: "projects" | "sketches" | "notes"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -140,4 +158,19 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof PublicSchema["CompositeTypes"]
+    | { schema: keyof Database },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
+    ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never

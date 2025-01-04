@@ -1,4 +1,5 @@
-import NextLink, { LinkProps as NextLinkProps } from "next/link";
+import { LinkProps as NextLinkProps } from "next/link";
+import { Link as NextViewTransitionLink } from "next-view-transitions";
 import { ComponentProps } from "react";
 import { ArrowTopRightIcon } from "@radix-ui/react-icons";
 import { cx } from "class-variance-authority";
@@ -20,14 +21,14 @@ export const Link: React.FC<LinkProps> = ({
   const isExternal = href.startsWith("http");
 
   return (
-    <NextLink
+    <NextViewTransitionLink
       href={href}
       className={cx(
-        "underline decoration-dotted inline-flex flex-row gap-[2px]",
+        "underline decoration-dashed inline-flex flex-row gap-[2px]",
         "transition-all underline-offset-4",
         muted
-          ? "dark:text-slate-100 dark:hover:text-slate-300 text-slate-800 hover:text-slate-600"
-          : "text-purple-700 dark:text-lime-500 hover:brightness-110",
+          ? "text-foreground-muted hover:text-foreground"
+          : "text-foreground hover:text-action",
         isExternal && "group items-center",
         className
       )}
@@ -42,6 +43,15 @@ export const Link: React.FC<LinkProps> = ({
           )}
         />
       )}
-    </NextLink>
+    </NextViewTransitionLink>
   );
+};
+
+export const UnstyledLink: React.FC<LinkProps> = ({
+  href,
+  children,
+  className,
+  ...props
+}) => {
+  return <NextViewTransitionLink href={href} className={className} {...props}>{children}</NextViewTransitionLink>;
 };

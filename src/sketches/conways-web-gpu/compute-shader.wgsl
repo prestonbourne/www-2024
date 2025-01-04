@@ -30,13 +30,12 @@ fn computeMain(@builtin(global_invocation_id) cell: vec3u) {
     }
 
     let currCellIdx = cellIndex(cell.xy);
-
     switch activeNeighbors {
-        case 2: {
+        case 2u: {
             // 2 neighbors means stay the same
             cellStateOut[currCellIdx] = cellStateIn[currCellIdx];
         }
-        case 3: {
+        case 3u: {
             // 3 neighbors means become active
             cellStateOut[currCellIdx] = 1;
         }

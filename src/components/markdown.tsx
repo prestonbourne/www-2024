@@ -1,8 +1,12 @@
 import React from "react";
+
+import type { MDXRemoteProps } from "next-mdx-remote/rsc";
+import type { MDXComponents } from "mdx/types";
+import { cx } from "class-variance-authority";
+
 import { MDXRemote } from "next-mdx-remote/rsc";
-import { MDXComponents } from "mdx/types";
 import { ReactElement } from "react";
-import { CodeBlock, extractCodeEl, extractLang } from "./CodeBlock";
+import { CodeBlock, extractCodeEl, extractLang } from "./code-block";
 import { codeToHtml } from "shiki";
 import {
   Heading,
@@ -11,14 +15,26 @@ import {
   UnorderedList,
   ListItem,
 } from "./typography";
-import { Divider } from "./Divider";
+import { Divider } from "./divider";
 import { Video } from "./video";
 import { Image } from "./image/image-with-dialog";
-import { PersonLink } from "./PersonLink";
+import { PersonLink } from "./person-link";
 import { Callout } from "./callout";
+
 import rehypeSlug from "rehype-slug";
+import remarkGfm from "remark-gfm";
+import rehypePrettyCode from "rehype-pretty-code";
 
+// sketches
+import ConwaysWebGPU from "@/sketches/conways-web-gpu/sketch";
+import PerlinNoiseSea from "@/sketches/first-water/sketch";
+import MeshGradient from "@/sketches/mesh-gradient-1/sketch";
 
+const Sketch = {
+  ConwaysWebGPU,
+  PerlinNoiseSea,
+  MeshGradient,
+};
 
 const components: MDXComponents = {
   h1: (props) => <Heading level={1} {...props} />,
@@ -28,7 +44,7 @@ const components: MDXComponents = {
   h5: (props) => <Heading level={5} {...props} className="my-1" />,
   h6: (props) => <Heading level={6} {...props} />,
   p: ({ className = "", ...rest }) => {
-    return <Paragraph {...rest} className={`${className} mb-6`} />;
+    return <Paragraph {...rest} className={cx(`mb-6`, className)} />;
   },
   a: (props) => {
     const { href, children, ...rest } = props;
@@ -53,36 +69,56 @@ const components: MDXComponents = {
   Image,
   Video,
   PersonLink,
-  pre: async (props) => {
-    const isElement = React.isValidElement(props.children);
-    if (!isElement) {
-      return <pre {...props} />;
-    }
-    const codeEl = extractCodeEl(props.children as ReactElement);
-    const lang = extractLang(codeEl?.props.className as string);
-    const code = await codeToHtml(codeEl?.props.children as string, {
-      lang,
-      themes: {
-        light: "catppuccin-latte",
-        dark: "dracula-soft",
-      },
-    });
+  Sketch,
+  // pre: async (props) => {
+  //   const isElement = React.isValidElement(props.children);
+  //   if (!isElement) {
+  //     return <pre {...props} />;
+  //   }
+  //   const codeEl = extractCodeEl(props.children as ReactElement);
+  //   const lang = extractLang(codeEl?.props.className as string);
+  //   const code = await codeToHtml(codeEl?.props.children as string, {
+  //     lang,
+  //     themes: {
+  //       light: "catppuccin-latte",
+  //       dark: "dracula-soft",
+  //     },
+  //   });
 
-    return <CodeBlock code={code} className="sheen-ring rounded-md" />;
-  },
+  //   return <CodeBlock code={code} className="sheen-ring rounded-md" />;
+  // },
 };
 
-export const WorkMDXRenderer: React.FC<{ source: string }> = ({ source }) => {
+export function useMDXComponents(components: MDXComponents): MDXComponents {
+  return {
+    ...components,
+  };
+}
+
+export function MDX(props: JSX.IntrinsicAttributes & MDXRemoteProps) {
   return (
     <MDXRemote
-      source={source}
+      {...props}
       components={components}
       options={{
         mdxOptions: {
-          remarkPlugins: [],
-          rehypePlugins: [rehypeSlug],
+          remarkPlugins: [remarkGfm],
+          rehypePlugins: [
+            rehypeSlug,
+            [
+              rehypePrettyCode,
+              {
+                theme: {
+                  dark: "github-dark",
+                  light: "github-light",
+                },
+                defaultLang: "tsx",
+                keepBackground: false,
+              },
+            ],
+          ],
         },
       }}
     />
   );
-};
+}

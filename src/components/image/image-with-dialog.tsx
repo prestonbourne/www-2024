@@ -7,20 +7,17 @@ type ImageProps = NextImageProps & {
     src: string;
     alt?: string;
     caption?: string;
-    bleed?: boolean;
-    borderless?: boolean;
   };
   
-  const Image = ({ src, alt, caption, bleed = false, borderless = false }: ImageProps) => {
+  const Image = ({ src, alt, caption }: ImageProps) => {
 
     const className = cx(
         "flex flex-col mb-12 overflow-hidden mx-auto",
-        bleed ? "relative lg:-mx-36 xl:-mx-64" : "max-w-full",
-        !borderless && "rounded-md shadow-sheen dark:bg-background/30"
+        "max-w-full rounded-md surface bg-transparent",
     );
 
     return (
-      <ClientImageProvider src={src} alt={alt} caption={caption}>
+      <ClientImageProvider src={src} alt={alt } caption={caption}>
         <ClientImageDialog />
          <ClientImageClickTarget >
         <figure className={className}>

@@ -1,5 +1,5 @@
 import type { Sketch, SketchMetaData } from "./types";
-import { SketchLoading } from "@/components/sketches/SketchLoading";
+import { SketchLoading } from "@/components/sketches/loading";
 import dynamic from "next/dynamic";
 
 type MetadataModule = {

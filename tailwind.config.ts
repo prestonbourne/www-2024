@@ -39,7 +39,6 @@ const config: Config = {
       black: colors.black,
       white: colors.white,
       purple: colors.purple,
-      lime: colors.lime,
       slate: colors.slate,
       gray: {
         ...colors["gray"],
@@ -49,11 +48,27 @@ const config: Config = {
     },
 
     extend: {
+      colors: {
+        background: {
+          DEFAULT: "rgb(var(--background))",
+          surface: "rgb(var(--background-surface))",
+        },
+
+        foreground: {
+          DEFAULT: "rgb(var(--foreground))",
+          muted: "rgb(var(--foreground-muted))",
+          highlight: "rgb(var(--foreground-highlight))",
+        },
+
+        action: "rgb(var(--action))",
+        "callout-info": "rgb(var(--callout-info))",
+
+      },
       boxShadow: {
-        dense: denseShadow,
-        "inner-shine": innerShineShadow,
-        sheen: sheenShadow,
-        sharp: sharpShadow,
+        dense: "var(--shadow-dense)",
+        "inner-shine": "var(--shadow-inner-shine)",
+        sheen: "var(--shadow-sheen)",
+        sharp: "var(--shadow-sharp)",
       },
     },
   },

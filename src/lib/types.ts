@@ -6,16 +6,61 @@ export interface NextPageProps<SlugType = string> {
   searchParams?: { [key: string]: string | string[] | undefined };
 }
 
-export type MDXEntity = {
-  slug: string;
-  metadata: MDXEntityMetadata;
-  content: string;
-};
 
-export type MDXEntityMetadata = {
+export type PostType = 'projects' | 'sketches' | 'notes';
+
+
+export type Post = {
+  type: PostType;
   title: string;
-  publishedAt: string;
-  description: string;
-  imageURL?: string;
+  slug: string;
+  content: string;
   tags?: string[];
+  description?: string;
+  externalURL?: string;
+
+  author?: {
+    name?: string;
+    link?: string;
+    handle?: string;
+  };
+
+  publishedAt?: string;
+  updatedAt?: string;
+
+  media?: {
+    image?: string;
+    video?: string;
+    audio?: string;
+  };
+
+  readingTimeMS?: number;
+
+  seo?: {
+    title?: string;
+    description?: string;
+    keywords?: string[];
+  };
+
+  audience?: {
+    likes?: number;
+    views?: number;
+    comments?: number;
+  };
+
+  related?: {
+    media?: string[];
+    links?: string[];
+    posts?: string[];
+  };
+
+  social?: {
+    twitter?: string;
+    facebook?: string;
+    linkedin?: string;
+    instagram?: string;
+    youtube?: string;
+    pinterest?: string;
+    others?: string[];
+  };
 };

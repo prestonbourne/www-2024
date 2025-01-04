@@ -1,6 +1,7 @@
-import path from "path";
 import fs from "fs";
 import { loadEnvConfig } from "@next/env";
+import { inspect } from "node:util";
+import path from "path";
 
 type ScriptParams = {
   env: typeof process.env;
@@ -8,24 +9,26 @@ type ScriptParams = {
 
 loadEnvConfig(process.cwd());
 
+
 const runAsync = async () => {
-  // find all scripts in subfolder
+  const trimmedFileName = __filename.split(path.sep).pop();
+  // find all scripts in current directory
   const files = fs
-    .readdirSync(path.join(__dirname, "prebuild"))
-    .filter((file) => file.endsWith(".ts"))
+    .readdirSync(__dirname)
+    .filter((file) => file.endsWith(".ts") && file !== trimmedFileName) // exclude self
     .sort();
   for (const file of files) {
     const {
       default: defaultFunc,
     }: { default: (params: ScriptParams) => void } = await import(
-      `./prebuild/${file}`
+      `./${file}`
     );
     try {
-      console.log(`Running prebuild script '${file}'`);
+      console.log(`[SCRIPT RUNNER]: running '${file}'`);
       await defaultFunc({ env: process.env });
     } catch (e) {
       console.error(
-        `[SCRIPT RUNNER]: failed to execute prebuild script '${file}'`
+        `[SCRIPT RUNNER]: failed to execute script '${file}'`
       );
       console.error(e);
     }
@@ -36,6 +39,6 @@ const runAsync = async () => {
 (async () => {
   await runAsync();
 })().catch((err) => {
-  console.error(err);
+  console.error(inspect(err, { showHidden: true, depth: null }));
   throw err;
 });

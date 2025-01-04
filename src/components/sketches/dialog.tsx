@@ -1,6 +1,6 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSketchContext } from "./SketchProvider";
+import { useSketchContext } from "./provider";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { ReactEventHandler } from "react";
 import { cx } from "class-variance-authority";
@@ -80,7 +80,6 @@ export const SketchDialog: React.FC = ({}) => {
             <motion.p
               layoutId={`sketch-description-${activeSketch.id}`}
               layout="position"
-              className="text-slate-300"
             >
               {activeSketch.description}
             </motion.p>
