@@ -1,5 +1,5 @@
 'use client'
-import { TextWithIcon, TextWithIconLoading } from '../../TextWithIcon'
+import { TextWithIcon, TextWithIconLoading } from '../../text-with-icon'
 import { EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons'
 import { useRealTimeViewCount } from './hooks'
 import { LIKES_VIEWS_SENTINEL } from '@/lib/work'

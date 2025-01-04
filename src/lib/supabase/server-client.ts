@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { Database } from './types.gen'
 
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined' || typeof document !== 'undefined') {
   throw Error(`Don't Import this on the client`)
 }
 
@@ -16,17 +16,6 @@ if (!supabaseKey) {
   throw new Error('Missing supabase anon key')
 }
 
-export const createAgnosticAdminClient = () => {
-  return createClient<Database>(supabaseUrl, supabaseKey, {
-    global: {
-      fetch: (url, init) =>
-        fetch(url, {
-          cache: 'no-store',
-          next: {
-            tags: ['supabase_work'],
-          },
-          ...init,
-        }),
-    },
-  })
+export const createAdminClient = () => {
+  return createClient<Database>(supabaseUrl, supabaseKey)
 }

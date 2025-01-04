@@ -25,6 +25,17 @@ import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import rehypePrettyCode from "rehype-pretty-code";
 
+// sketches
+import ConwaysWebGPU from "@/sketches/conways-web-gpu/sketch";
+import PerlinNoiseSea from "@/sketches/first-water/sketch";
+import MeshGradient from "@/sketches/mesh-gradient-1/sketch";
+
+const Sketch = {
+  ConwaysWebGPU,
+  PerlinNoiseSea,
+  MeshGradient,
+};
+
 const components: MDXComponents = {
   h1: (props) => <Heading level={1} {...props} />,
   h2: (props) => <Heading level={2} {...props} className="my-3" />,
@@ -58,6 +69,7 @@ const components: MDXComponents = {
   Image,
   Video,
   PersonLink,
+  Sketch,
   // pre: async (props) => {
   //   const isElement = React.isValidElement(props.children);
   //   if (!isElement) {
@@ -97,11 +109,11 @@ export function MDX(props: JSX.IntrinsicAttributes & MDXRemoteProps) {
               rehypePrettyCode,
               {
                 theme: {
-                  dark: "github-light",
-                  light: "github-dark",
+                  dark: "github-dark",
+                  light: "github-light",
                 },
-                keepBackground: false,
                 defaultLang: "tsx",
+                keepBackground: false,
               },
             ],
           ],

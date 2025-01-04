@@ -2,7 +2,7 @@ import { DesktopGrid, MobileGrid } from "./grids";
 import { getPosts } from "@/lib/posts";
 
 export async function PostsGrid() {
-  const posts = getPosts('projects');
+  const posts = await getPosts('projects');
 
   const sortedPosts = posts.sort((a, b) => {
     return (

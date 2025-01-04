@@ -23,5 +23,5 @@ you're welcome to use any code snippets you find, or even use the entire website
 3. run the development server `pnpm run dev`
 
 To install supbase types (_optional_):
-`pnpm run supabase gen types typescript --project-id {here} --schema public > src/supabase/types.ts`
+`pnpx supabase gen types typescript --project-id {PROJECT_ID} --schema public > src/lib/supabase/types.gen.ts`
 [Read More](https://supabase.com/docs/guides/api/rest/generating-types)

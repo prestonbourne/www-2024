@@ -2,6 +2,9 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import { Post, PostType } from "./types";
+import { getClient } from "./supabase/browser-client";
+
+const supabase = getClient();
 
 function readPostFile(filePath: string): Post | null {
   try {
@@ -47,32 +50,52 @@ export const calculateReadingTimeMS = (
   return readTime;
 };
 
-
-export function getPosts(directory: PostType): Post[] {
-
+export async function getPosts(directory: PostType): Promise<Post[]> {
   const files = getFiles(
     path.join(process.cwd(), "src", "app", "(posts)", directory, "posts")
   );
 
-  return files
-    .map((file) =>
-      readPostFile(
-        path.join(
-          process.cwd(),
-          "src",
-          "app",
-          "(posts)",
-          directory,
-          "posts",
-          file
+  return Promise.all(
+    files
+      .map((file) =>
+        readPostFile(
+          path.join(
+            process.cwd(),
+            "src",
+            "app",
+            "(posts)",
+            directory,
+            "posts",
+            file
+          )
         )
       )
-    )
-    .filter((post): post is Post => post !== null)
-    .map((post) => {
-      post.type = directory;
-      return post;
-    });
+      .filter((post): post is Post => post !== null)
+      .map(async (post) => {
+        post.type = directory;
+
+        const { data, error } = await supabase
+          .from("posts")
+          .select("audience_likes, audience_views")
+          .eq("slug", post.slug)
+          .single();
+        if (data) {
+          post.audience = {
+            likes: data.audience_likes ?? 0,
+            views: data.audience_views ?? 0,
+          };
+        } else {
+          post.audience = {
+            likes: 0,
+            views: 0,
+          };
+        }
+        if (error) {
+          console.error(error);
+        }
+        return post;
+      })
+  );
 }
 
 export const getAllPosts = () => {

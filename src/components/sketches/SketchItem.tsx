@@ -22,7 +22,7 @@ export const SketchItem: React.FC<SketchItemsProps> = ({ sketch }) => {
   return (
     <motion.li
         whileHover={{ scale: 1.035 }}
-        className="bg-background-surface border border-surface-border rounded-md overflow-clip cursor-pointer h-60 flex flex-col"
+        className="bg-background-surface overflow-clip cursor-pointer h-60 flex flex-col"
         layoutId={`sketch-${sketch.id}`}
         key={`sketch-${sketch.id}-li`}
         onClick={handleClick}

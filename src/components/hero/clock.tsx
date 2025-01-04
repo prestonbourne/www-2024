@@ -2,7 +2,11 @@
 import { useState, useEffect } from "react";
 
 export const Clock = () => {
-  const [time, setTime] = useState<string>();
+  const [time, setTime] = useState(
+    new Date().toLocaleTimeString("en-US", {
+      timeZone: "America/New_York",
+    })
+  );
   const ONE_SECOND = 1000;
 
   useEffect(() => {
@@ -19,14 +23,9 @@ export const Clock = () => {
 
   return (
     <p className="text-foreground antialiased">
-     
-      {!!time ? (
-        <time dateTime={time} suppressHydrationWarning>
-          {time}
-        </time>
-      ) : (
-        <span className="ml-1 rounded-sm inline-block w-16 h-3 animate-pulse bg-foreground/30"></span>
-      )}
+      <time dateTime={time} suppressHydrationWarning>
+        {time}
+      </time>
       {" 🗽"}
     </p>
   );

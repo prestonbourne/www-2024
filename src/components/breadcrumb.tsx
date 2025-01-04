@@ -14,7 +14,7 @@ export const Breadcrumb = () => {
     .map((path) => path.replace(/-/g, " "));
 
   return (
-    <div className="mt-0 mb-4 flex w-full items-center gap-1 align-middle font-normal text-small">
+    <nav className="mb-4 flex w-full items-center gap-1 align-middle font-normal text-small">
       <UnstyledLink href="/">home</UnstyledLink>
       <ChevronRightIcon />
       {paths.map((path, index) => {
@@ -36,6 +36,6 @@ export const Breadcrumb = () => {
           </React.Fragment>
         );
       })}
-    </div>
+    </nav>
   );
 };

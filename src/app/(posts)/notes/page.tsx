@@ -1,6 +1,6 @@
-import { PostsGrid } from "@/components/posts/grid";
 import { Heading, Paragraph } from "@/components/typography";
 import postTypes from "@/post-types.json";
+import { PostList } from "@/components/post-list";
 
 const ROUTE = "notes";
 
@@ -13,7 +13,7 @@ export default function Page() {
         <Paragraph>{notes[0].description}</Paragraph>
       </header>
       <main>
-        <PostsGrid />
+        <PostList category={ROUTE} />
       </main>
     </>
   );

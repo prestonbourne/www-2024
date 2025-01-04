@@ -68,7 +68,7 @@ export function TableOfContents({ className, routes }: TableOfContentsProps): Re
       });
 
     setHeadings(tocItems);
-  }, []);
+  }, [pathname]);
 
   useEffect(
     function setupIntersectionObserver() {
@@ -183,7 +183,7 @@ export function TableOfContents({ className, routes }: TableOfContentsProps): Re
             <TocThumb
               active={Array.from(visibleHeadings)}
               containerRef={containerRef}
-              className="mt-[var(--toc-thumb-top)] h-[var(--toc-thumb-height)] bg-white transition-all"
+              className="mt-[var(--toc-thumb-top)] h-[var(--toc-thumb-height)] bg-foreground-highlight transition-all"
               data-testid="toc-thumb"
             />
           </div>

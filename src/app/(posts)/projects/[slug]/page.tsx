@@ -4,7 +4,7 @@ import { MDX } from "@/components/markdown";
 import { formatISOToDate } from "@/lib/index";
 
 import { NextPageProps } from "@/lib/types";
-import { TextWithIcon } from "@/components/TextWithIcon";
+import { TextWithIcon } from "@/components/text-with-icon";
 import { CalendarIcon, ClockIcon } from "@radix-ui/react-icons";
 import { Divider } from "@/components/divider";
 import { Heading } from "@/components/typography";
@@ -14,14 +14,17 @@ import { Breadcrumb } from "@/components/breadcrumb";
 import { getPosts } from "@/lib/posts";
 
 export function generateStaticParams() {
-  return getPosts("projects").map((post) => ({
-    slug: post.slug,
-  }));
+  return getPosts("projects").then((posts) =>
+    posts.map((post) => ({
+      slug: post.slug,
+    }))
+  );
 }
 
 export async function generateMetadata({ params }: NextPageProps) {
   const currentSlug = params.slug;
-  const post = getPosts("projects").find((post) => post.slug === currentSlug);
+  const posts = await getPosts("projects");
+  const post = posts.find((post) => post.slug === currentSlug);
 
   if (!post) return notFound();
   const { title, description } = post;
@@ -34,7 +37,8 @@ export async function generateMetadata({ params }: NextPageProps) {
 
 export default async function Page({ params }: NextPageProps) {
   const currentSlug = params.slug;
-  const post = getPosts("projects").find((post) => post.slug === currentSlug);
+  const posts = await getPosts("projects");
+  const post = posts.find((post) => post.slug === currentSlug);
 
   if (!post) return notFound();
 

@@ -40,17 +40,25 @@ const Sketch = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const width = canvas.clientWidth;
-    const height = canvas.clientHeight;
+    // Get parent element dimensions instead of canvas rect
+    const parent = canvas.parentElement;
+    if (!parent) return;
+    
+    const width = parent.clientWidth;
+    const height = parent.clientHeight;
+    
     const FOV = 50;
     const camera = new THREE.PerspectiveCamera(FOV, width / height, 0.1, 500);
     camera.position.set(0, 0, 1);
 
     const clock = new THREE.Clock();
 
-    const renderer = new THREE.WebGLRenderer({ canvas });
+    const renderer = new THREE.WebGLRenderer({ 
+        canvas,
+        antialias: true // Optional: adds smoother edges
+    });
+    renderer.setSize(width, height, false); // false prevents setting canvas style
     renderer.setClearColor(0xffffff);
-    renderer.setSize(width, height);
     // Initialize OrbitControls
     const devMode = process.env.NODE_ENV === "development";
     if (devMode) {
@@ -79,14 +87,13 @@ const Sketch = () => {
     camera.lookAt(plane.position);
 
     const handleResize = () => {
-      if (!canvas || !canvas.parentElement) return;
+        if (!canvas || !canvas.parentElement) return;
+        const width = canvas.parentElement.clientWidth;
+        const height = canvas.parentElement.clientHeight;
 
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(width, height);
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height, false);
     };
 
     window.addEventListener("resize", handleResize);
@@ -95,7 +102,7 @@ const Sketch = () => {
       requestAnimationFrame(animate);
 
       const deltaTime = clock.getDelta();
-      material.uniforms.time.value += deltaTime / 50;
+      material.uniforms.time.value += (deltaTime / 10) * Math.random();
       renderer.render(scene, camera);
     };
 

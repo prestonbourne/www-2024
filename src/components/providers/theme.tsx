@@ -1,10 +1,10 @@
 "use client";
-
 import type React from "react";
-
+import { cx } from "class-variance-authority";
 import { MoonIcon, SunIcon, LaptopIcon } from "@radix-ui/react-icons";
 import { ThemeProvider, useTheme } from "next-themes";
 import { useEffect, useState } from "react";
+import { ButtonToggle } from "@/components/button-toggle";
 
 export const AppThemeSwitcher = () => {
   const [mounted, setMounted] = useState(false);
@@ -16,33 +16,30 @@ export const AppThemeSwitcher = () => {
 
   if (!mounted) return null;
 
-  const buttons = [
+  const themeOptions = [
     {
       label: "system",
       icon: <LaptopIcon width={13} />,
-      active: theme === "system",
+      value: "system",
     },
-    { label: "dark", icon: <MoonIcon width={13} />, active: theme === "dark" },
-    { label: "light", icon: <SunIcon width={13} />, active: theme === "light" },
+    { 
+      label: "dark",
+      icon: <MoonIcon width={13} />,
+      value: "dark"
+    },
+    { 
+      label: "light",
+      icon: <SunIcon width={13} />,
+      value: "light"
+    },
   ];
 
   return (
-    <span className="flex w-fit items-center gap-0.5 overflow-hidden rounded-[6px] bg-background-surface border border-surface-border p-[2px]">
-      {buttons.map(({ label, icon, active }) => (
-        <button
-          type="button"
-          key={label}
-          onClick={() => setTheme(label)}
-          className={
-            `transition-all flex h-6 w-6 items-center justify-center rounded-[4px] hover:brightness-120
-            ${active ?  "text-action border-action bg-action/10" : ""}
-          `
-          }
-        >
-          {icon}
-        </button>
-      ))}
-    </span>
+    <ButtonToggle
+      options={themeOptions}
+      value={theme || "system"}
+      onChange={setTheme}
+    />
   );
 };
 

@@ -8,8 +8,8 @@ export type PostListProps = {
   category: PostType;
 };
 
-export const PostList = ({ category }: PostListProps) => {
-  const posts = getPosts(category).sort((a, b) => {
+export const PostList = async ({ category }: PostListProps) => {
+  const posts = (await getPosts(category)).sort((a, b) => {
     return (
       new Date(b.publishedAt || Date.now()).getTime() -
       new Date(a.publishedAt || Date.now()).getTime()

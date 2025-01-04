@@ -63,8 +63,6 @@ const config: Config = {
         action: "rgb(var(--action))",
         "callout-info": "rgb(var(--callout-info))",
 
-
-        "surface-border": "rgb(var(--surface-border))",
       },
       boxShadow: {
         dense: "var(--shadow-dense)",
