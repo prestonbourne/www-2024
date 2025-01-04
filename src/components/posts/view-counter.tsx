@@ -24,7 +24,6 @@ function ViewCounter({ slug, initialViews, shouldInc = false }: ViewCounterProps
 
 // Add a loading fallback to prevent layout shift
 export function ViewCounterWithSuspense(props: ViewCounterProps) {
-  console.log("ViewCounterWithSuspense", props);
   return (
     <Suspense fallback={<TextWithIcon text={`${props.initialViews} views`} Icon={EyeOpenIcon} />}>
       <ViewCounter {...props} />

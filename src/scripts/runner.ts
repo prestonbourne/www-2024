@@ -1,6 +1,7 @@
 import fs from "fs";
 import { loadEnvConfig } from "@next/env";
 import { inspect } from "node:util";
+import path from "path";
 
 type ScriptParams = {
   env: typeof process.env;
@@ -8,11 +9,13 @@ type ScriptParams = {
 
 loadEnvConfig(process.cwd());
 
+
 const runAsync = async () => {
+  const trimmedFileName = __filename.split(path.sep).pop();
   // find all scripts in current directory
   const files = fs
     .readdirSync(__dirname)
-    .filter((file) => file.endsWith(".ts") && file !== __filename) // exclude self
+    .filter((file) => file.endsWith(".ts") && file !== trimmedFileName) // exclude self
     .sort();
   for (const file of files) {
     const {
