@@ -1,5 +1,5 @@
 import { HomeSection } from "@/components/home-section";
-import { getPosts } from "@/lib/posts";
+import { getPostsByCategory } from "@/lib/posts";
 import { PostType } from "@/lib/types";
 import postTypes from "@/post-types.json";
 import { NextPageProps } from "@/lib/types";
@@ -18,7 +18,7 @@ export async function PostListPage({ postType }: PostListPageProps) {
         description={description}
         link={`/${postType}`}
         category={postType}
-        posts={await getPosts(postType)}
+        posts={getPostsByCategory(postType)}
         level={1}
       />
     </main>

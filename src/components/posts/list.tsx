@@ -1,4 +1,4 @@
-import { getPosts } from "@/lib/posts";
+import { getPostsByCategory } from "@/lib/posts";
 import { Link } from "@/components/typography/link";
 import React from "react";
 import type { PostType } from "@/lib/types";
@@ -10,7 +10,7 @@ export type PostListProps = {
 };
 
 export const PostList = async ({ category }: PostListProps) => {
-  const posts = (await getPosts(category)).sort((a, b) => {
+  const posts = getPostsByCategory(category).sort((a, b) => {
     return (
       new Date(b.publishedAt || Date.now()).getTime() -
       new Date(a.publishedAt || Date.now()).getTime()

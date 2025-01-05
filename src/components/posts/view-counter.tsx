@@ -3,7 +3,6 @@
 import { useRealTimeViews } from "@/lib/posts/views";
 import { TextWithIcon } from "@/components/text-with-icon";
 import { EyeOpenIcon } from "@radix-ui/react-icons";
-import { Suspense } from "react";
 
 type ViewCounterProps = {
   slug: string;
@@ -11,8 +10,9 @@ type ViewCounterProps = {
   shouldInc?: boolean;
 };
 
-function ViewCounter({ slug, initialViews, shouldInc = false }: ViewCounterProps) {
+export function ViewCounter({ slug, initialViews, shouldInc = false }: ViewCounterProps) {
   const views = useRealTimeViews({ initialViews, shouldInc, slug });
+  if(views === 0) return null;
   
   return (
     <TextWithIcon 
@@ -21,12 +21,3 @@ function ViewCounter({ slug, initialViews, shouldInc = false }: ViewCounterProps
     />
   );
 }
-
-// Add a loading fallback to prevent layout shift
-export function ViewCounterWithSuspense(props: ViewCounterProps) {
-  return (
-    <Suspense fallback={<TextWithIcon text={`${props.initialViews} views`} Icon={EyeOpenIcon} />}>
-      <ViewCounter {...props} />
-    </Suspense>
-  );
-} 

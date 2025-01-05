@@ -15,6 +15,6 @@ if (!supabaseUrl || !supabaseKey) {
 /**
  * Uses singleton under the hood so its safe to call repeatedly
  */
-export const getClient = () => {
+export const getBrowserClient = () => {
   return createBrowserClient<Database>(supabaseUrl, supabaseKey);
 };

@@ -1,10 +1,10 @@
 import { MetadataRoute } from "next";
-import { getPosts } from "@/lib/posts";
+import { getPostsByCategory } from "@/lib/posts";
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const projectPosts = await getPosts("projects");
-  const sketchPosts = await getPosts("sketches");
-  const notePosts = await getPosts("notes");
+export default function sitemap(): MetadataRoute.Sitemap {
+  const projectPosts = getPostsByCategory("projects");
+  const sketchPosts = getPostsByCategory("sketches");
+  const notePosts = getPostsByCategory("notes");
   const allPosts = [...projectPosts, ...sketchPosts, ...notePosts];
 
   const allPostsEntries: MetadataRoute.Sitemap = allPosts.map((post: any) => {
