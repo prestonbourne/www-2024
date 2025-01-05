@@ -1,16 +1,15 @@
 import { formatISOToDate } from "@/lib/index";
 import { NextPageProps } from "@/lib/types";
-import { TextWithIcon, TextWithIconLoading } from "@/components/text-with-icon";
-import { CalendarIcon, ClockIcon, EyeOpenIcon } from "@radix-ui/react-icons";
+import { TextWithIcon } from "@/components/text-with-icon";
+import { CalendarIcon, ClockIcon } from "@radix-ui/react-icons";
 import { Divider } from "@/components/divider";
 import { Heading } from "@/components/typography";
 import { Paragraph as Body } from "@/components/typography/paragraph";
-import { getPostsByCategory, getPostViews } from "@/lib/posts";
+import { getPostsByCategory } from "@/lib/posts";
 import { notFound } from "next/navigation";
 import { PostType } from "@/lib/types";
 import { MDX } from "@/components/markdown";
 import { ViewCounter } from "./view-counter";
-import { Suspense } from "react";
 
 type PostPageProps = NextPageProps & {
   postType: PostType;
@@ -19,7 +18,6 @@ type PostPageProps = NextPageProps & {
 export async function PostPage({ params, postType }: PostPageProps) {
   const currentSlug = params.slug;
   const posts = getPostsByCategory(postType);
-  const views = await getPostViews(currentSlug);
   const post = posts.find((post) => post.slug === currentSlug);
   if (!post) return notFound();
 
@@ -42,15 +40,7 @@ export async function PostPage({ params, postType }: PostPageProps) {
                 Icon={ClockIcon}
               />
             )}
-            {views && (
-              <Suspense fallback={<TextWithIconLoading Icon={EyeOpenIcon} />}>
-                <ViewCounter
-                  slug={post.slug}
-                  initialViews={views}
-                  shouldInc={true}
-                />
-              </Suspense>
-            )}
+            <ViewCounter slug={currentSlug} shouldInc={true} />
           </div>
         </div>
       </header>

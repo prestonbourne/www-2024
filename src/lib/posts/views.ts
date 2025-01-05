@@ -1,22 +1,37 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import { getBrowserClient } from "@/lib/supabase/browser-client";
-import { registerView } from './actions';
-
-type UseRealTimeViewsArgs = {
-  initialViews: number;
+import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
+interface UseRealTimeViewsArgs {
   shouldInc: boolean;
   slug: string;
-};
+}
+interface UseRealTimeViewsReturn {
+  views: number;
+  state: "loading" | "idle" | "error";
+}
 
-export const useRealTimeViews = ({ initialViews, shouldInc, slug }: UseRealTimeViewsArgs) => {
-  // optimistic state
-  const [views, setViews] = useState(initialViews + (shouldInc ? 1 : 0));
+export const useRealTimeViews = ({
+  shouldInc,
+  slug,
+}: UseRealTimeViewsArgs): UseRealTimeViewsReturn => {
+  const [views, setViews] = useState(0);
+  const [state, setState] =
+    useState<UseRealTimeViewsReturn["state"]>("loading");
   const supabase = getBrowserClient();
 
   useEffect(() => {
+    const inc = shouldInc ? 1 : 0;
+    getPostViews(slug, supabase).then(({ views, error }) => {
+      if (error) {
+        setState("error");
+      } else {
+        setViews(views + inc);
+        setState("idle");
+      }
+    });
     if (shouldInc) {
       // actually register the view
-      registerView(slug).catch(console.error);
+      registerView(slug, supabase).catch(console.error);
     }
 
     // Setup realtime subscription
@@ -53,5 +68,33 @@ export const useRealTimeViews = ({ initialViews, shouldInc, slug }: UseRealTimeV
     };
   }, [slug, supabase, shouldInc]);
 
-  return views;
+  return { views, state };
+};
+
+const registerView = async (
+  slug: string,
+  supabase: SupabaseClient
+): Promise<void> => {
+  const { data, error } = await supabase.rpc("increment_post_views_by_slug", {
+    post_slug: slug,
+  });
+
+  if (error) {
+    console.error(error);
+  }
+};
+
+const getPostViews = async (
+  slug: string,
+  supabase: SupabaseClient
+): Promise<{ views: number; error: PostgrestError | null }> => {
+  const { data, error } = await supabase
+    .from("posts")
+    .select("audience_views")
+    .eq("slug", slug)
+    .single();
+  if (error) {
+    console.error(error);
+  }
+  return { views: data?.audience_views ?? 0, error };
 };

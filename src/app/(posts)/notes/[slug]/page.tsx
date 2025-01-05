@@ -8,6 +8,6 @@ const CURRENT_SLUG = "notes";
 export const generateMetadata = getGenerateMetadata(CURRENT_SLUG);
 export const generateStaticParams = getGenerateStaticParams(CURRENT_SLUG);
 
-export default async function Page({ params }: NextPageProps) {
+export default function Page({ params }: NextPageProps) {
   return <PostPage params={params} postType={CURRENT_SLUG} />;
 }
