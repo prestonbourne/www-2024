@@ -1,7 +1,7 @@
 'use client'
 
 import { useRealTimeViews } from "@/lib/posts/views";
-import { TextWithIcon } from "@/components/text-with-icon";
+import { TextWithIcon, TextWithIconLoading } from "@/components/text-with-icon";
 import { EyeOpenIcon } from "@radix-ui/react-icons";
 import { Suspense } from "react";
 
@@ -25,7 +25,7 @@ function ViewCounter({ slug, initialViews, shouldInc = false }: ViewCounterProps
 // Add a loading fallback to prevent layout shift
 export function ViewCounterWithSuspense(props: ViewCounterProps) {
   return (
-    <Suspense fallback={<TextWithIcon text={`${props.initialViews} views`} Icon={EyeOpenIcon} />}>
+    <Suspense fallback={<TextWithIconLoading text={`${props.initialViews} views`} Icon={EyeOpenIcon} />}>
       <ViewCounter {...props} />
     </Suspense>
   );

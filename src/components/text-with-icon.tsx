@@ -27,7 +27,7 @@ export const TextWithIconLoading = ({ Icon, text }: WorkstatProps) => {
           <Icon />
         </div>
       )}
-      <div className="w-6 h-3 animate-pulse bg-slate-400/20 rounded-sm" />
+      <div className="w-6 h-3 animate-pulse bg-foreground-muted/30 rounded-sm" />
       <span className="sr-only">{text}</span>
     </div>
   );
