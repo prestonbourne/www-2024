@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { NextPageProps } from "@/lib/types";
-import { getPosts } from "@/lib/posts";
+import { getPostsByCategory } from "@/lib/posts";
 import { PostType } from "@/lib/types";
 
 type MetadataProps = NextPageProps & {
@@ -9,7 +9,7 @@ type MetadataProps = NextPageProps & {
 
 export async function generateMetadata({ params, postType }: MetadataProps) {
   const currentSlug = params.slug;
-  const post = (await getPosts(postType)).find(
+  const post = getPostsByCategory(postType).find(
     (post) => post.slug === currentSlug
   );
 

@@ -2,9 +2,12 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import { Post, PostType } from "./types";
-import { createAdminClient } from "./supabase/server-client";
+import { createSSRClient } from "@/lib/supabase/server-client";
 
-const supabase = createAdminClient();
+
+if (typeof window !== 'undefined' || typeof document !== 'undefined') {
+  throw new Error('This file should not be imported on the client')
+}
 
 function readPostFile(filePath: string): Post | null {
   try {
@@ -50,55 +53,46 @@ export const calculateReadingTimeMS = (
   return readTime;
 };
 
-export async function getPosts(directory: PostType): Promise<Post[]> {
+export function getPostsByCategory(directory: PostType): Omit<Post, "audience">[] {
   const files = getFiles(
     path.join(process.cwd(), "src", "app", "(posts)", directory, "posts")
   );
 
-  return Promise.all(
-    files
-      .map((file) =>
-        readPostFile(
-          path.join(
-            process.cwd(),
-            "src",
-            "app",
-            "(posts)",
-            directory,
-            "posts",
-            file
-          )
+  return files
+    .map((file) =>
+      readPostFile(
+        path.join(
+          process.cwd(),
+          "src",
+          "app",
+          "(posts)",
+          directory,
+          "posts",
+          file
         )
       )
-      .filter((post): post is Post => post !== null)
-      .map(async (post) => {
-        post.type = directory;
-
-        const { data, error } = await supabase
-          .from("posts")
-          .select("audience_likes, audience_views")
-          .eq("slug", post.slug)
-          .single();
-        if (data) {
-          post.audience = {
-            likes: data.audience_likes ?? 0,
-            views: data.audience_views ?? 0,
-          };
-        } else {
-          post.audience = {
-            likes: 0,
-            views: 0,
-          };
-        }
-        if (error) {
-          console.error(error);
-        }
-        return post;
-      })
-  );
+    )
+    .filter((post): post is Post => post !== null);
 }
+
+
+export const getPostViews = async (slug: string) => {
+  const supabase = await createSSRClient();
+  const { data, error } = await supabase
+    .from("posts")
+    .select("audience_views")
+    .eq("slug", slug)
+    .single();
+
+  if (error) {
+    console.error(error);
+    return 0;
+  }
+
+  return data?.audience_views ?? 0;
+};
 
 export const getAllPosts = () => {
   const types: PostType[] = ["projects", "sketches", "notes"];
-  return types.map((type) => getPosts(type));
+  return types.map((type) => getPostsByCategory(type));
 };

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getClient } from "@/lib/supabase/browser-client";
+import { getBrowserClient } from "@/lib/supabase/browser-client";
 import { registerView } from './actions';
 
 type UseRealTimeViewsArgs = {
@@ -11,7 +11,7 @@ type UseRealTimeViewsArgs = {
 export const useRealTimeViews = ({ initialViews, shouldInc, slug }: UseRealTimeViewsArgs) => {
   // optimistic state
   const [views, setViews] = useState(initialViews + (shouldInc ? 1 : 0));
-  const supabase = getClient();
+  const supabase = getBrowserClient();
 
   useEffect(() => {
     if (shouldInc) {
