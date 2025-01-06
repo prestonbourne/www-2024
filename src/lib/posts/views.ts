@@ -20,17 +20,15 @@ export const useRealTimeViews = ({
   const supabase = getBrowserClient();
 
   useEffect(() => {
-    const inc = shouldInc ? 1 : 0;
     getPostViews(slug, supabase).then(({ views, error }) => {
       if (error) {
         setState("error");
       } else {
-        setViews(views + inc);
+        setViews(views);
         setState("idle");
       }
     });
     if (shouldInc) {
-      // actually register the view
       registerView(slug, supabase).catch(console.error);
     }
 
