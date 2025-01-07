@@ -49,7 +49,7 @@ export default function RootLayout({
           "bg-background"
         )}
       >
-        <div className="[z-index:-1] pointer-events-none absolute min-h-screen inset-0 bg-repeat bg-[size:180px] opacity-[0.045]" style={{backgroundImage: 'url(/noise.png)'}} ></div>
+        <div className="[z-index:-1] pointer-events-none absolute min-h-screen inset-0 bg-repeat bg-[size:180px] opacity-[0.025]" style={{backgroundImage: 'url(/noise.png)'}} ></div>
         <Providers>
           <div className="2xl:grid 2xl:grid-cols-4 2xl:gap-8 pt-12">
             {/* empty div to push the table of contents to the right in 3 column layout */}
