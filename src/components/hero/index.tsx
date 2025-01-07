@@ -9,7 +9,7 @@ export function Hero() {
   return (
     <header className="max-w-screen-sm leading-none">
       <Heading level={1}>preston bourne</Heading>
-      <Body className={"my-2"}>(web ∧ graphics ∧ design) engineer</Body>
+      <Body className={"my-2"}>(web ∧ graphics) engineer</Body>
       <Body className={"mb-2"}>
         currently a{" "}
         <PersonLink name="hashicorp" url="https://www.hashicorp.com" />{" "}
