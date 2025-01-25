@@ -22,6 +22,7 @@ export const Link: React.FC<LinkProps> = ({
 
   return (
     <NextViewTransitionLink
+      target={isExternal ? "_blank" : undefined}
       href={href}
       className={cx(
         "underline decoration-dashed inline-flex flex-row gap-[2px]",

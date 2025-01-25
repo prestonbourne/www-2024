@@ -4,6 +4,8 @@ import { useEffect, useState, useRef, RefObject } from "react";
 import shader from "./shader.wgsl";
 import simulationShader from "./compute-shader.wgsl";
 import { SketchWrapper } from "@/components/sketch-wrapper";
+import { Link } from "@/components";
+
 const GRID_SIZE = 32;
 
 const Sketch: React.FC = () => {
@@ -15,11 +17,11 @@ const Sketch: React.FC = () => {
 
   useEffect(() => {
     const mountCallback = async (canvasRef: RefObject<HTMLCanvasElement>) => {
-      console.log("mounting");
       const foundBrowserSupport = !!navigator.gpu;
       if (!foundBrowserSupport) {
         const errorMsg = "WebGPU not supported";
         console.error(errorMsg);
+        setIsLoading(false);
         setHasWebGPUBrowser(false);
         setError(errorMsg);
         return;
@@ -350,7 +352,7 @@ const Sketch: React.FC = () => {
     return (
       <p>
         Your {message} does not support{" "}
-        <a href="https://www.w3.org/TR/webgpu/">WebGPU</a>:(
+        <Link href="https://developer.mozilla.org/en-US/docs/Web/API/WebGPU_API">WebGPU</Link>{" "}:(
       </p>
     );
   }
